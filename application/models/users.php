@@ -202,4 +202,28 @@ class Users extends CI_Model{
 			echo "Failed to post Article";
 		}
 	}
+
+	public function check_email($email){
+		$sess_email = $this->session->userdata('email');
+		if($email == $sess_email){
+			$sql = "SELECT PP.Id From player_profile PP,20oversusers 20U  WHERE 20U.Username=? AND PP.UserSysID=20U.UserSysID";
+			$count = $this->db->query($sql,array($sess_email))->num_rows();
+			if($count > 0){
+				return $this->db->query($sql,array($sess_email))->result_array();
+			}
+			}else{
+				return array(array('Id'=>0));
+			}
+	}
+	public function do_upload($ext){
+		$sql = "UPDATE player_image SET 'ext'=? WHERE UserSysID=?";
+		if($this->db->query($sql,array($ext,$this->session->userdata('user_id'))));
+		{
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+
 }
+?>

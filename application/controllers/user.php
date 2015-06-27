@@ -148,8 +148,67 @@ class User extends CI_Controller {
 		$this->users->del_bowling();
 	}
 	
-	function send_email(){
+	function send_email()
+	{
 		$email = $this->input->post('recover_mail',TRUE);
+		$result = $this->users->check_email($email);
+		$id = $result[0]['Id'];
+		if($id != 0)
+		{
+		$subject = "Message from: www.20overs.com";
+		$message = "Dear ". $this->session->userdata('name')." ,\n\n
+		Here is your profile id:"  . $id.
+		"\n\nIf you need further assistance please go to 20overs.com and use our contact us section to raise any concerns or to give feedback.\n\n
+		Thank you for visiting 20overs.com.";
+               $from = "support@20overs.com";
+		$headers = "From:" . $from;
+			if(mail($email,$subject,$message,$headers))
+			{	
+				echo "<font color='green'>Your player profile ID is sent to your email address.Please check inbox/spam folder</font>";
+			}
+			else
+			{
+				echo "<font color='red'>Error sending email</font>";
+			}
+		}else{
+			echo "<font color='red'>Email id is wrong</font>";
+		}
 	}
+
+	public function do_upload(){
+
+		$config['upload_path'] = 'uploads/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size']	= '100';
+		$config['max_width']  = '1024';
+		$config['max_height']  = '768';
+		$config['overwrite']  = TRUE;
+
+		$path = $_FILES['userfile']['name'];
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		echo $ext;
+		$config['file_name'] = $this->session->userdata('email').".".$ext;
+
+		$this->load->library('upload', $config);
+
+		if ( ! $this->upload->do_upload('userfile'))
+		{
+			$error = array('error' => $this->upload->display_errors());
+			$this->load->view('upload_form', $error);
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+			$insert=$this->upload->data();
+			if($this->users->do_upload($ext)=== TRUE){
+				echo "Profile picture uploaded!";
+			}else{
+				echo "Failed to upload";
+			}
+
+			//$this->load->view('upload_success', $data);
+		}
+	}
+
 }
 ?>

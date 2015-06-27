@@ -18,14 +18,15 @@
                         <label class="form-label-cust">Enter your recover email ID :</label>
                         <input type="email" class="form-control  form-control-cust" name="recover_mail" placeholder="Enter your email ID">
                         <input type="submit" value="Send Email" class="btn btn-xs btn-default">
+                        <div id="recover_email_res"></div>
                     </div>
                   </form>
                 </div>
                 <div class="col-lg-6">
-                  <form action="#">
+                  <form action="do_upload/" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="form-label-cust">Select a picture :</label>
-                        <input type="file" class="form-control  form-control-cust" name="profile_pic">
+                        <input type="file" class="form-control  form-control-cust" name="userfile">
                         <input type="submit" value="UPDATE PROFILE PIC" class="btn btn-xs btn-default">
                     </div>
                   </form>

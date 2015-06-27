@@ -261,7 +261,8 @@ $("#logout").click(function(e){
 
   $('#recover_mail').submit(function(e){
     $.post("send_email/",$(this).serializeArray(),function(data){
-      alert(data)
+      $('#recover_email_res').html("<h4>"+data+"</h4>");
+      $(this).reset();
     });
     e.preventDefault();
   });
