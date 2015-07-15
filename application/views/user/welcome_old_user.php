@@ -11,7 +11,7 @@
 		?>
 		<form action="#" method="post" id="update_profile">
 		<div class="col-lg-12 border padding-3">
-		<div class="panel panel-success">
+		<div class="panel panel-info">
 		   	<div class="panel-heading">
 		  <h3 class="panel-title text-center">YOUR PLAYER PROFILE</h3>
 		 	</div>

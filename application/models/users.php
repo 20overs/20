@@ -210,14 +210,14 @@ class Users extends CI_Model{
 			$count = $this->db->query($sql,array($sess_email))->num_rows();
 			if($count > 0){
 				return $this->db->query($sql,array($sess_email))->result_array();
-			}
 			}else{
 				return array(array('Id'=>0));
 			}
+		}
 	}
 	public function do_upload($ext){
-		$sql = "UPDATE player_image SET 'ext'=? WHERE UserSysID=?";
-		if($this->db->query($sql,array($ext,$this->session->userdata('user_id'))));
+		$sql = "UPDATE 20oversusers SET image=? WHERE UserSysID=?";
+		if($this->db->query($sql,array($ext,$this->session->userdata('user_id'))))
 		{
 			return TRUE;
 		}else{

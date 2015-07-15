@@ -245,11 +245,15 @@ border-bottom: 1px dashed #ccc;
 	border-bottom: 0px dashed #ccc;	
 }
 .recent-ul li,.extras-ul li{
-padding:9px 0 10px 0;
+padding:5px 0 5px 0;
 border-bottom: 1px dashed #CCC;
 font-family: open;
 color:#215390;
+margin-left: 20px;
 letter-spacing:1px;
+}
+.icon-top{
+	margin-top: -5px;
 }
 .arti-ul li{
 	padding-bottom:15px;
@@ -407,7 +411,7 @@ display:none;
 .trending-ul  li{
 	margin:0 0 20px 0;
 	font-family: source;
-	font-size:14px;
+	font-size:17px;
 	padding-bottom:20px;
 	line-height:20px;
 	border-bottom:1px dashed #ccc;
@@ -580,4 +584,7 @@ padding:5px;
 }
 .upper{
 	text-transform:uppercase;
+}
+.none{
+	display: none;
 }

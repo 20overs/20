@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="<?=site_url()?>public/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/main.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/datepicker.css" />
+	<link rel="stylesheet" href="<?=site_url()?>public/css/datatable.css" />
 	<link rel="shortcut icon" href="<?=site_url()?>public/img/favicon.ico" />
 </head>
 <body>

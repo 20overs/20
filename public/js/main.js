@@ -89,6 +89,7 @@ $("#logout").click(function(e){
       data:$(this).serializeArray(),
       method:"POST",
       success :function(data){
+        document.getElementById("create_profile").reset();
         data = jQuery.parseJSON(data);
         $('#result').html("<h3 class='text-success'>Your Profile id is <b>"+data.message+"</b>.If you want to make any change in your profile this profile id is required.</h3>");
       },
@@ -200,8 +201,6 @@ $("#logout").click(function(e){
       }
     });
   });
-
-  //A
 
   $('#matchid').change(function(){
   if($(this).val() != 0 ){

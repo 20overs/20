@@ -32,6 +32,12 @@
 						<div id="login-form-error" class="text-center"></div>
 					</form>
 					<a href="#" class="pull-right" id="lost"><span class="glyphicon glyphicon-link"></span> Lost your password?</a>
+          <form action="#" id="lostform" class="none">
+          <input type="email" id="lostpassword" name="lostpassword" placeholder="Enter email id" class="form-control login-field" required>
+          <br>
+            <button class="btn btn-xs btn-success" id="lostpasswordbtn">Send email</button>
+            <span id="resetres" class="h5"></span>
+          </form>
 	     </div>
 	        <!--
 	        		<div class='modal-body-right'>
@@ -46,7 +52,7 @@
 							</div>
 							<span id="recres"></span>
 	        			</div> 
-	        		</div>	
+	        		</div>
 	        		<div id='center-line'> OR </div>-->
 	        	</div>
         		<div class="clearfix"></div>
@@ -54,13 +60,13 @@
 		
 				<div id="reg-flip" class="hide">
 					
-                <form action="#" id="register-form">
-				<div class="form-group">
-						<div class="input-group">
-         <span class="input-group-addon">@</span>
-         <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" required>
-      </div>
-		</div>
+          <form action="#" id="register-form">
+    				<div class="form-group">
+    						<div class="input-group">
+                   <span class="input-group-addon">@</span>
+                   <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" required>
+                </div>
+    		    </div>
 						<div class="form-group">
 		            	  	<input type="text" id="reg-first-name" name="reg-first-name" placeholder="First Name" value="" class="form-control login-field" required>
 		            	</div>
@@ -117,6 +123,41 @@ $('#login-form').submit(function(e){
       	window.open("<?=site_url()?>user/welcome",'_self');
       }else{
       	$('#login-form-error').html('<span class="text-danger">Wrong Username / Password</span>');
+      }
+    });
+    e.preventDefault();
+  });
+  
+  $('#lost').click(function(){
+    $('#lostform').toggleClass('none');
+  });
+
+  $('#lostform').submit(function(e){
+    $.ajax({
+      url:'<?=site_url()?>welcome/recover',
+      data:$(this).serializeArray(),
+      method:"POST",
+      success :function(data){
+        //alert(data);
+        $('#resetres').html(data);
+      }
+    });
+    e.preventDefault();
+  });
+
+  $('#register-form').submit(function(e){
+    $('#reg-form-error').html('<img src="<?=site_url()?>public/img/fb_load.gif" class="text-center" />');
+    $.ajax({
+      url:'<?=site_url()?>welcome/register',
+      data:$(this).serializeArray(),
+      method:"POST",
+      success :function(data){
+        document.getElementById("register-form").reset();
+        $('#reg-form-error').html(data);
+      },
+      error: function(){
+        $('#reg-form-error').html("Email already exist. Try again later.");
+        document.getElementById("register-form").reset();
       }
     });
     e.preventDefault();

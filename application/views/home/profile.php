@@ -5,8 +5,17 @@
 				echo $this->load->view('inc/sidebar');
 			?>
 		</div>
+		<?php
+		if($this->session->userdata('logged_in')===TRUE) {
+		?>
 		<div class="col-lg-8 col-md-8">
-
+		<?php
+		}else{
+		?>
+		<div class="col-lg-12 col-md-12">
+		<?php
+		}
+		?>
 			<div class="panel panel-info">
 			   <div class="panel-heading">
 			      <h3 class="panel-title text-center">TALENTS</h3>

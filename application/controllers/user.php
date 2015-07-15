@@ -10,16 +10,28 @@ class User extends CI_Controller {
 		$res = $this->users->login($this->input->post('username',true),$this->input->post('password',true));
 		if($res !== FALSE){
 			foreach ($res as $ress) {
-				$sessdata = array(
-                   'user_id'  => $ress->UserSysID,
-                   'user_id_enc' => $ress->UserSysID + 674539873,
-                   'name' => $ress->Firstname." ".$ress->Lastname,
-                   'email' =>$ress->Username,
-                   'logged_in' => TRUE
-               );
+				if($ress->image != ""){
+					$sessdata = array(
+	                   'user_id'  => $ress->UserSysID,
+	                   'user_id_enc' => $ress->UserSysID + 674539873,
+	                   'name' => $ress->Firstname." ".$ress->Lastname,
+	                   'email' =>$ress->Username,
+	                   'image_url' => site_url()."uploads/".$ress->image,
+	                   'logged_in' => TRUE
+	               );
+				}else{
+					$sessdata = array(
+	                   'user_id'  => $ress->UserSysID,
+	                   'user_id_enc' => $ress->UserSysID + 674539873,
+	                   'name' => $ress->Firstname." ".$ress->Lastname,
+	                   'email' =>$ress->Username,
+	                   'image_url' => site_url()."uploads/talent.jpg",
+	                   'logged_in' => TRUE
+	               );
+				}
 				$this->session->set_userdata($sessdata);
 			}
-		echo "1";
+			echo "1";
 		}else{
 			echo "0";
 		}
@@ -64,6 +76,10 @@ class User extends CI_Controller {
 		$this->load->view('inc/extra_pop');
 	}
 	public function add_articles(){
+		if($this->session->userdata('logged_in')!==TRUE){
+			redirect('/');
+			die();
+		}
 		$this->users->add_articles();
 	}
 	public function view_profile($id){
@@ -176,7 +192,10 @@ class User extends CI_Controller {
 	}
 
 	public function do_upload(){
-
+		if($this->session->userdata('logged_in')!==TRUE){
+			redirect('/');
+			die();
+		}
 		$config['upload_path'] = 'uploads/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['max_size']	= '100';
@@ -186,7 +205,6 @@ class User extends CI_Controller {
 
 		$path = $_FILES['userfile']['name'];
 		$ext = pathinfo($path, PATHINFO_EXTENSION);
-		echo $ext;
 		$config['file_name'] = $this->session->userdata('email').".".$ext;
 
 		$this->load->library('upload', $config);
@@ -199,15 +217,26 @@ class User extends CI_Controller {
 		else
 		{
 			$data = array('upload_data' => $this->upload->data());
+			$data['title'] = "Profile picture uploaded";
 			$insert=$this->upload->data();
-			if($this->users->do_upload($ext)=== TRUE){
-				echo "Profile picture uploaded!";
+			$this->load->view('inc/header',$data);
+			if($this->users->do_upload($data['upload_data']['file_name'])=== TRUE){
+				$this->session->set_userdata(array('image_url'=>site_url()."uploads/".$data['upload_data']['file_name']));
+				$data['alert'] = "success";
+				$data['message'] = "Profile photo uploaded successfully";
+				$this->load->view('inc/message.php',$data);
 			}else{
-				echo "Failed to upload";
+				$data['alert'] = "danger";
+				$data['message'] = "Profile picture upload failed";
+				$this->load->view('inc/message.php',$data);
 			}
-
-			//$this->load->view('upload_success', $data);
+			$this->load->view('inc/footer');
+			header("Refresh:2;url=".site_url()."user/welcome");
 		}
+	}
+
+	public function doreset(){
+		echo "A";
 	}
 
 }

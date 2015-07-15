@@ -9,7 +9,7 @@ class Home extends CI_Model{
 		
 	}
 	function talent(){
-		$sql = "SELECT CONCAT(UCASE(U.LastName),\" \",UCASE(U.FirstName)) as fullname, PF.Id,PF.DOB,PF.BattingStyle, PF.BowlingStyle, CTRY.Country, CTY.city_name FROM 20oversUsers U, Player_Profile PF, Countries CTRY, Cities CTY WHERE U.UserSysID = PF.UserSysID	AND PF.Country = CTY.country_id AND PF.Country = CTRY.countryid	AND PF.State = CTY.state_id	AND PF.City = CTY.id ORDER BY RAND() LIMIT 0 , 1";
+		$sql = "SELECT CONCAT(UCASE(U.LastName),\" \",UCASE(U.FirstName)) as fullname, PF.Id,PF.DOB,PF.BattingStyle, PF.BowlingStyle, CTRY.Country, CTY.city_name FROM 20oversusers U, player_profile PF, countries CTRY, cities CTY WHERE U.UserSysID = PF.UserSysID	AND PF.Country = CTY.country_id AND PF.Country = CTRY.countryid	AND PF.State = CTY.state_id	AND PF.City = CTY.id ORDER BY RAND() LIMIT 0 , 1";
 		return $this->db->query($sql)->result_array();
 	}
 	function recent(){
@@ -22,6 +22,43 @@ class Home extends CI_Model{
 	}
 	function news($cat=null){
 		$sql = "SELECT News as news FROM 20overs_news WHERE NewsCategory = ? ORDER BY NewsPostedOn DESC LIMIT 3 ";
-		return $this->db->query($sql,array($cat))->result_array();	
+		return $this->db->query($sql,array($cat))->result_array();
 	}
+
+	function register($email,$first,$last,$pass){
+		$sql = "SELECT Username FROM 20oversusers WHERE Username=?";
+		$count = $this->db->query($sql,array($email))->num_rows();
+		if($count > 0)
+		{
+			$sql = "INSERT INTO user_activate_account (Lastname, Firstname, Username, IDNbr,CreatedOn,AuthToken) VALUES (?,?,?, AES_ENCRYPT(?,'test'),NOW(),?)";
+			$token =  md5(uniqid(rand(), TRUE));
+			$tokenlinkpaste = site_url()."welcome/active/".$token;
+			if ($this->db->query($sql,array($last,$first,$email,$pass,$token)))
+			{
+				$toemail = $email;
+				$to = trim($toemail);
+				$subject = "20Overs.com - Activate your account";
+						$message =" ## This is an automated response. Please do not reply to this e-mail. ##\n\n
+						Dear ". $last." ,\n\n
+						THANK YOU for registering with us.\n\n Click the following link to confirm your registration.\n\n.". $tokenlinkpaste."
+						\n\n. If that link is not working then copy and paste this link in your browser's address bar.\n\n.".$tokenlinkpaste." If you need further assistance please go to 20overs.com and use our contact us section to raise any concerns or to give feedback.\n\n
+						Thank you for visiting 20overs.com.";
+				$from = "support@20overs.com";
+				$headers = "From:" . $from;
+				if(mail($to,$subject,$message,$headers))
+				{	
+					return "<font color='green'>Activation link has been sent to your Email Id . Follow the instructions in email to activate your account</font>";
+				}
+				else
+				{
+					return "Error sending email";
+				}
+			}else{
+				return "Error saving your data";
+			}
+		}else{
+			return "User already exist";
+		}
+	}
+	
 }

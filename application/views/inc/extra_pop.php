@@ -43,7 +43,7 @@
 </div><!-- /.modal -->
 <script>
 $(function () {
-  $('#forgot-popup').click(function(e){
+  $('#forgot-popup,#forgot-popup1').click(function(e){
         $('#forgot').modal('show');
         e.preventDefault();
   });

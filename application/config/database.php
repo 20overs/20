@@ -52,12 +52,12 @@ $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = '';
 $db['default']['database'] = '20overs';
-/*
-$db['default']['hostname'] = 'mysql6.000webhost.com';
-$db['default']['username'] = 'a7898440_local';
-$db['default']['password'] = 'a7898440_local';
-$db['default']['database'] = 'a7898440_local';
-*/
+
+/*$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'vada1972';
+$db['default']['password'] = 'mouse1972';
+$db['default']['database'] = '20overs';*/
+
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

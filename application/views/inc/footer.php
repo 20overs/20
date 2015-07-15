@@ -16,3 +16,4 @@
 <script src="<?=site_url()?>public/js/bootstrap.min.js"></script>
 <script src="<?=site_url()?>public/js/bootstrap-datepicker.js"></script>
 <script src="<?=site_url()?>public/js/modernizr-2.6.2.min.js"></script>
+<script src="<?=site_url()?>public/js/datatable.js"></script>
