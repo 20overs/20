@@ -1,9 +1,23 @@
 <?php
 class Users extends CI_Model{
+		
 	function login($user,$pass){
-		$sql = "SELECT * FROM 20oversusers WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
+		$sql = "SELECT * FROM 20oversusers users WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
+		//$sql = "SELECT users.*,pi.image_url FROM 20oversusers users,player_image pi WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
 		if($this->db->query($sql,array($user,$pass))->num_rows() === 1){
-			return $this->db->query($sql,array($user,$pass))->result();	
+
+			$sql = "SELECT * FROM 20oversusers users WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
+			$datas = $this->db->query($sql,array($user,$pass))->result();
+
+			$image = $datas[0]->image;
+			$user_id = $datas[0]->UserSysID;
+			if($image == 1){
+				$sql = "SELECT users.*,pi.image_url FROM 20oversusers users,player_image pi WHERE users.Username=? AND AES_DECRYPT(IDNbr,'test')=? AND pi.user_id=?";
+				return $this->db->query($sql,array($user,$pass,$user_id))->result();
+			}else{
+				$sql = "SELECT * FROM 20oversusers users WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
+				return $this->db->query($sql,array($user,$pass))->result();
+			}
 		}else{
 			return FALSE;
 		}
@@ -179,9 +193,11 @@ class Users extends CI_Model{
 		return $this->db->query($sql,array("World Cup 2015","ODI",$full,$full1,$full2,$full3))->result_array();
 	}
 	function add_articles(){
-		$match = $this->input->post('id');
-		$name = $this->input->post('name');
-		$arti = $this->input->post('arti');
+		$match = $this->input->post('id',TRUE);
+		$name = $this->input->post('name',TRUE);
+		$arti = $this->input->post('arti',TRUE);
+		$link = trim($this->input->post('link',TRUE));
+
 		$day = date("d");
 		$day +=1;
 		$ym = date("Y-m");
@@ -194,13 +210,23 @@ class Users extends CI_Model{
 		$day = date("d");
 		$day +=2;
 		$full2 = $ym."-".$day;
-
-		$sql = "INSERT INTO 20overs_articles(user_name,match_id,article,added) VALUES(?,?,?,now())";
-		if($this->db->query($sql,array($match,$name,$arti))){
+		if($link != ""){
+			$sql = "INSERT INTO 20overs_articles(user_name,match_id,article,external_link,added) VALUES(?,?,?,?,now())";
+			if($this->db->query($sql,array($name,$match,$arti,$link))){
 			echo "Article posted Succesfully";
+			}else{
+				echo "Failed to post Article";
+			}
 		}else{
-			echo "Failed to post Article";
+			$sql = "INSERT INTO 20overs_articles(user_name,match_id,article,added) VALUES(?,?,?,now())";	
+			if($this->db->query($sql,array($name,$match,$arti))){
+			echo "Article posted Succesfully";
+			}else{
+				echo "Failed to post Article";
+			}
 		}
+		
+		
 	}
 
 	public function check_email($email){
@@ -224,6 +250,46 @@ class Users extends CI_Model{
 			return FALSE;
 		}
 	}
+	public function profile_count($id){
+		$sql = "SELECT Id from player_profile where Id =? ";
+		$count = count($this->db->query($sql,array($id))->result_array());
+		return $count;
+	}
 
+	public function get_style($id){
+		return $this->db->query("SELECT pp.BowlingStyle as bow,pp.BattingStyle as bat from player_profile pp where Id =? ",array($id))->result_array();
+	}
+	public function get_name($id){
+		return $this->db->query("SELECT CONCAT(UCASE(20U.Lastname),\" \",UCASE(20U.Firstname)) as fullname,Username as username FROM player_profile pp,20oversusers 20U WHERE 20U.UserSysID=pp.UserSysID AND pp.Id = ?",array($id))->result_array();
+	}
+	public function pro_batting_history($id){
+		return $this->db->query("Select BH.MyTeamName,BH.BallsFaced,BH.RunsScored,BH.Four,BH.Six,BH.OpponentTeam,BH.Overs,BH.MatchDate From batting_history BH Where BH.PlayerId =?",array($id))->result_array();
+	}
+	public function pro_bowling_history($id){
+		return $this->db->query("Select BLH.MyTeamName,BLH.OversBowled,BLH.Wickets,BLH.OpponentTeam,BLH.Overs,BLH.RunsGiven,BLH.MatchDate From bowling_history BLH Where BLH.PlayerId =?",array($id))->result_array();
+	}
+	public function pro_get_six($id){
+		return $this->db->query("Select sum(BH.Six) as sixes From batting_history BH where BH.PlayerId =?",array($id))->result_array();
+	}
+	public function pro_get_four($id){
+		return $this->db->query("Select Sum(BH.Four) as fours From batting_history BH Where BH.PlayerId =?",array($id))->result_array();
+	}
+	public function pro_get_runs($id){
+		return $this->db->query("Select Sum(BH.RunsScored) as runs From batting_history BH Where BH.PlayerId =?",array($id))->result_array();
+	}
+	public function pro_get_location($id){
+		return $this->db->query("SELECT co.Country as country, st.name as state, ct.city_name as city FROM player_profile pp ,countries co,cities ct, states st WHERE pp.Id=? and co.countryid=pp.country  and st.stateid=pp.State and st.countryid=pp.country and ct.id=pp.City and ct.state_id=pp.State and ct.country_id=pp.country",array($id))->result_array();
+	}
+	public function pro_get_wicket($id){
+		return $this->db->query("Select Sum(BLH.Wickets) as wikets From bowling_history BLH Where BLH.PlayerId =?",array($id))->result_array();
+	}
+	public function get_profile_pic($id){
+		$image = $this->db->select('image')->from('20oversusers')->where('UserSysID',$id)->get()->row()->image;
+		if($image == 0){
+			return 'uploads/talent.jpg';
+		}else{
+			return $this->db->select('image_url')->from('player_image')->where('user_id',$id)->get()->row()->image_url;
+		}
+	}
 }
 ?>

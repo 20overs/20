@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
-
+$('.open_new').click(function(e){
+  window.open($(this).attr('href'), '_blank');
+  e.preventDefault();
+});
 $('.banner').hover(function(){
 	$('.image').toggleClass('anim');
 });
@@ -127,24 +130,25 @@ $("#logout").click(function(e){
   });
 
   $('#batting_history').submit(function(e){
-    $.ajax({
-      url:'batting_history',
-      data:$(this).serializeArray(),
-      method:"POST",
-      success :function(data){
-        data = jQuery.parseJSON(data);
-        if(data.errors === 0){
-          document.getElementById("batting_history").reset();
-          $('#bat_result').html("<span class='h3 text-success'>"+data.message+"</span>");
-        }else{
-          $('#bat_result').html("<span class='h3 text-danger'>"+data.message+"</span>");
+      $.ajax({
+        url:'batting_history',
+        data:$(this).serializeArray(),
+        method:"POST",
+        success :function(data){
+          data = jQuery.parseJSON(data);
+          if(data.errors === 0){
+            document.getElementById("batting_history").reset();
+            $('#bat_result').html("<span class='h3 text-success'>"+data.message+"</span>");
+          }else{
+            $('#bat_result').html("<span class='h3 text-danger'>"+data.message+"</span>");
+          }
+        },
+        error: function(){
+          $('#bat_result').html("<span class='h3 text-danger'>Server error try again later</span>");
         }
-      },
-      error: function(){
-        $('#bat_result').html("<span class='h3 text-danger'>Server error try again later</span>");
-      }
-    });
-   e.preventDefault();
+      });
+
+     e.preventDefault();
   });
 
   $('#bowling_history').submit(function(e){
@@ -204,10 +208,10 @@ $("#logout").click(function(e){
 
   $('#matchid').change(function(){
   if($(this).val() != 0 ){
-    $('#arti,#countdown').slideDown(300);
+    $('#arti,#countdown,#link').slideDown(300);
     $('#ajax').text('');
     }else{
-    $('#arti,#countdown').slideUp(300);
+    $('#arti,#countdown,#link').slideUp(300);
     $('#arti_submit').slideUp(300);
     }
   });
@@ -239,31 +243,36 @@ $("#logout").click(function(e){
   
   $('#arti_form').submit(function(e){
   //$('#ajax').html("<img src='http://20overs.com/_img/fb_load.gif' />");
+  $('#arti_submit').attr('disabled','true');
   var arti = $('#op').text();
   arti = arti.replace(/(\r\n|\n|\r)/gm," ");
     arti = arti.replace(/\s+/g," ");
   if(arti.length ==0){
     $('#ajax').html("<div class='badge badge-error'>Enter Some Data To Post Article</div>");
+    $('#arti_submit').removeAttr('disabled');
   }else{
-    $.post('add_articles',{id:$('#matchid').val(),name:$('#name').val(),arti:arti},function(data){
+    $.post('add_articles',{id:$('#matchid').val(),name:$('#name').val(),link:$('#link').val(),arti:arti},function(data){
     $('#arti').val();
       $('#ajax').html("<div class='badge badge-success'>"+data+"</div>");
-      $('#arti').val('');$('#matchid').val('0');$('#op').text('');
+      $('#arti,#link').val('');$('#matchid').val('0');$('#op').text('');
       $('#arti_submit').css('display','none');
-      $('#arti').css('display','none');
+      $('#arti,#link').css('display','none');
       $('#countdown').text('250 characters remaining.');
       $('#countdown').css('display','none');
+      $('#arti_submit').removeAttr('disabled');
     });
     }
     e.preventDefault(); 
   });
 
   $('#recover_mail').submit(function(e){
+    $('#recover_mail_submit').attr('disabled','true');
     $.post("send_email/",$(this).serializeArray(),function(data){
       $('#recover_email_res').html("<h4>"+data+"</h4>");
-      $(this).reset();
+      document.getElementById("recover_mail").reset();
     });
     e.preventDefault();
   });
 
+  $('#myTable').DataTable();
 });

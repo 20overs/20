@@ -15,23 +15,16 @@
 	        		<div class='modal-body-left'>
 					<form action="#" id="login-form">
 	        			<div class="form-group">
-	        				<div class="input-group">
-		            			<span class="input-group-addon glyphicon glyphicon-user"></span>
-		              			<input type="email" id="username" name="username" placeholder="Enter Email Id" value="" class="form-control login-field" required>
-		              		</div>
+		              	<input type="email" id="username" name="username" placeholder="Enter Email Id" value="" class="form-control login-field" required>
 		            	</div>
-		
 		            	<div class="form-group">
-			            	<div class="input-group">
-		            			<span class="input-group-addon glyphicon glyphicon-hand-right"></span>
-			            	  	<input type="password" id="password" name="password" placeholder="Password" value="" class="form-control login-field" required>
-			            	  </div>
+			            	<input type="password" id="password" name="password" placeholder="Password" value="" class="form-control login-field" required>
 		            	</div>
 		
-		            	<button type="submit" href="#" class="btn btn-success modal-login-btn">Login</button>
+		            	<button type="submit" href="#" class="btn btn-success modal-login-btn" id="login-btn">Login</button>
 						<div id="login-form-error" class="text-center"></div>
 					</form>
-					<a href="#" class="pull-right" id="lost"><span class="glyphicon glyphicon-link"></span> Lost your password?</a>
+					<a href="#" class="pull-right" id="lost">Lost your password?</a>
           <form action="#" id="lostform" class="none">
           <input type="email" id="lostpassword" name="lostpassword" placeholder="Enter email id" class="form-control login-field" required>
           <br>
@@ -62,10 +55,7 @@
 					
           <form action="#" id="register-form">
     				<div class="form-group">
-    						<div class="input-group">
-                   <span class="input-group-addon">@</span>
                    <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" required>
-                </div>
     		    </div>
 						<div class="form-group">
 		            	  	<input type="text" id="reg-first-name" name="reg-first-name" placeholder="First Name" value="" class="form-control login-field" required>
@@ -116,6 +106,7 @@
 -->
 <script>
 $('#login-form').submit(function(e){
+  $('#login-btn').attr('disabled','true');
 	$('#login-form-error').html('<img src="<?=site_url()?>public/img/fb_load.gif" class="text-center" />');
     $.post('<?=site_url()?>user/login',{username:$('#username').val(),password:$('#password').val()},function(data){
       if(data=="1"){
@@ -124,6 +115,7 @@ $('#login-form').submit(function(e){
       }else{
       	$('#login-form-error').html('<span class="text-danger">Wrong Username / Password</span>');
       }
+      $('#login-btn').removeAttr('disabled');
     });
     e.preventDefault();
   });
@@ -133,6 +125,7 @@ $('#login-form').submit(function(e){
   });
 
   $('#lostform').submit(function(e){
+    $('#lostpasswordbtn').attr('disabled','true');
     $.ajax({
       url:'<?=site_url()?>welcome/recover',
       data:$(this).serializeArray(),
@@ -140,6 +133,8 @@ $('#login-form').submit(function(e){
       success :function(data){
         //alert(data);
         $('#resetres').html(data);
+        $('#lostpasswordbtn').removeAttr('disabled');
+        document.getElementById("lostform").reset();
       }
     });
     e.preventDefault();

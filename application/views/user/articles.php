@@ -5,6 +5,15 @@
 				echo $this->load->view('inc/sidebar');
 			?>
 		</div>
+		<?php
+		if($this->session->userdata('logged_in')!==TRUE){
+		?>
+		<div class="container">
+			<div class="alert alert-info text-center"><h1>Login to post article</h1></div>
+		</div>
+		<?php
+		}else{
+		?>
 		<div class="col-lg-8 col-md-8">
 			<div class="panel-group" id="accordion">
 					  <div class="panel panel-info">
@@ -31,7 +40,6 @@
 										}
 									}else{
 									?>
-									<option value="Common title">Common title</option>
 									<option value="India">India</option>
 									<option value="Sachin">Sachin</option>
 									<option value="Dhoni">Dhoni</option>
@@ -46,6 +54,13 @@
 								</div>
 								<div class="form-group">
 									<textarea id="arti" name="arti" maxlength="250" class="form-control form-control-cust" placeholder="Write Your Article" style="display:none;" required></textarea>
+									<?php
+									if($this->session->userdata('admin')==1){
+									?>
+									<input type="url" name="link" class="form-control" placeholder="Article link" id="link" name="link" style="display:none;" />
+									<?php
+									}
+									?>
 								</div>
 								<div class="badge badge-success" id="countdown" style="display:none;">250 characters remaining.</div>
 								<div> &nbsp; </div>
@@ -61,5 +76,8 @@
 				</div>
 			</div>
 		</div>
+		<?php
+		}
+		?>
 	</div>
 </div>

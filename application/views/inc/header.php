@@ -6,10 +6,13 @@
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="<?=site_url()?>public/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="<?=site_url()?>public/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="<?=site_url()?>public/css/main.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/datepicker.css" />
+	<!--
+	<link rel="stylesheet" href="<?=site_url()?>public/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="<?=site_url()?>public/css/datepicker.css" />
+	-->
 	<link rel="stylesheet" href="<?=site_url()?>public/css/datatable.css" />
+	<link rel="stylesheet" href="<?=site_url()?>public/css/main.css" />
 	<link rel="shortcut icon" href="<?=site_url()?>public/img/favicon.ico" />
 </head>
 <body>
@@ -35,11 +38,21 @@
 		<nav class="navbar navbar-default nav-pills" role="navigation">
 			<ul class="nav navbar-nav header-ul">
 				 <li><a href="<?=site_url()?>">Home</a></li>
+				 <?php
+				 if($this->session->userdata('logged_in')!==TRUE){
+				 ?>
 				 <li><a href="<?=site_url('welcome/profile')?>">Player Profile</a></li>
-				 <li><a href="<?=site_url()?>createArticles.php">Articles</a></li>
-				 <li><a href="<?=site_url()?>internationsMatchSchedule.php">IPL 2015</a></li>
-				 <li><a href="<?=site_url()?>20overs_videos.php">Wow Catches</a></li>
-				 <li><a href="<?=site_url()?>20overs_videos_1.php">Blind Spot</a></li>
+				 <?php
+					}else{
+				 ?>
+				 <li><a href="<?=site_url('user/welcome')?>">Player Profile</a></li>
+				 <?php
+				 }
+				 ?>
+				 <li><a href="<?=site_url('user/articles')?>">Articles</a></li>
+				 <!--<li><a href="<?=site_url()?>">IPL 2015</a></li>-->
+				 <li><a href="<?=site_url('welcome/wow')?>">Wow Catches</a></li>
+				 <li><a href="<?=site_url('welcome/blind')?>">Blind Spot</a></li>
 				 <?php
 				if($this->session->userdata('logged_in')!==TRUE){
 				?>

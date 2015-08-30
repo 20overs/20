@@ -1,5 +1,9 @@
 <?php
 class Home extends CI_Model{
+	function get_matches(){
+		$today = date("Y-m-d");
+		return $this->db->query('SELECT * FROM  international_match_schedule where MatchStartDate=?',array($today))->result_array();
+	}
 	function get_articles($id = null){
 		if($id==null){
 			return $this->db->query('SELECT * FROM 	20overs_articles order by article_id desc limit 10')->result_array();

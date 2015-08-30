@@ -1,6 +1,5 @@
 <div class="container-fluid margin-top-5">
 	<div class="row">
-
 			<div class="col-lg-4 col-md-4 height-400">
 				<div class="border  padding-9 clearfix article">
 					<h4 class="heading">
@@ -16,6 +15,13 @@
 									<div class="media-body">
 										<b><img src="<?=site_url()?>public/img/icons/user.png" class="icon-top"/> <span class="arti-title blue-font bold font-open"><?=$res['user_name']?> Says:</span></b>
 										<p><img src="<?=site_url()?>public/img/icons/message.png" class="icon-top"/> <span class="arti-content font-source"> <?=$res['article']?></span></p>
+										<?php
+										if($res['external_link'] != ""){
+										?>
+										<p><a href="<?=$res['external_link']?>" class="label label-success open_new">Click here</a> to visit website</p>
+										<?php
+										}
+										?>
 										-<?=$res['match_id']?>
 									</div>
 								</div>
@@ -28,7 +34,7 @@
 					<?php endif; ?>
 				</div>
 					<span class="padding-9"></span>
-					<a class="gold-font font-source" href=""><img src="<?=site_url()?>public/img/icons/plus.png" class="icon-top"/> Create new</a>
+					<a class="gold-font font-source" href="<?=site_url('user/articles')?>"><img src="<?=site_url()?>public/img/icons/plus.png" class="icon-top"/> Create new</a>
 				</span>
 			</div>
 		</div>
@@ -52,25 +58,35 @@
 					<div class="media">
 					
 					<div class="media-body">
+					<?php
+					if(count($match_today) > 0){
+					foreach ($match_today as $row) {
+					?>
+					<span class="font-source font-size-16"><?=$row['Team1Name']?> vs <?=$row['Team2Name']?></span>
+					<small><?=$row['MatchTimeGMT']?> | <?=$row['MatchTimeLocal']?> (IST) | <?=$row['MatchVenue']?></small>
+					<?php
+					}
+					}else{
+					?>
+					<h3>No matches found</h3>
+					<?php
+					}
+					?>
 						<!--
 						<span class="font-source font-size-16">Pakistan vs Zimbabwe</span>
 						<small>09:00:00 | 14:00:00 (IST) | Gaddafi Stadium, Lahore</small>
 						-->
-						<h3>No matches found</h3>
 					</div>
 					</div>
 				</li>
 			</ul>
-			<a href="<?=site_url()?>" class="gold-font">More</a>
 		</div>
 		<div class="border  padding-9 margin-top-5">
 			<h4 class="heading">
 				LIVE SCORE
 			</h4>
 			<div class="live-score-iframe">
-				<!--
-				<script src="//www.cricruns.com/system/application/views/widgetBase/wid_300_200_2_wo_ad.js" type="text/javascript"></script>
-				-->
+				<script src="//www.cricruns.com/system/application/views/widgetBase/wid_300_200_2_wo_ad.js" type="text/javascript" id="cricruns"></script>
 			</div>
 		</div>
 	</div>
@@ -164,7 +180,7 @@
 							$age = $curryear-$doby[0];
 							foreach ($talent as $row):
 						?>
-							<a href='<?=$row['Id']+674539873?>' class="user"><?=$row['fullname']?></a>
+							<a href='<?=site_url()?>user/view_profile/<?=$row['Id']+674539873?>' class="user"><?=$row['fullname']?></a>
 						</span>
 					</div>
 							<ul class="no-style talent-ul">

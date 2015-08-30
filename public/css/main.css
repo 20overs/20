@@ -588,3 +588,6 @@ padding:5px;
 .none{
 	display: none;
 }
+.panel-heading:hover{
+	cursor: pointer;
+}

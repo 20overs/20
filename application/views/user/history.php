@@ -19,11 +19,11 @@
 							      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 							     	<div class="form-group">
 										<label for="id">Player ID</label>
-										<input type="text" class="form-control form-control-cust" id="id" placeholder="Player ID" required name="id">
+										<input type="number" class="form-control form-control-cust" id="id" placeholder="Player ID" required name="id">
 									</div>
 									<div class="form-group">
 										<label for="match_date">Match Date</label>
-										<input type="text" class="form-control datepicker form-control-cust" id="match_date" placeholder="Match date" required name="match_date">
+										<input type="text" class="form-control datepicker form-control-cust" id="match_date" placeholder="Match date" required name="match_date" onchange="ValidateDate(this.value)">
 									</div>
 									<div class="form-group">
 										<label for="match_result">Match Result</label>
@@ -121,7 +121,7 @@
                                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                                         <div class="form-group">
                                             <label for="id">Player ID</label>
-                                            <input type="text" class="form-control form-control-cust" id="id" placeholder="Player ID" required name="id">
+                                            <input type="number" class="form-control form-control-cust" id="id" placeholder="Player ID" required name="id">
                                         </div>
                                         <div class="form-group">
                                             <label for="match_date">Match Date</label>
@@ -210,20 +210,12 @@
                                 <?php
                                 if(count($batting_history) < 1){
                                 ?>
-                                <li class="list-group-item">
-                                    <a href="#">
-                                        No Batting history is found
-                                    </a>
-                                </li>
+                                <li class="list-group-item">No Batting history is found</li>
                                 <?php
                                 }else{
                                     foreach ($batting_history as $row) {
                                 ?>
-                                    <li class="list-group-item">
-                                        <a href="#">
-                                            <?=$row['MyTeamName']?> vs <?=$row['OpponentTeam']?>|<small><?=$row['MatchDate']?> @ <?=$row['MatchVenue']?></small>                                            
-                                        </a>
-                                        <span data-id="<?=$row['Id']?>" class="btn btn-xs btn-danger pull-right delete_batting">X</span>
+                                    <li class="list-group-item"><?=$row['MyTeamName']?> vs <?=$row['OpponentTeam']?>|<small><?=$row['MatchDate']?> @ <?=$row['MatchVenue']?></small><span data-id="<?=$row['Id']?>" class="btn btn-xs btn-danger pull-right delete_batting">X</span>
                                     </li>
                                 <?php
                                     }
@@ -240,20 +232,12 @@
                                 <?php
                                 if(count($bowling_history) < 1){
                                 ?>
-                                <li class="list-group-item">
-                                    <a href="#">
-                                        No Bowling history is found
-                                    </a>
-                                </li>
+                                <li class="list-group-item">No Bowling history is found</li>
                                 <?php
                                 }else{
                                     foreach ($bowling_history as $row) {
                                 ?>
-                                    <li class="list-group-item">
-                                        <a href="#">
-                                            <?=$row['MyTeamName']?> vs <?=$row['OpponentTeam']?>|<small><?=$row['MatchDate']?> @ <?=$row['MatchVenue']?></small>                                            
-                                        </a>
-                                        <span  data-id="<?=$row['Id']?>" class="delete_bowling btn btn-xs btn-danger pull-right">X</span>
+                                    <li class="list-group-item"><?=$row['MyTeamName']?> vs <?=$row['OpponentTeam']?>|<small><?=$row['MatchDate']?> @ <?=$row['MatchVenue']?></small><span  data-id="<?=$row['Id']?>" class="delete_bowling btn btn-xs btn-danger pull-right">X</span>
                                     </li>
                                 <?php
                                     }
@@ -271,3 +255,14 @@
 		</div>
 	</div>
 </div>
+<script>
+function ValidateDate(dtValue)
+{
+var dtRegex = new RegExp(/^\d{4}-\d{1,2}-\d{1,2}$/);
+    if(dtRegex.test(dtValue)){
+        alert(1);
+    }else{
+        alert(2);
+    }
+}
+</script>

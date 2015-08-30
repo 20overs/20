@@ -4,23 +4,24 @@ class Search extends CI_Controller{
 		parent::__construct();
 	}
 	public function index(){
-		$bowlbatstyle = $this->input->post('bowlbatstyle');
-		$country = $this->input->post('country');
-		$state = $this->input->post('state');
-		$city = $this->input->post('city');
-		$postalcode = $this->input->post('zipcode');
-		/*$sql1="SELECT co.country from Countries co where co.countryid='$country'";
-		$sql2="SELECT st.name as state from States st , Player_Profile pp where st.stateid='$state' and st.countryid ='$country' ";
-		$sql3="SELECT ct.city_name as city from Cities ct , Player_Profile pp where  ct.id='$city' and  ct.state_id='$state' and ct.country_id='$country'";*/
+		$data['title'] = "Search result";
+		$bowlbatstyle = $this->input->post('bowlbatstyle',true);
+		$country = $this->input->post('country',true);
+		$state = $this->input->post('state',true);
+		$city = $this->input->post('city',true);
+		$postalcode = $this->input->post('zipcode',true);
+
+
+
 		if(!empty($country)&& ($state) && ($city) && ($postalcode))
 		{
 		$sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=?  and pp.Country=? and pp.State=? and pp.City=? and pp.PostalCode=?
 		and
@@ -52,11 +53,11 @@ class Search extends CI_Controller{
 		{
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.city_name as State,ct.name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=?  and pp.Country=? and pp.City=? and pp.PostalCode=?
 		and
@@ -85,11 +86,11 @@ class Search extends CI_Controller{
 		{
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=?  and pp.Country=? and pp.City=?
 		and
@@ -120,11 +121,11 @@ class Search extends CI_Controller{
 		{
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=?  and pp.Country=?  and pp.PostalCode=?
 		and
@@ -156,11 +157,11 @@ class Search extends CI_Controller{
 
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=? and pp.Country=? and pp.State=? and pp.City=?
 		and
@@ -190,11 +191,11 @@ class Search extends CI_Controller{
 
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=?  and pp.Country=? and pp.State=?
 		and
@@ -224,11 +225,11 @@ class Search extends CI_Controller{
 
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=? and pp.Country=?
 		and
@@ -258,11 +259,11 @@ class Search extends CI_Controller{
 
 		 $sql = "SELECT pp.Id,pp.UserSysID,pp.Id,pp.DOB,st.name as State,ct.city_name as City,pp.City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
 		FROM
-		Player_Profile pp,
-		Countries co,
-		Cities ct,
-		States st,
-		20oversUsers 20U
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
 		where
 		pp.BattingStyle=? and pp.PostalCode=?
 		and
@@ -286,6 +287,37 @@ class Search extends CI_Controller{
 		and
 		20U.UserSysID=pp.UserSysID";
 		$res = $this->db->query($sql,array($bowlbatstyle,$postalcode,$bowlbatstyle,$postalcode))->result_array();
+		}else{
+		$sql = "SELECT pp.Id,pp.UserSysID,pp.DOB,pp.Country,st.name as State,ct.city_name as City,pp.PostalCode,pp.BattingStyle,pp.BowlingStyle,co.country,CONCAT(UCASE(20U.LastName),\" \",UCASE(20U.FirstName)) as fullname
+		FROM
+		player_profile pp,
+		countries co,
+		cities ct,
+		states st,
+		20oversusers 20U
+		where
+		pp.BattingStyle=? 
+		and
+		co.countryid=pp.Country
+		and
+		ct.id=pp.City
+		and ct.state_id =pp.State and ct.country_id=pp.Country and
+		st.stateid=pp.State
+		AND st.countryid = pp.Country
+		and
+		20U.UserSysID=pp.UserSysID
+		or
+		pp.BowlingStyle=? 
+		and
+		co.countryid=pp.Country
+		and
+		ct.id=pp.City
+		and ct.state_id =pp.State and ct.country_id=pp.Country and
+		st.stateid=pp.State
+		AND st.countryid = pp.Country
+		and
+		20U.UserSysID=pp.UserSysID";
+		$res = $this->db->query($sql,array($bowlbatstyle,$bowlbatstyle))->result_array();
 		}
 		if(count($res) > 0){
 			$curryear = date('Y');

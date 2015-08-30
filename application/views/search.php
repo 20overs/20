@@ -2,7 +2,7 @@
 echo $this->load->view('inc/header');
 ?>
 <div class="container-fluid">
-<br>
+<h3><u>SEARCH RESULT</u></h3>
 <table id="myTable" class="table table-striped">
 <thead>
     <tr>
@@ -26,8 +26,3 @@ foreach ($data as $val) {
 <?php
 echo $this->load->view('inc/footer');
 ?>
-<script>
-$(document).ready(function(){
-    $('#myTable').DataTable();
-});
-</script>

@@ -3,9 +3,11 @@
 class Welcome extends CI_Controller {
 	public function index()
 	{
+		$this->output->cache(1);
 		$this->load->model('home');
 		$this->load->model('locations');
 		$data['countries'] = $this->locations->get_countries();
+		$data['match_today'] = $this->home->get_matches();
 		$data['title'] = "20overs.com";
 		$data['arti'] = $this->home->get_articles();
 		$data['arti_count'] = count($data['arti']);
@@ -21,6 +23,7 @@ class Welcome extends CI_Controller {
 		$this->load->view('inc/popup');
 	}
 	public function profile(){
+		$this->output->cache(1);
 		$data['title'] = "Player Profile";
 		$this->load->view('inc/header',$data);
 		$this->load->view('home/profile');
@@ -73,6 +76,7 @@ class Welcome extends CI_Controller {
 		if($id == ""){
 			redirect('/');
 		}
+		$this->output->cache(1);
 		$this->load->model('home');
 		$data['title'] = "Reset password";
 		$this->session->set_userdata('token',$id);
@@ -138,5 +142,97 @@ class Welcome extends CI_Controller {
 		$this->load->view('inc/footer');
 		$this->load->view('inc/popup');
 	}
-	
+	public function wow(){
+		$this->output->cache(1);
+		$data['title'] = "WOW catch";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/wow');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');
+	}
+	public function blind(){
+		$this->output->cache(1);
+		$data['title'] = "Blind spot";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/blind');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');
+	}
+	public function contactform(){
+		$this->output->cache(1);
+		$data['title'] = "Contact form";
+		$this->load->view('inc/header',$data);
+		$this->load->view('footer/contactform');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');
+	}
+	public function postcontactform(){
+		$this->output->cache(1);
+		$name = $this->input->post('name');
+		$email = $this->input->post('email');
+		$ihavea = $this->input->post('ihavea');
+		$comments = $this->input->post('comments');
+		$sql = "INSERT INTO suggestions(Name,Email,SuggestionCode,Comments,SuggestionDate) VALUES(?,?,?,?,NOW())";
+		$this->db->query($sql,array($name,$email,$ihavea,$comments));
+		$id = $this->db->insert_id();
+		if($id != 0){
+			$data['title'] = "Thanks for contact us";
+			$data['message'] = "Your feedback is submitted";
+			$this->load->view('inc/header',$data);
+			$this->load->view('message');
+			$this->load->view('inc/footer');
+			$this->load->view('inc/popup');
+			header("refresh:2;url=".site_url('welcome/contactform'));
+		}
+	}
+	public function aboutus(){
+		$this->output->cache(1);
+		$data['title'] = "About us";
+		$this->load->view('inc/header',$data);
+		$this->load->view('footer/aboutus');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');
+	}
+	public function privacypolicy(){
+		$this->output->cache(1);
+		$data['title'] = "Privacty policy";
+		$this->load->view('inc/header',$data);
+		$this->load->view('footer/terms');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');	
+	}
+	public function ourteam(){
+		$this->output->cache(1);
+		$data['title'] = "Our team";
+		$this->load->view('inc/header',$data);
+		$this->load->view('footer/ourteam');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');	
+	}
+	public function faq(){
+		$this->output->cache(1);
+		$data['title'] = "FAQ";
+		$this->load->view('inc/header',$data);
+		$this->load->view('footer/faq');
+		$this->load->view('inc/footer');
+		$this->load->view('inc/popup');	
+	}
+
+	public function sendmail(){
+
+		
+		$this->load->library('email');
+
+		$this->email->from("cvvkshcv@gmail.com","Vikash");
+		$this->email->to('cvvkshcv@gmail.com');
+
+		$this->email->subject('Message from: www.20overs.com');
+		$this->email->message("Dear ,\n\nHere is your profile id:\n\nIf you need further assistance please go to 20overs.com and use our contact us section to raise any concerns or to give feedback.\n\nThank you for visiting 20overs.com.");
+		$this->email->attach('uploads/talent.jpg');
+		if($this->email->send()){
+			echo "A";
+		}else{
+			echo "B";
+		}
+	}
 }
