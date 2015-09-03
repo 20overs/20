@@ -284,7 +284,9 @@ class Users extends CI_Model{
 		return $this->db->query("Select Sum(BLH.Wickets) as wikets From bowling_history BLH Where BLH.PlayerId =?",array($id))->result_array();
 	}
 	public function get_profile_pic($id){
-		$image = $this->db->select('image')->from('20oversusers')->where('UserSysID',$id)->get()->row()->image;
+		$user = $this->db->select('UserSysID')->from('player_profile')->where('Id',$id)->get()->row();
+		$id = $this->db->select('image')->from('20oversusers')->where('UserSysID',$user->UserSysID)->get()->row();
+		$image = $id->image;
 		if($image == 0){
 			return 'uploads/talent.jpg';
 		}else{

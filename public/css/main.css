@@ -591,3 +591,9 @@ padding:5px;
 .panel-heading:hover{
 	cursor: pointer;
 }
+.handover{
+	cursor: pointer;
+}
+.handover:hover{
+	color: #000;
+}

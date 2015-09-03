@@ -9,7 +9,7 @@
 					<div class="panel-group" id="accordion">
 					  <div class="panel panel-info">
 					    <div class="panel-heading" href="#collapseOne" data-toggle="collapse" data-parent="#accordion">
-					        <center><span class="h4">CREATE BATTING HISTORY</span></center>
+					        <center><span class="h4 handover">CREATE BATTING HISTORY</span></center>
 					    </div>
 					    <div id="collapseOne" class="panel-collapse collapse">
 					      <div class="panel-body">
@@ -111,7 +111,7 @@
 					  </div>
 					  <div class="panel panel-info">
 					    <div class="panel-heading" href="#collapseTwo" data-toggle="collapse" data-parent="#accordion">
-					        <center><span class="h4">CREATE BOWLING HISTORY</span></center>
+					        <center><span class="h4 handover">CREATE BOWLING HISTORY</span></center>
 					    </div>
 					    <div  id="collapseTwo" class="panel-collapse collapse">
 					      <div class="panel-body">
@@ -129,7 +129,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="match_result">Match Result</label>
-                                        <input type="text" class="form-control form-control-cust" id="match_result" placeholder="Match Result" required name="match_result">
+                                        <input type="text" class="form-control form-control-cust" id="match_result1" placeholder="Match Result" required name="match_result">
                                         </div>
                                       </div>
                                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
@@ -199,7 +199,7 @@
 
 					  <div class="panel panel-info">
 					    <div class="panel-heading" class="panel-heading" href="#collapseThree" data-toggle="collapse" data-parent="#accordion">
-					        <center><span class="h4">MANAGE HISTORY</span></center>
+					        <center><span class="h4 handover">MANAGE HISTORY</span></center>
 					    </div>
 					    <div  id="collapseThree" class="panel-collapse collapse in">
 					      <div class="panel-body">
@@ -260,9 +260,9 @@ function ValidateDate(dtValue)
 {
 var dtRegex = new RegExp(/^\d{4}-\d{1,2}-\d{1,2}$/);
     if(dtRegex.test(dtValue)){
-        alert(1);
+        return true;
     }else{
-        alert(2);
+        return false;
     }
 }
 </script>

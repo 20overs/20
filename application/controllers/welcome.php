@@ -235,4 +235,26 @@ class Welcome extends CI_Controller {
 			echo "B";
 		}
 	}
+	public function active($token){
+		
+		if($this->db->query('SELECT * from user_activate_account where AuthToken=?',array($token))->num_rows() > 0){
+			$x = $this->db->query('SELECT UserSysID,Lastname,Firstname,Username,IDNbr,CreatedOn from user_activate_account where AuthToken=?',array($token))->row();
+			if($x->UserSysID != null){
+			$this->db->query('INSERT into 20oversusers(Lastname,Firstname,Username,IDNbr,CreatedOn) values(?,?,?,?,?)',array($x->Lastname,$x->Firstname,$x->Username,$x->IDNbr,$x->CreatedOn));
+			$data['title'] = "Account activation";
+			$this->load->view('inc/header',$data);
+			if($this->db->insert_id() != null){
+				$data['message'] = "<div class='jumbotron'><h2>Your account has been <span>activated successfully</span>.</h2><h2>Enjoy our <span>FREE services</span> by Creating/Maintaining <span>your own schedules in Schedules</span> and Maintain <span>your records in Talents by creating your player profile</span>.</h2></div><a href='www.20overs.com' data-toggle='modal' data-target='#login-modal' class='btn btn-primary'>Login</a>";
+				$this->db->query('delete from user_activate_account where AuthToken=?',array($token));
+				$this->load->view('message',$data);
+			}else{
+				$data['message'] = "<div class='jumbotron'><h2>Error activating your account.  Please contact support using our contact us section.</h2></div>";
+				$this->load->view('message',$data);
+			}
+			$this->load->view('inc/footer');
+			}
+		}else{
+			redirect('/');
+		}
+	}
 }

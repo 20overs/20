@@ -85,13 +85,13 @@
 <p>We take privacy seriously. Please check out our Privacy Policy for details.</p>
 
 <h4>17. &nbsp;How do I update my batting/bowling history?</h4>
-<p> This feature is available in the "Talents" section. Please watch the <a href="http://www.20overs.com/ssl/demo/BatBowlDemo.php">DEMO</a> video for more details.</P>
+<p> This feature is available in the "Talents" section.</P>
 
 <h4>18. &nbsp; How do I update my Player Profile?</h4>
-<p>This feature is available in the "Talents" section. Please watch the <a href="http://www.20overs.com/ssl/demo/PlayerProfileDemo.php">DEMO</a> video for more details.</p>
+<p>This feature is available in the "Talents" section.</p>
 
 <h4>19.&nbsp;How do I search for a particular talent such as right handed batsman, or a left break googly bowler?</h4>
-<p> This feature is available in our Home page. Please take a peek at the <a href="http://www.20overs.com/ssl/demo/TalentsDemo.php">DEMO</a> video for more details.</p>
+<p> This feature is available in our Home page.</p>
 
 <h4>20. &nbsp;Can I remove my own Series?</h4>
 <p>Yes.  You can remove a series when there is at least one match is created under a series.</p>

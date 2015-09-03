@@ -130,6 +130,11 @@ $("#logout").click(function(e){
   });
 
   $('#batting_history').submit(function(e){
+    var val = $('#match_result').val();
+    var matches = val.match(/\d+/g);
+    if (matches != null) {
+        alert('Match result contain numbers please remove it.');
+    }else{
       $.ajax({
         url:'batting_history',
         data:$(this).serializeArray(),
@@ -147,11 +152,16 @@ $("#logout").click(function(e){
           $('#bat_result').html("<span class='h3 text-danger'>Server error try again later</span>");
         }
       });
-
+    }
      e.preventDefault();
   });
 
   $('#bowling_history').submit(function(e){
+    var val = $('#match_result1').val();
+    var matches = val.match(/\d+/g);
+    if (matches != null) {
+        alert('Match result contain numbers please remove it.');
+    }else{
     $.ajax({
       url:'bowling_history',
       data:$(this).serializeArray(),
@@ -169,6 +179,7 @@ $("#logout").click(function(e){
         $('#bow_result').html("<span class='h3 text-danger'>Server error try again later</span>");
       }
     });
+  }
    e.preventDefault();
   });
 

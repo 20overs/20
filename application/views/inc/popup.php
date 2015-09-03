@@ -66,7 +66,7 @@
 		            	<div class="form-group">
 		            	  	<input type="password" id="reg-password" name="reg-password" placeholder="Password" value="" class="form-control login-field" required>
 		            	</div>
-						<button type="submit" href="#" class="btn btn-success modal-login-btn">Sign Up</button>
+						<button type="submit" href="#" class="btn btn-success modal-login-btn" id="signup-btn">Sign Up</button>
 						<div id="reg-form-error" class="text-center"></div>
             </form>
 				</div>
@@ -141,6 +141,7 @@ $('#login-form').submit(function(e){
   });
 
   $('#register-form').submit(function(e){
+    $('#signup-btn').attr('disabled','true');
     $('#reg-form-error').html('<img src="<?=site_url()?>public/img/fb_load.gif" class="text-center" />');
     $.ajax({
       url:'<?=site_url()?>welcome/register',
@@ -151,8 +152,9 @@ $('#login-form').submit(function(e){
         $('#reg-form-error').html(data);
       },
       error: function(){
+        $('#signup-btn').removeAttr('disabled');
         $('#reg-form-error').html("Email already exist. Try again later.");
-        document.getElementById("register-form").reset();
+        //document.getElementById("register-form").reset();
       }
     });
     e.preventDefault();

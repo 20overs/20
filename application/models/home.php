@@ -32,7 +32,7 @@ class Home extends CI_Model{
 	function register($email,$first,$last,$pass){
 		$sql = "SELECT Username FROM 20oversusers WHERE Username=?";
 		$count = $this->db->query($sql,array($email))->num_rows();
-		if($count > 0)
+		if($count < 1)
 		{
 			$sql = "INSERT INTO user_activate_account (Lastname, Firstname, Username, IDNbr,CreatedOn,AuthToken) VALUES (?,?,?, AES_ENCRYPT(?,'test'),NOW(),?)";
 			$token =  md5(uniqid(rand(), TRUE));
@@ -61,7 +61,7 @@ class Home extends CI_Model{
 				return "Error saving your data";
 			}
 		}else{
-			return "User already exist";
+			return 'User already exist';
 		}
 	}
 	
