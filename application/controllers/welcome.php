@@ -3,7 +3,6 @@
 class Welcome extends CI_Controller {
 	public function index()
 	{
-		$this->output->cache(1);
 		$this->load->model('home');
 		$this->load->model('locations');
 		$data['countries'] = $this->locations->get_countries();

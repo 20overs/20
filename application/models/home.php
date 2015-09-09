@@ -29,6 +29,7 @@ class Home extends CI_Model{
 		return $this->db->query($sql,array($cat))->result_array();
 	}
 
+	/*
 	function register($email,$first,$last,$pass){
 		$sql = "SELECT Username FROM 20oversusers WHERE Username=?";
 		$count = $this->db->query($sql,array($email))->num_rows();
@@ -42,7 +43,7 @@ class Home extends CI_Model{
 				$toemail = $email;
 				$to = trim($toemail);
 				$subject = "20Overs.com - Activate your account";
-						$message =" ## This is an automated response. Please do not reply to this e-mail. ##\n\n
+				$message =" ## This is an automated response. Please do not reply to this e-mail. ##\n\n
 						Dear ". $last." ,\n\n
 						THANK YOU for registering with us.\n\n Click the following link to confirm your registration.\n\n.". $tokenlinkpaste."
 						\n\n. If that link is not working then copy and paste this link in your browser's address bar.\n\n.".$tokenlinkpaste." If you need further assistance please go to 20overs.com and use our contact us section to raise any concerns or to give feedback.\n\n
@@ -64,5 +65,38 @@ class Home extends CI_Model{
 			return 'User already exist';
 		}
 	}
-	
+	*/
+	function register($emails,$first,$last,$pass)
+	{
+		header('Content-Type: application/json');
+		$sql = "SELECT Username FROM 20oversusers WHERE Username=?";
+		$count = $this->db->query($sql,array($emails))->num_rows();
+		if($count > 0)
+		{
+			echo json_encode(array('error' => 1,'message'=>"<font color='red'>There is already an account with this email address!!  Please try with different email address.</font>"));
+		}
+		else
+		{
+			$sql = "INSERT INTO user_activate_account (Lastname, Firstname, Username, IDNbr,CreatedOn,AuthToken) VALUES (?,?,?, AES_ENCRYPT(?,'test'),NOW(),?)";
+			$token =  md5(uniqid(rand(), TRUE));
+			$tokenlinkpaste = site_url()."welcome/active/".$token;
+			if ($this->db->query($sql,array($last,$first,$emails,$pass,$token)))
+			{
+				$this->load->library('email');
+				$this->email->from("support@20overs.com","20overs");
+				$this->email->to($emails);
+				$message = "## This is an automated response. Please do not reply to this e-mail. ##\n<br>Dear ".$first ." 	". $last." ,\n\n<br><br> THANK YOU for registering with us.\n\n<br><br> Click the following link to confirm your registration.\n\n<br><br>.". $tokenlinkpaste."\n\n<br><br>. If that link is not working then copy and paste this link in your browser's address bar.\n\n<br><br>.".$tokenlinkpaste." If you need further assistance please go to 20overs.com and use our contact us section to raise any concerns or to give feedback.\n\n<br><br>Thank you for visiting 20overs.com.";
+				$this->email->subject('20Overs.com - Activate your account');
+				$this->email->message($message);
+				$this->email->set_mailtype('html');
+				if($this->email->send()){
+					echo json_encode(array('error' => 0,'message'=>"<font color='green'>Confirmation mail has sent to your mail.</font>"));
+				}else{
+					echo json_encode(array('error' => 1,'message'=>"<font color='red'>Error saving your data.</font>"));
+				}
+			}else{
+				echo json_encode(array('error' => 1,'message'=>"<font color='red'>Error saving your data.</font>"));
+			}
+		}
+	}	
 }

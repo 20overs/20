@@ -55,17 +55,17 @@
 					
           <form action="#" id="register-form">
     				<div class="form-group">
-                   <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" required>
+              <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" data-validation="required" data-validation="email" data-validation-length="5-35" />
     		    </div>
 						<div class="form-group">
-		            	  	<input type="text" id="reg-first-name" name="reg-first-name" placeholder="First Name" value="" class="form-control login-field" required>
-		            	</div>
+		         	<input type="text" id="reg-first-name" name="reg-first-name" placeholder="First Name (only a-z characters)" value="" class="form-control login-field" pattern="^[a-zA-Z ]*$" data-validation="required" data-validation-length="5-15" />
+		        </div>
 						<div class="form-group">
-		            	  	<input type="text" id="reg-last-pass" name="reg-last-name" placeholder="Last Name" value="" class="form-control login-field" required>
-		            	</div>
-		            	<div class="form-group">
-		            	  	<input type="password" id="reg-password" name="reg-password" placeholder="Password" value="" class="form-control login-field" required>
-		            	</div>
+          	  	<input type="text" id="reg-last-pass" name="reg-last-name" placeholder="Last Name (only a-z characters)" value="" class="form-control login-field" pattern="^[a-zA-Z ]*$" data-validation="required" data-validation-length="5-15" />
+          	</div>
+          	<div class="form-group">
+          	  	<input type="password" id="reg-password" name="reg-password" placeholder="Password" value="" class="form-control login-field" data-validation="required" data-validation-length="5-15" />
+          	</div>
 						<button type="submit" href="#" class="btn btn-success modal-login-btn" id="signup-btn">Sign Up</button>
 						<div id="reg-form-error" class="text-center"></div>
             </form>
@@ -140,25 +140,33 @@ $('#login-form').submit(function(e){
     e.preventDefault();
   });
 
-  $('#register-form').submit(function(e){
+  $.validate({
+  form : '#register-form',
+  scrollToTopOnError : true,
+  onSuccess : function($form) {
     $('#signup-btn').attr('disabled','true');
     $('#reg-form-error').html('<img src="<?=site_url()?>public/img/fb_load.gif" class="text-center" />');
-    $.ajax({
+      $.ajax({
       url:'<?=site_url()?>welcome/register',
-      data:$(this).serializeArray(),
+      data:$("#register-form").serializeArray(),
       method:"POST",
       success :function(data){
-        document.getElementById("register-form").reset();
-        $('#reg-form-error').html(data);
+        if(data.error == 1){
+          $('#reg-form-error').html(data.message);
+          $('#register-form').reset();
+        }else{
+          $('#reg-form-error').html(data.message);
+          $('#signup-btn').removeAttr('disabled');
+        }
       },
       error: function(){
+        $('#reg-form-error').html("<font color='red'>Confirmation mail already sent.</font>");
         $('#signup-btn').removeAttr('disabled');
-        $('#reg-form-error').html("Email already exist. Try again later.");
-        //document.getElementById("register-form").reset();
       }
-    });
-    e.preventDefault();
-  });
+      });
+      return false;
+    }
+});
 
 	$('#scountry').change(function(e){
     var id = $(this).val();
