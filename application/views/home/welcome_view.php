@@ -301,7 +301,7 @@
 			   <h4 class="heading">
 				EXTRAS
 			   </h4>
-			<ul class="no-style trending-ul">
+			<ul class="no-style trending-ul ">
 				<?php
 				foreach ($extras as $row):
 				?>
