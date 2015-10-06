@@ -1,7 +1,7 @@
 <div class="container-fluid margin-top-5">
 	<div class="row">
 			<div class="col-lg-4 col-md-4 height-400">
-				<div class="border  padding-9 clearfix article">
+				<div class="border  padding-9 clearfix article wow fadeInLeft">
 					<h4 class="heading">
 						LATEST ARTICLES
 					</h4>
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 
-		<div class="col-lg-5 col-md-5 img-container  hidden-sm  hidden-xs">
+		<div class="col-lg-5 col-md-5 img-container  hidden-sm  hidden-xs wow fadeIn" data-wow-duration="3s">
 			<div class="banner"></div>
 				<?php
 				  $min=2;
@@ -48,7 +48,7 @@
 				?>
 				<img src="<?=site_url()?>public/img/front/front<?=$randval?>.jpg" width=100% class="image" />
 		</div>
-	<div class="col-lg-3 col-md-3">
+	<div class="col-lg-3 col-md-3 wow fadeInRight" data-wow-delay="0.5s" data-wow-duration="1s">
 		<div class="border padding-9 clearfix">
 			<h4 class="heading">
 				MATCHES TODAY
@@ -85,8 +85,12 @@
 			<h4 class="heading">
 				LIVE SCORE
 			</h4>
-			<div class="live-score-iframe">
-				<script src="//www.cricruns.com/system/application/views/widgetBase/wid_300_200_2_wo_ad.js" type="text/javascript" id="cricruns"></script>
+			<div style="margin-top:0px;height:200px;overflow:auto;">
+				<div class="live-score-iframe">
+					<script src="//www.cricruns.com/system/application/views/widgetBase/wid_300_200_2_wo_ad.js" type="text/javascript" id="cricruns"></script>
+				</div>
+				<h3>OTHER MATCHES</h3>
+				<?=$rss?>
 			</div>
 		</div>
 	</div>
@@ -96,7 +100,7 @@
 
 <div class="row margin-top-5">
 			<div class="col-lg-6">
-				<div class="border padding-9 clearfix">
+				<div class="border padding-9 clearfix wow fadeInLeft" data-wow-delay="2s">
 					<h4 class="heading">
 						SEARCH TALENT
 					</h4>
@@ -125,7 +129,7 @@
 
 					    <div class="form-group">
 							<label class="form-label-cust" for="inputEmail">Country :</label>
-					        <select class="form-control form-control-cust" id="scountry" name="country">
+					        <select class="form-control form-control-cust" id="country" name="country">
 							<option value="">Select Country</option>
 							<?php
 			                    foreach ($countries as $count) {
@@ -141,7 +145,7 @@
 						
 					    <div class="form-group" style="margin-bottom:13px;">
 					        <label class="form-label-cust" for="inputPassword">State :</label>
-					        <select class="form-control form-control-cust" id="sstate" name="state">
+					        <select class="form-control form-control-cust" id="state" name="state">
 							<option value="">Select state</option>
 							</select>
 					    </div>
@@ -149,7 +153,7 @@
 				<div class="col-lg-6">
 				    <div class="form-group">
 				        <label class="form-label-cust" for="inputEmail">City :</label>
-				        <select class="form-control form-control-cust" id="scity" name="city">
+				        <select class="form-control form-control-cust" id="city" name="city">
 						<option value="">Select city</option>
 						</select>
 				    </div>
@@ -166,7 +170,7 @@
 			</div>
 			<div class="col-lg-3">
 
-				<div class="border padding-9">
+				<div class="border padding-9 wow fadeInRight" data-wow-delay="2s">
 					<h4 class="heading">
 						TALENTS TODAY
 					</h4>
@@ -203,7 +207,7 @@
 					</div>
 
 			</div>
-			<div class="col-lg-3">
+			<div class="col-lg-3 wow fadeInRight" data-wow-delay="2s">
 				<div class="border padding-9">
 			        <h4 class="heading">
 			        	RECENT USERS
@@ -227,7 +231,7 @@
 
     
 	<div class="row margin-top-5 rows3">
-		<div class="col-lg-3">
+		<div class="col-lg-3 wow fadeInLeft" data-wow-delay="1s">
 			<div class="border  padding-9">
 				<h4 class="heading">
 					TRENDING NOW
@@ -246,10 +250,10 @@
 				</ul>
 			</div>
 		</div>
-		<div class="col-lg-3">
+		<div class="col-lg-3 wow fadeInLeft" data-wow-delay="0.5s">
 			<div class="border  padding-9">
 				<h4 class="heading">
-					WHAT IS?
+					GET TO KNOW
 				</h4>
 				<ul class="no-style trending-ul">
 				<?php
@@ -266,7 +270,7 @@
 			</div>
 		</div>
 
-		<div class="col-lg-3">
+		<div class="col-lg-3 wow fadeInRight" data-wow-delay="0.5s">
 			<div class="border padding-12">
 				<h4 class="heading">
 					GOOGLY
@@ -292,7 +296,7 @@
 			</div>
 		</div>
 
-		<div class="col-lg-3">
+		<div class="col-lg-3 wow fadeInRight" data-wow-delay="1s">
 			<div class="border  padding-9">
 			   <h4 class="heading">
 				EXTRAS

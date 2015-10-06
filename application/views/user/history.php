@@ -103,9 +103,10 @@
                                         <input type="number" class="form-control form-control-cust" id="_6s" placeholder="Number Of 6(s)" required name="_6s">
                                     </div>
                                     <button type="submit" class="btn search-btn">SAVE BATTING HISTORY</button>
+                                    <button type="reset" class="btn search-btn">RESET</button>
 							      </div>
 						      </div>
-                              </form>
+                            </form>
 						  </div>
 					    </div>
 					  </div>
@@ -116,7 +117,7 @@
 					    <div  id="collapseTwo" class="panel-collapse collapse">
 					      <div class="panel-body">
                                 <div class="col-lg-12">
-                    <form action="#" method="post" id="bowling_history">
+                                <form action="#" method="post" id="bowling_history">
                                   <h3>Match details</h3>
                                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                                         <div class="form-group">
@@ -190,9 +191,10 @@
                                             <input type="number" class="form-control form-control-cust" id="total_wickets" placeholder="Total Wickets" required name="total_wickets">
                                         </div>
                                         <button type="submit" class="btn search-btn">SAVE BOWLING HISTORY</button>
+                                        <button type="reset" class="btn search-btn">RESET</button>
                                       </div>
                                   </div>
-                                  </form>
+                                </form>
                               </div>
                             </div>
                           </div>

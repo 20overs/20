@@ -6,6 +6,9 @@ class User extends CI_Controller {
 		$this->load->model('users');
 		$this->load->model('locations');
 	}
+	public function get_pp_id($id){
+		return $this->db->select('Id')->from('player_profile')->where('UserSysID',$id)->get()->row()->Id;
+	}
 	public function login(){
 		$res = $this->users->login($this->input->post('username',true),$this->input->post('password',true));
 		if($res !== FALSE){
@@ -13,20 +16,20 @@ class User extends CI_Controller {
 				if($ress->image != false){
 					$sessdata = array(
 	                   'user_id'  => $ress->UserSysID,
-	                   'user_id_enc' => $ress->UserSysID + 674539873,
+	                   'user_id_enc' => $this->get_pp_id($ress->UserSysID) + 674539873,
 	                   'name' => $ress->Firstname." ".$ress->Lastname,
 	                   'email' =>$ress->Username,
 	                   'image_url' => site_url().$ress->image_url,
 	                   'admin' => $ress->admin,
 	                   'logged_in' => TRUE
-	               );
+	             	);
 				}else{
 					$sessdata = array(
 	                   'user_id'  => $ress->UserSysID,
-	                   'user_id_enc' => $ress->UserSysID + 674539873,
+	                   'user_id_enc' => $this->get_pp_id($ress->UserSysID) + 674539873,
 	                   'name' => $ress->Firstname." ".$ress->Lastname,
 	                   'email' =>$ress->Username,
-	                   'image_url' => site_url()."uploads/talent.jpg",
+	                   'image_url' => site_url()."uploads/talent.png",
 	                   'admin' => $ress->admin,
 	                   'logged_in' => TRUE
 	               );
@@ -69,6 +72,7 @@ class User extends CI_Controller {
 	public function articles(){
 		$data['title'] = "Create articles";
 		$data['articles'] = $this->users->articles();
+		$data['countries'] = $this->locations->get_countries();
 		$this->load->view('inc/header',$data);		
 		$this->load->view('user/articles');
 		$this->load->view('inc/footer');
@@ -82,12 +86,15 @@ class User extends CI_Controller {
 		}
 		$this->users->add_articles();
 	}
-	public function view_profile($id){
-		$id = $id - 674539873;
+	public function view_profile($getid){
+		$data['title'] = "View profile";
+		$this->load->view('inc/header',$data);
+		$id = $getid - 674539873;
 		$data['id'] = $id;
 		$count = $this->users->profile_count($id);
 		if($count>0){
-			$data['profile_pic'] = $this->users->get_profile_pic($id);
+			$profile_id = $this->users->get_profile_id($id);
+			$data['profile_pic'] = $this->users->get_profile_pic($profile_id);
 			$data['style'] = $this->users->get_style($id);
 			$data['name'] = $this->users->get_name($id);
 			$data['batting_history'] = $this->users->pro_batting_history($id);
@@ -97,10 +104,16 @@ class User extends CI_Controller {
 			$data['location'] = $this->users->pro_get_location($id);
 			$data['runs'] = $this->users->pro_get_runs($id);
 			$data['wickets'] = $this->users->pro_get_wicket($id);
+
+			$data['user_id'] = $this->users->get_profile_id($id);
+			$data['profile_id'] = $getid;
+
+			$this->load->view('home/view_profile',$data);
+		}else{
+			$data['alert'] = "danger";
+			$data['message'] = "No profile found";
+			$this->load->view('inc/message',$data);
 		}
-		$data['title'] = "View profile";
-		$this->load->view('inc/header',$data);
-		$this->load->view('home/view_profile');
 		$this->load->view('inc/footer');
 	}
 	public function get_states(){
@@ -323,6 +336,5 @@ class User extends CI_Controller {
 		}
 		//$this->email->attach($fullpath);
 	}
-
 }
 ?>

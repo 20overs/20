@@ -147,7 +147,6 @@ class Users extends CI_Model{
 			echo json_encode(array('message'=>'Wrong Profile ID.','errors'=>1));
 		}
 	}
-
 	function get_batting_history(){
 		$sql = "SELECT a.* FROM batting_history a,player_profile b WHERE a.PlayerId=b.Id AND b.UserSysID=?";
 		return $this->db->query($sql,array($this->session->userdata('user_id')))->result_array();
@@ -172,7 +171,6 @@ class Users extends CI_Model{
 			echo json_encode(array('message'=>'Batting history not deleted.','errors'=>1));
 		}
 	}
-
 	function articles(){
 		$day = date("d");
 		$day +=1;
@@ -225,10 +223,7 @@ class Users extends CI_Model{
 				echo "Failed to post Article";
 			}
 		}
-		
-		
 	}
-
 	public function check_email($email){
 		$sess_email = $this->session->userdata('email');
 		if($email == $sess_email){
@@ -284,14 +279,25 @@ class Users extends CI_Model{
 		return $this->db->query("Select Sum(BLH.Wickets) as wikets From bowling_history BLH Where BLH.PlayerId =?",array($id))->result_array();
 	}
 	public function get_profile_pic($id){
-		$user = $this->db->select('UserSysID')->from('player_profile')->where('Id',$id)->get()->row();
-		$id = $this->db->select('image')->from('20oversusers')->where('UserSysID',$user->UserSysID)->get()->row();
+		$count = $this->db->select('*')->from('player_image')->where('user_id',$id)->get()->num_rows();
+		if($count <= 0){
+			return 'uploads/talent.jpg';
+		}else{
+			return $this->db->select('image_url')->from('player_image')->where('user_id',$id)->get()->row()->image_url;
+		}
 		$image = $id->image;
 		if($image == 0){
 			return 'uploads/talent.jpg';
 		}else{
 			return $this->db->select('image_url')->from('player_image')->where('user_id',$id)->get()->row()->image_url;
 		}
+	}
+	public function get_profile_id($profileid){
+		return $this->db->select('UserSysID')->from('player_profile')->where('Id',$profileid)->get()->row()->UserSysID;
+	}
+
+	public function get_user_id($userid){
+		return $this->db->select('Id')->from('player_profile')->where('UserSysID',$userid)->get()->row()->Id;
 	}
 }
 ?>

@@ -55,18 +55,20 @@
 					
           <form action="#" id="register-form">
     				<div class="form-group">
-              <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" data-validation="required" data-validation="email" data-validation-length="5-35" />
+              <input type="email" id="email" name="email" placeholder="Enter Email Id" value="" class="form-control login-field" />
     		    </div>
 						<div class="form-group">
 		         	<input type="text" id="reg-first-name" name="reg-first-name" placeholder="First Name (only a-z characters)" value="" class="form-control login-field" pattern="^[a-zA-Z ]*$" data-validation="required" data-validation-length="5-15" />
 		        </div>
 						<div class="form-group">
-          	  	<input type="text" id="reg-last-pass" name="reg-last-name" placeholder="Last Name (only a-z characters)" value="" class="form-control login-field" pattern="^[a-zA-Z ]*$" data-validation="required" data-validation-length="5-15" />
+          	  	<input type="text" id="reg-last-name" name="reg-last-name" placeholder="Last Name (only a-z characters)" value="" class="form-control login-field" pattern="^[a-zA-Z ]*$" data-validation="required" data-validation-length="5-15" />
           	</div>
           	<div class="form-group">
           	  	<input type="password" id="reg-password" name="reg-password" placeholder="Password" value="" class="form-control login-field" data-validation="required" data-validation-length="5-15" />
           	</div>
-						<button type="submit" href="#" class="btn btn-success modal-login-btn" id="signup-btn">Sign Up</button>
+						<button type="submit" href="#" class="btn btn-success" id="signup-btn">Sign Up</button>
+            <button type="reset" href="#" class="btn btn-warning">Reset form</button>
+            <!-- modal-login-btn -->
 						<div id="reg-form-error" class="text-center"></div>
             </form>
 				</div>
@@ -140,18 +142,50 @@ $('#login-form').submit(function(e){
     e.preventDefault();
   });
 
-  $.validate({
-  form : '#register-form',
-  scrollToTopOnError : true,
-  onSuccess : function($form) {
-    $('#signup-btn').attr('disabled','true');
-    $('#reg-form-error').html('<img src="<?=site_url()?>public/img/fb_load.gif" class="text-center" />');
+  $('#register-form').validate({
+    rules:{
+      "email":{
+        required:true,
+        email:true,
+      },
+      "reg-first-name":{
+        required:true,
+        lettersonly:true,
+        minlength: 5
+      },
+      "reg-last-name":{
+        required:true,
+        lettersonly:true,
+        minlength: 5
+      },
+      "reg-password":{
+        required:true,
+        minlength: 7
+      }
+    },
+    messages:{
+      "email":{
+        required : "20overs.com need a email address to verify your account",
+        email : "Please enter a valid email address"
+      },
+      "reg-first-name":{
+        lettersonly:"You entered unwanted characters. Please remove"
+      },
+      "reg-last-name":{
+        lettersonly:"You entered unwanted characters. Please remove"
+      },
+      "reg-password":{
+        minlength:"Password should be atleast 7 characters long"
+      }
+    },
+    submitHandler: function (form) {
       $.ajax({
       url:'<?=site_url()?>welcome/register',
       data:$("#register-form").serializeArray(),
       method:"POST",
       success :function(data){
         if(data.error == 1){
+          $('#signup-btn').removeAttr('disabled');
           $('#reg-form-error').html(data.message);
           $('#register-form').reset();
         }else{
@@ -166,7 +200,44 @@ $('#login-form').submit(function(e){
       });
       return false;
     }
-});
+  });
+  /*$('#register-form').submit(function(e){
+     var charReg = "^[a-zA-Z ]*$";
+    if($('#email').val().trim()=="" || $('#email').val().trim().length < 10){
+      $('#reg-form-error').html("<span class='text text-danger h4'>Email should be more than 10 characters.</span>");
+    }else if($('#reg-first-name').val().trim() == "" || $('#reg-first-name').val().trim().length < 5){
+      $('#reg-form-error').html("<span class='text text-danger h4'>First name should 5 characters long and only characters allowed.</span>");
+    }else if($('#reg-last-name').val().trim() == "" || $('#reg-last-name').val().trim().length < 5 ){
+      $('#reg-form-error').html("<span class='text text-danger h4'>Last name should 5 characters long and only characters allowed.</span>");
+    }else if($('#reg-password').val().trim() == "" || $('#reg-password').val().trim().length < 8 ){
+      $('#reg-form-error').html("<span class='text text-danger h4'>Password should atleast 8 characters long.</span>");
+    }
+    else
+    {
+    $('#signup-btn').attr('disabled','true');
+    $('#reg-form-error').html('<img src="<?=site_url()?>public/img/fb_load.gif" class="text-center" />');
+      $.ajax({
+      url:'<?=site_url()?>welcome/register',
+      data:$("#register-form").serializeArray(),
+      method:"POST",
+      success :function(data){
+        if(data.error == 1){
+          $('#signup-btn').removeAttr('disabled');
+          $('#reg-form-error').html(data.message);
+          $('#register-form').reset();
+        }else{
+          $('#reg-form-error').html(data.message);
+          $('#signup-btn').removeAttr('disabled');
+        }
+      },
+      error: function(){
+        $('#reg-form-error').html("<font color='red'>Confirmation mail already sent.</font>");
+        $('#signup-btn').removeAttr('disabled');
+      }
+      });
+    }
+    e.preventDefault();
+  });
 
 	$('#scountry').change(function(e){
     var id = $(this).val();
@@ -181,7 +252,7 @@ $('#login-form').submit(function(e){
     });
     e.preventDefault();
   });
-
+*/
   $('#sstate').change(function(){
     var opt="<option value=''>Select city</option>";
     $.post('<?=site_url()?>user/get_cities/',{country:$('#scountry').val(),state:$(this).val()},function(data){

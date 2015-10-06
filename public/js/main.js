@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 $('.open_new').click(function(e){
   window.open($(this).attr('href'), '_blank');
   e.preventDefault();
@@ -47,7 +46,7 @@ $("#logout").click(function(e){
   $('#country').change(function(e){
     var id = $(this).val();
     var opt="<option value=''>Select state</option>";
-    $.post('get_states/',{id:id},function(data){
+    $.post('user/get_states/',{id:id},function(data){
         var obj = jQuery.parseJSON(data);
         $.each( obj, function( key, value ) {
             opt += "<option value='"+value.stateid+"'>"+value.name+"</option>";
@@ -60,7 +59,7 @@ $("#logout").click(function(e){
 
   $('#state').change(function(){
     var opt="<option value=''>Select city</option>";
-    $.post('get_cities/',{country:$('#country').val(),state:$(this).val()},function(data){
+    $.post('user/get_cities/',{country:$('#country').val(),state:$(this).val()},function(data){
         var obj = jQuery.parseJSON(data);
         $.each( obj, function( key, value ) {
             opt += "<option value='"+value.id+"'>"+value.city_name+"</option>";
@@ -184,6 +183,8 @@ $("#logout").click(function(e){
   });
 
   $('.delete_batting').click(function(){
+    var r = confirm("Sure want to delete?");
+    if (r == true) {
     $(this).parent().fadeOut(800);
     $.ajax({
       url:'del_batting',
@@ -198,9 +199,12 @@ $("#logout").click(function(e){
         $(this).parent().fadeIn(500);
       }
     });
+  }
   });
 
   $('.delete_bowling').click(function(){
+    var r = confirm("Sure want to delete?");
+    if (r == true) {
     $(this).parent().fadeOut(800);
     $.ajax({
       url:'del_bowling',
@@ -215,6 +219,7 @@ $("#logout").click(function(e){
         $(this).parent().fadeIn(500);
       }
     });
+  }
   });
 
   $('#matchid').change(function(){
@@ -285,5 +290,28 @@ $("#logout").click(function(e){
     e.preventDefault();
   });
 
-  $('#myTable').DataTable();
+  $('#update_profile,#create_profile').validate({
+    rules:{
+      "dob":{
+        required:true,
+        date:true
+      },
+      "height":{
+        required:true,
+        number:true,
+        max:220
+      },
+      "weight":{
+        required:true,
+        number:true,
+        max:130
+      },
+      "postal":{
+        required:true,
+        number:true,
+        minlength:4
+      }
+    }
+  });
+
 });

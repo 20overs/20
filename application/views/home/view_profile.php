@@ -3,6 +3,13 @@
 	<b><center><?=$name[0]['fullname']?></center></b>
 	<b><center><?=$location[0]['state']?> , <?=$location[0]['city']?></center></b>
 	<img src="<?=site_url()?><?=$profile_pic?>" class="img-thumbnail img-circle" height=500 width=500 />
+	<?php
+	if($this->session->userdata('logged_in') !== FALSE && $this->session->userdata('user_id') !== $user_id){
+	?>
+	<button class="btn btn-block btn-default" data-pp-id="<?=$profile_id?>" data-user-id="<?=$user_id?>" id="add_friend"> Add Friend </button>
+	<?php
+	}
+	?>
 	</div>
 	<div class="col-lg-9">
 		<h3 class="tableHeading">Player Profile</h3>
@@ -99,3 +106,12 @@
 		</table>
 
 </div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('#add_friend').click(function(){
+			alert(1);
+		});
+	});
+</script>

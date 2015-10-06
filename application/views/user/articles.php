@@ -30,24 +30,30 @@
 								<div class="form-group">
 								  <label for="name">Select Title</label>
 								  <select class="form-control form-control-cust" id="matchid">
-									<option value="0">Select a match</option>
+									<option value="0">Select a Topic</option>
 									<?php
-								  if(count($articles) > 0){
+								 	if(count($articles) > 0){
 									foreach ($articles as $row) {
 									?>
 										<option value="<?=$row["Team1Name"]?> vs <?=$row["Team2Name"]?>"><?=$row["Team1Name"]?> vs <?=$row["Team2Name"]?></option>
 									<?php
 										}
-									}else{
+									}
 									?>
-									<option value="India">India</option>
+									<!--<option value="India">India</option>
 									<option value="Sachin">Sachin</option>
 									<option value="Dhoni">Dhoni</option>
 									<option value="Dravid">Dravid</option>
 									<option value="Rohith">Rohith</option>
 									<option value="Kholi">Kholi</option>
-									<option value="Suresh Raina">Suresh Raina</option>
+									<option value="Suresh Raina">Suresh Raina</option>-->
 									<?php
+								 	if(count($countries) > 0){
+									foreach ($countries as $row) {
+									?>
+										<option value="<?=$row["country"]?>"><?=$row["country"]?></option>
+									<?php
+										}
 									}
 									?>
 								  </select>

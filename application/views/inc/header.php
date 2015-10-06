@@ -10,10 +10,13 @@
 	<!--
 	<link rel="stylesheet" href="<?=site_url()?>public/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/datepicker.css" />
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 	-->
+	<script src="<?=site_url()?>public/js/jquery.min.js"></script>
 	<link rel="stylesheet" href="<?=site_url()?>public/css/datatable.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/main.css" />
 	<link rel="shortcut icon" href="<?=site_url()?>public/img/favicon.ico" />
+	
 </head>
 <body>
 <div class="container-fluid">
@@ -65,6 +68,15 @@
 				}
 				?>
 			</ul>
+			<?php
+			if($this->session->userdata('logged_in')===TRUE){
+			?>
+			<ul class="nav navbar-nav header-ul pull-right">
+	          <li><a href="<?=site_url('user/welcome')?>" style="text-transform: capitalize;">Welcome <?=$this->session->userdata('name')?></a></li>
+	        </ul>
+	        <?php
+			}
+			?>
 		</nav>
 	</div>
 </div>

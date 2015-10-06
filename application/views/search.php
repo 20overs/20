@@ -26,3 +26,7 @@ foreach ($data as $val) {
 <?php
 echo $this->load->view('inc/footer');
 ?>
+<script src="<?=site_url()?>public/js/datatable.js"></script>
+<script type="text/javascript">
+    $('#myTable').DataTable();
+</script>

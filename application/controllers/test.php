@@ -16,9 +16,12 @@ class Test extends CI_Controller{
 		}
 	}
 	public function test1(){
-		$sql = "SELECT * FROM 20oversusers users WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
-		$image = $this->db->query($sql,array('cvvkshcv@gmail.com','cvvkshcv'))->result();
-		echo $image[0]->image;
+		$this->load->library('curl');
+		$result = $this->curl->simple_get('http://static.cricinfo.com/rss/livescores.xml');
+		$res = new SimpleXMLElement($result);
+		foreach($res->channel->item as $live){
+			echo "<p style='text-transform:upper-case;'>".$live->title . "</p>";
+		}
 	}
 
 }

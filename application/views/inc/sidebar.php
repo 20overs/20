@@ -14,12 +14,11 @@ if($this->session->userdata('logged_in')===TRUE) {
 		</center>
 		<br/>
       <ul class="list-group">
-      	<li class="list-group-item" id="welcome"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top">  <a href="<?=site_url()?>user/welcome">My Profile</a></li>
-		<li class="list-group-item" id="Batting History"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top">  <a href="<?=site_url()?>user/history">Create/Manage History</a></li>
+      	<li class="list-group-item" id="welcome"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top">  <a href="<?=site_url()?>user/view_profile/<?=$this->session->userdata('user_id_enc')?>">My Profile</a></li>
+		<li class="list-group-item" id="Batting History"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top"><a href="<?=site_url()?>user/history">Create/Manage History</a></li>
 		<li class="list-group-item" id="Articles"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top">  <a href="<?=site_url()?>user/articles">Articles</a></li>
 		<li class="list-group-item" id="Forgot Profile Id"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top">  <a id="forgot-popup" data-target="#forgot" href="#">Forgot Profile Id</a></li>
 		<li class="list-group-item"><img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top">  <a href="<?=site_url()?>user/logout" id="logout">Logout</a></li>
-		
 		</ul>
    </div>
 </div>

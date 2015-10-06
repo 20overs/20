@@ -16,10 +16,34 @@ class Welcome extends CI_Controller {
 		$data['whatis'] = $this->home->news('What is');
 		$data['trending'] = $this->home->news('Trending Now');
 		$data['extras'] = $this->home->news('Extras');
+		$data['rss'] = $this->rss();
 		$this->load->view('inc/header',$data);
 		$this->load->view('home/welcome_view');
 		$this->load->view('inc/footer');
 		$this->load->view('inc/popup');
+	}
+	public function rss(){
+		$this->load->library('curl');
+		$ret = "<ul class='list-group'>";
+		$result = $this->curl->simple_get('http://static.cricinfo.com/rss/livescores.xml');
+		$res = new SimpleXMLElement($result);
+		foreach($res->channel->item as $live){
+			$ret .= "<li class='list-group-item'><b>".$live->title."</b></li>";
+		}
+		/*try {
+		$result = $this->curl->simple_get('http://www.ecb.co.uk/live-scores.xml');
+			$res = new SimpleXMLElement($result);
+			foreach($res->channel->item as $live){
+				$ret .= "<li class='list-group-item'>".$live->title."</li>";
+			}
+			$ret .= "</ul>";
+			return $ret;
+		}catch(Exception $e) {
+		  //var_dump($e->getMessage());
+			return "Error on server";
+		}*/
+		$ret .= "</ul>";
+		return $ret;
 	}
 	public function profile(){
 		$this->output->cache(1);

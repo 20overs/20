@@ -1,0 +1,29 @@
+fieldset.title {
+    border-top: 1px solid #aaa;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    display: block;
+    text-align: center;
+}
+
+fieldset.title legend {
+    padding: 5px 10px;
+}
+.validate-error{
+	border-bottom: 1px solid red !important; 
+	box-shadow: 0 1px 0 0 red !important;
+}
+
+.parallax-container {
+      height: 200px;
+}
+.small{
+	font-size:0.6em;
+}
+.med{
+	font-size: 1em;
+}
+.lg{
+	font-size: 1.3em;
+}

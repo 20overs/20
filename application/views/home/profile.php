@@ -38,7 +38,7 @@
 						      If you have any batting records that could be filled in here in this section and made visible for sponsers or teams looking for talents.
 						      </p>
 						      <center>
-						      <img src="<?=site_url()?>public/img/talent.jpg" height=180/>
+						      <img src="<?=site_url()?>public/img/talent.png" height=180/>
 						      </center>
 						   </div>
 						</div>
