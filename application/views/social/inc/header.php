@@ -53,19 +53,30 @@
 <div class="navbar-fixed">
 <nav>
     <div class="nav-wrapper indigo">
-      <a href="#!" class="brand-logo">&nbsp;
+      <a href="<?=site_url()?>" class="brand-logo">&nbsp;
       <span class="med thin white-text waves-effect waves-light"> 20overs.com</span>
       </a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#" class="waves-effect waves-light">HOME</a></li>
-        <li><a href="#" class="waves-effect waves-light">PROFILE PROFILE</a></li>
-        <li><a href="#" class="waves-effect waves-light">ARTICLES</a></li>
-        <li><a href="#" class="waves-effect waves-light">WOW CATCHES</a></li>
-        <li><a href="#" class="waves-effect waves-light">BLIND SPOT</a></li>
-        <li><a href="#" class="waves-effect waves-light">LOGOUT</a></li>
+        <li><a href="<?=site_url()?>" class="waves-effect waves-light">HOME</a></li>
+        <?php
+         if($this->session->userdata('logged_in')!==TRUE){
+         ?>
+        <li><a href="<?=site_url('welcome/profile')?>" class="waves-effect waves-light">PROFILE PROFILE</a></li>
+         <?php
+          }else{
+         ?>
+         <li><a href="<?=site_url('user/welcome')?>" class="waves-effect waves-light">PROFILE PROFILE</a></li>
+         <?php
+         }
+         ?>
+        <li><a href="<?=site_url('user/articles')?>" class="waves-effect waves-light">ARTICLES</a></li>
+        <li><a href="<?=site_url('welcome/wow')?>" class="waves-effect waves-light">WOW CATCHES</a></li>
+        <li><a href="<?=site_url('welcome/blind')?>" class="waves-effect waves-light">BLIND SPOT</a></li>
+        <li><a href="<?=site_url()?>user/logout" class="waves-effect waves-light">LOGOUT</a></li>
+        <!--
         <li><a class='dropdown-button' href='#' data-activates='menudropdown'>
-        <!--<i class="material-icons white-text">chat_bubble_outline</i></a>
+        <i class="material-icons white-text">chat_bubble_outline</i></a>
         </li>
         
         <ul id='menudropdown' class='dropdown-content'>
@@ -77,14 +88,24 @@
          Dropdown Structure -->
       </ul>
       <ul class="side-nav" id="mobile-demo">
-        <li><a href="#" class="waves-effect waves-light">HOME</a></li>
-        <li><a href="#" class="waves-effect waves-light">PROFILE PROFILE</a></li>
-        <li><a href="#" class="waves-effect waves-light">ARTICLES</a></li>
-        <li><a href="#" class="waves-effect waves-light">WOW CATCHES</a></li>
-        <li><a href="#" class="waves-effect waves-light">BLIND SPOT</a></li>
+        <li><a href="<?=site_url()?>" class="waves-effect waves-light">HOME</a></li>
+        <?php
+         if($this->session->userdata('logged_in')!==TRUE){
+         ?>
+        <li><a href="<?=site_url('welcome/profile')?>" class="waves-effect waves-light">PROFILE PROFILE</a></li>
+         <?php
+          }else{
+         ?>
+         <li><a href="<?=site_url('user/welcome')?>" class="waves-effect waves-light">PROFILE PROFILE</a></li>
+         <?php
+         }
+         ?>
+        <li><a href="<?=site_url('user/articles')?>" class="waves-effect waves-light">ARTICLES</a></li>
+        <li><a href="<?=site_url('welcome/wow')?>" class="waves-effect waves-light">WOW CATCHES</a></li>
+        <li><a href="<?=site_url('welcome/blind')?>" class="waves-effect waves-light">BLIND SPOT</a></li>
         <!--<li><a href="#" class="waves-effect waves-light">MATCH REQUESTS <span class="new badge">1</span></a></li>-->
         <li class="divider"></li>
-        <li><a href="#" class="waves-effect waves-light">LOGOUT</a></li>
+        <li><a href="<?=site_url()?>user/logout" class="waves-effect waves-light">LOGOUT</a></li>
       </ul>
     </div>
   </nav>

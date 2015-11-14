@@ -1,22 +1,14 @@
+<!--
+'pending','accepted','rejected','blocked'
+'friend','join_team','created_team'
+-->
 <div class="row">
 	<div class="col l4 m4 s12">
-		<ul class="collection">
-			<li><h5>BEING SOCIAL !</h5></li>
-			<li class="divider"></li>
-			<li><a href="#" class="collection-item">NOTIFICATIONS <span class="new badge">7</span></a></li>
-			<li><a href="#" class="collection-item">MATCH REQUESTS <span class="new badge">1</span></a></li>
-			<li><a href="#" class="collection-item">FRIEND REQUESTS <span class="new badge">2</span></a></li>
-			<li class="divider"></li>
-			<li><a href="#" class="collection-item">CREATE MATCH SCHEDULE</a></li>
-			<li class="divider"></li>
-			<li><a href="#" class="collection-item">EDIT PROFILE</a></li>
-			<li><a href="#" class="collection-item">SETTINGS</a></li>
-			<li class="divider"></li>
-			<li><a href="#" class="collection-item">LOGOUT</a></li>
-		</ul>
+		<?php echo $this->load->view('social/inc/side_bar.php');?>
 	</div>
 	<div class="col l5 m5 s12">
-
+		<h1>Under construction</h1>
+		<!--
 		<div class="row">
 		    <div class="col s12">
 		      <ul class="tabs">
@@ -93,15 +85,16 @@
             </div>
         </div>
         </div>
+        -->
 	</div>
 	<div class="col l3 m3 s12">
 		<div class="card section">
 		    <div class="card-image waves-effect waves-block waves-light">
-		      <img class="activator" src="http://www.20overs.com/uploads/3958541ce04a32e1f99cbaa54c5ee889.jpg">
+		      <img class="activator" src="<?=$this->session->userdata('image_url')?>">
 		    </div>
 		    <div class="card-content">
-		      <span class="card-title activator grey-text text-darken-4">Cv vikash<i class="material-icons right">more_vert</i></span>
-		      <p><a href="#">View your profile</a></p>
+		      <span class="card-title activator grey-text text-darken-4"> <?=$this->session->userdata('name')?><i class="material-icons right">more_vert</i></span>
+		      <p><a href="<?=site_url()?>user/view_profile/<?=$this->session->userdata('user_id_enc')?>">View your profile</a></p>
 		    </div>
 		    <div class="card-reveal">
 		      <span class="card-title grey-text text-darken-4">About me<i class="material-icons right">close</i></span>
@@ -119,7 +112,7 @@
 	}
 </style>
 <script type="text/javascript">
-	 var options = [
+/*	 var options = [
     {selector: '.section', offset: 200, callback: 'fun()' },
 	  ];
 	  Materialize.scrollFire(options);
@@ -129,4 +122,5 @@
 	  		$('.section').css('position','fixed');
 	  	});
 	  }
+*/
 </script>

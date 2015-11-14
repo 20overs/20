@@ -22,6 +22,10 @@ class Welcome extends CI_Controller {
 		$this->load->view('inc/footer');
 		$this->load->view('inc/popup');
 	}
+	public function ajax_whatis(){
+		$this->load->model('home'); 
+		echo json_encode($this->home->news('What is'));
+	}
 	public function rss(){
 		$this->load->library('curl');
 		$ret = "<ul class='list-group'>";
@@ -30,7 +34,8 @@ class Welcome extends CI_Controller {
 		foreach($res->channel->item as $live){
 			$ret .= "<li class='list-group-item'><b>".$live->title."</b></li>";
 		}
-		/*try {
+		/*
+		try {
 		$result = $this->curl->simple_get('http://www.ecb.co.uk/live-scores.xml');
 			$res = new SimpleXMLElement($result);
 			foreach($res->channel->item as $live){
@@ -173,11 +178,11 @@ class Welcome extends CI_Controller {
 		$this->load->view('inc/footer');
 		$this->load->view('inc/popup');
 	}
-	public function blind(){
+	public function spin(){
 		$this->output->cache(1);
-		$data['title'] = "Blind spot";
+		$data['title'] = "Spin to win";
 		$this->load->view('inc/header',$data);
-		$this->load->view('home/blind');
+		$this->load->view('home/spin');
 		$this->load->view('inc/footer');
 		$this->load->view('inc/popup');
 	}

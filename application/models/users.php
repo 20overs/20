@@ -3,6 +3,7 @@ class Users extends CI_Model{
 		
 	function login($user,$pass){
 		$sql = "SELECT * FROM 20oversusers users WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
+		//SELECT AES_DECRYPT(IDNbr,'test') FROM 20oversusers users WHERE Username='sthaniga@yahoo.com'
 		//$sql = "SELECT users.*,pi.image_url FROM 20oversusers users,player_image pi WHERE Username=? AND AES_DECRYPT(IDNbr,'test')=?";
 		if($this->db->query($sql,array($user,$pass))->num_rows() === 1){
 
@@ -23,36 +24,7 @@ class Users extends CI_Model{
 		}
 	}
 
-	function create_profile(){
-		if($this->input->post('batting')){
-		$dob=preg_replace('/[a-zA-Z]/','',$this->input->post('dob',TRUE));
-		$height = $this->input->post('height',TRUE);
-		if($height < 0){$height *= -1;}
-		$weight = $this->input->post('weight',TRUE);
-		if($weight < 0){$weight *= -1;}
-		$weight = $this->input->post('weight',TRUE);
-		$country = $this->input->post('country',TRUE);
-		$state = $this->input->post('state',TRUE);
-		$city = $this->input->post('city',TRUE);
-		$postal = $this->input->post('postal',TRUE);
-		if($postal < 0){$postal *= -1;}
-		$batting = $this->input->post('batting',TRUE);
-		$bowling = $this->input->post('bowling',TRUE);
-		$wicket = $this->input->post('wicket',TRUE);
-		$captained = $this->input->post('captained',TRUE);
-		$iamfrom =$this->input->post('iamfrom',TRUE);
-		$iam = $this->input->post('iam',TRUE);
-		$orgname = $this->input->post('orgname',TRUE);
-		$agree = $this->input->post('agree',TRUE);
-		$sql = "INSERT INTO  `player_profile` (`Id` ,`UserSysID` ,`DOB` ,`Height` ,`Weight` ,`Country` ,`State` ,`City` ,`PostalCode` ,`BattingStyle` ,`BowlingStyle` ,`DoYouKeepWicket` ,`HaveYouCaptained` ,`Disclosure`,`IAm` ,`PlayerOrgBy` ,`PlayerOrgName` ,`CreateTS`) VALUES (NULL , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
-		$this->db->query($sql,array($this->session->userdata('user_id'),$dob,$height,$weight,$country,$state,$city,$postal,$batting,$bowling,$wicket,$captained,$agree,$iam,$iamfrom,$orgname));
-		$id = $this->db->insert_id();
-		$this->db->trans_complete();
-		return json_encode(array('message'=>$id));
-		}else{
-			echo "<center>You dont have access to this page</center>";
-		}
-	}
+	
 	
 	function update_profile(){
 		if($this->input->post('batting')){

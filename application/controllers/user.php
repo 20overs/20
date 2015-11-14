@@ -5,9 +5,21 @@ class User extends CI_Controller {
 		parent::__construct();
 		$this->load->model('users');
 		$this->load->model('locations');
+		$this->load->library('form_validation');
+		$this->load->library('MY_Form_validation');
+		$this->output->set_header("HTTP/1.0 200 OK");
+		$this->output->set_header("HTTP/1.1 200 OK");
+		$this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
+		$this->output->set_header("Cache-Control: post-check=0, pre-check=0");
+		$this->output->set_header("Pragma: no-cache");
 	}
 	public function get_pp_id($id){
-		return $this->db->select('Id')->from('player_profile')->where('UserSysID',$id)->get()->row()->Id;
+		$rows = $this->db->query('SELECT count(*) as nums FROM player_profile where UserSysID=?',array($id))->row()->nums;
+		if($rows > 0){
+			return $this->db->select('Id')->from('player_profile')->where('UserSysID',$id)->get()->row()->Id;
+		}else{
+			return 0;
+		}
 	}
 	public function login(){
 		$res = $this->users->login($this->input->post('username',true),$this->input->post('password',true));
@@ -49,6 +61,7 @@ class User extends CI_Controller {
 	}
 
 	public function welcome(){
+
 		if($this->session->userdata('logged_in')!==TRUE){
 			redirect('/');
 			die();
@@ -59,14 +72,54 @@ class User extends CI_Controller {
 		$check_player_profile =  $this->locations->check_player_profile();
 		$data['title'] = "My profile";
 		$this->load->view('inc/header',$data);
+
+		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_rules('dob', 'Date of birth','required|valid_date[y-m-d,-]');
+		$this->form_validation->set_rules('height','Height','required|numeric|less_than[250]');
+		$this->form_validation->set_rules('weight','Weight','required|numeric|less_than[200]');
+
+		$this->form_validation->set_rules('country','Country','required');
+		$this->form_validation->set_rules('state','State','required');
+		$this->form_validation->set_rules('city','City','required');
+		$this->form_validation->set_rules('postal','Postal','required|numeric');
+
+		$this->form_validation->set_rules('batting','Batting style','required');
+		$this->form_validation->set_rules('bowling','Bowling style','required');
+		$this->form_validation->set_rules('wicket','Wicket Keeping','required');
+		$this->form_validation->set_rules('captained','Captained','required');
+
+		$this->form_validation->set_rules('iamfrom','I am from','required');
+		$this->form_validation->set_rules('iam','I am','required');
+		$this->form_validation->set_rules('orgname','Organisation name','required');
+		$this->form_validation->set_rules('agree','Agree','required');
+
+		if($this->form_validation->run() == TRUE)
+		{
+			echo $this->create_profile();
+		}
 		if($check_player_profile > 0){
 			$data['profile'] = $this->users->get_profile();
-			$this->load->view('user/welcome_old_user',$data);
+			$this->load->view('user/create_profile_old',$data);
 		}else{
-			$this->load->view('user/welcome');
+			$this->load->view('user/create_profile');
 		}
 		$this->load->view('inc/footer');
 		$this->load->view('inc/extra_pop');
+	}
+
+	function checkDateFormat($date)
+	{
+		if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date))
+		{
+			if(checkdate(substr($date, 3, 2), substr($date, 0, 2), substr($date, 6, 4)))
+				return true;
+			else
+				return false;
+		}
+		else
+		{
+		return false;
+		}
 	}
 
 	public function articles(){
@@ -87,6 +140,9 @@ class User extends CI_Controller {
 		$this->users->add_articles();
 	}
 	public function view_profile($getid){
+		if($getid == ""){
+			redirect('/');
+		}
 		$data['title'] = "View profile";
 		$this->load->view('inc/header',$data);
 		$id = $getid - 674539873;
@@ -107,6 +163,43 @@ class User extends CI_Controller {
 
 			$data['user_id'] = $this->users->get_profile_id($id);
 			$data['profile_id'] = $getid;
+			$logged_id = $this->users->get_user_id($this->session->userdata('user_id'));
+
+			if($this->session->userdata('logged_in') !== FALSE && $this->session->userdata('user_id') !== $data['user_id']){
+
+				$counts = $this->db->query('SELECT count(*) as nums FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?)',array($logged_id,$logged_id,$id,$id))->row()->nums;
+				if($counts == 0)
+				{
+					$data['choice']	= 1;
+				}else{
+					$result = $this->db->query('SELECT * FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and request_type="friend"',array($logged_id,$logged_id,$id,$id))->row();
+					if($result->sender_id == $logged_id && $result->status == "pending"){
+						$data['choice']	= 2;
+					}
+					if($result->receiver_id == $logged_id && $result->status == "pending"){
+						$data['choice']	= 3;
+					}
+					else if($result->status == "rejected")
+					{
+						$data['choice']	= 4;
+					}
+					else if($result->status == "accepted")
+					{
+						$data['choice']	= 5;
+					}
+					else if($result->status == "blocked")
+					{
+						$data['choice']	= 6;
+						$data['alert'] = "danger";
+						$data['message'] = "No profile found";
+						$this->load->view('inc/message',$data);
+						die();
+					}
+
+				}
+			}else{
+				$data['choice']	= 0;
+			}
 
 			$this->load->view('home/view_profile',$data);
 		}else{
@@ -135,19 +228,147 @@ class User extends CI_Controller {
 		}
 		echo json_encode($res);
 	}
-	public function create_profile(){
+	function create_profile(){
 		if($this->session->userdata('logged_in')!==TRUE){
 			redirect('/');
 			die();
 		}
-		echo $this->users->create_profile();
+		if($this->input->post('batting')){
+		$dob=preg_replace('/[a-zA-Z]/','',$this->input->post('dob',TRUE));
+		$height = $this->input->post('height',TRUE);
+		if($height < 0){$height *= -1;}
+		$weight = $this->input->post('weight',TRUE);
+		if($weight < 0){$weight *= -1;}
+		$weight = $this->input->post('weight',TRUE);
+		$country = $this->input->post('country',TRUE);
+		$state = $this->input->post('state',TRUE);
+		$city = $this->input->post('city',TRUE);
+		$postal = $this->input->post('postal',TRUE);
+		if($postal < 0){$postal *= -1;}
+		$batting = $this->input->post('batting',TRUE);
+		$bowling = $this->input->post('bowling',TRUE);
+		$wicket = $this->input->post('wicket',TRUE);
+		$captained = $this->input->post('captained',TRUE);
+		$iamfrom =$this->input->post('iamfrom',TRUE);
+		$iam = $this->input->post('iam',TRUE);
+		$orgname = $this->input->post('orgname',TRUE);
+		$agree = $this->input->post('agree',TRUE);
+
+		$profile_count  =$this->db->query('SELECT count(*) as nums FROM player_profile where UserSysID=?',array($this->session->userdata('user_id')))->row()->nums;
+		if($profile_count > 0){
+			$sql = "UPDATE  `player_profile` SET `DOB` = ?,`Height`=? ,`Weight`=?,`Country`=? ,`State`=? ,`City`=? ,`PostalCode`=? ,`BattingStyle`=? ,`BowlingStyle`=? ,`DoYouKeepWicket`=? ,`HaveYouCaptained`=? ,`Disclosure`=?,`IAm`=? ,`PlayerOrgBy`=? ,`PlayerOrgName`=? WHERE `UserSysID`=?";
+				if(!$this->db->query($sql,array($dob,$height,$weight,$country,$state,$city,$postal,$batting,$bowling,$wicket,$captained,$agree,$iam,$iamfrom,$orgname,$this->session->userdata('user_id'))))
+				{
+					$data['message'] = "Your player profile is already created.";
+					$data['title'] = "Player profile already created";
+					$this->load->view('message',$data);
+				}
+				else
+				{
+					$data['message'] = "Your player profile updated successfully.";
+					$data['title'] = "Success";
+					$this->load->view('message',$data);
+				}
+		}else{
+			$sql = "INSERT INTO  `player_profile` (`Id` ,`UserSysID` ,`DOB` ,`Height` ,`Weight` ,`Country` ,`State` ,`City` ,`PostalCode` ,`BattingStyle` ,`BowlingStyle` ,`DoYouKeepWicket` ,`HaveYouCaptained` ,`Disclosure`,`IAm` ,`PlayerOrgBy` ,`PlayerOrgName` ,`CreateTS`) VALUES (NULL , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+			if(!$this->db->query($sql,array($this->session->userdata('user_id'),$dob,$height,$weight,$country,$state,$city,$postal,$batting,$bowling,$wicket,$captained,$agree,$iam,$iamfrom,$orgname)))
+			{
+				$data['message'] = "Your player profile is already created.";
+				$data['title'] = "Player profile already created";
+				$this->load->view('message',$data);
+			}
+			else
+			{
+				$data['message'] = "Your player profile is created successfully.";
+				$data['title'] = "Success";
+				$this->load->view('message',$data);
+			}
+		}
+
+		$id = $this->db->insert_id();
+		$this->db->trans_complete();
+		}else{
+			echo "<center>You dont have access to this page</center>";
+		}
 	}
-	public function update_profile(){
+
+	public function batting_history()
+	{
 		if($this->session->userdata('logged_in')!==TRUE){
 			redirect('/');
 			die();
 		}
-		echo $this->users->update_profile();
+		$data['title'] = "Create Batting history";
+		$this->load->view('inc/header',$data);
+
+		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_rules('pro_id', 'Profile ID','required|numeric');
+		$this->form_validation->set_rules('match_date','date','required|valid_date[y-m-d,-]');
+		$this->form_validation->set_rules('match_result','match result','required|alpha');
+		$this->form_validation->set_rules('your_team','your team','required|alphanumeric');
+		$this->form_validation->set_rules('venue','venue','required|alphanumeric');
+		$this->form_validation->set_rules('opp_team','opponent team','required|alphanumeric');
+		$this->form_validation->set_rules('overs','overs','required|numeric|less_than[51]');
+
+		$this->form_validation->set_rules('batting_order','batting order','required');
+		$this->form_validation->set_rules('balls_faced','balls faced','required');
+		$this->form_validation->set_rules('batting_position','batting position','required');
+		$this->form_validation->set_rules('runs_scored','runs scored','required|numeric');
+		$this->form_validation->set_rules('_4s','4s','required|numeric');
+		$this->form_validation->set_rules('_6s','6s','required|numeric');
+
+		if($this->form_validation->run() == TRUE)
+		{
+			echo $this->save_batting_history();
+		}
+		if($this->input->get('success') == 1){
+			$data['message'] = "Your Batting history saved successfully.";
+			$data['title'] = "!";
+			$this->load->view('message',$data);
+		}
+		$this->load->view('user/batting_history');
+		$this->load->view('inc/footer');
+	}
+	public function save_batting_history(){
+		if($this->session->userdata('logged_in')!==TRUE){
+			redirect('/');
+			die();
+		}
+		$id = $this->input->post('pro_id',TRUE);
+		$count = $this->check_profile_id($this->input->post('pro_id'));
+		if($count == 1){
+			$match_date = preg_replace('/[a-zA-Z]/','',$this->input->post('match_date',TRUE));
+			$match_result = $this->input->post('match_result',TRUE);
+			$your_team = $this->input->post('your_team',TRUE);
+			$venue = $this->input->post('venue',TRUE);
+			$opp_team = $this->input->post('opp_team',TRUE);
+			$overs = $this->input->post('overs',TRUE);
+			$batting_order = $this->input->post('batting_order',TRUE);
+			$batting_position = $this->input->post('batting_position',TRUE);
+			$balls_faced = $this->input->post('balls_faced',TRUE);
+			$runs_scored = $this->input->post('runs_scored',TRUE);
+			if($runs_scored < 0){$runs_scored *= -1;}
+			$_4s = $this->input->post('_4s',TRUE);
+			if($_4s < 0){$_4s *= -1;}
+			$_6s = $this->input->post('_6s',TRUE);
+			if($_6s < 0){$_6s *= -1;}
+
+			$sql = "INSERT INTO  `batting_history` (`Id` ,`PlayerId` ,`MyTeamName` ,`OpponentTeam` ,`MatchDate` ,`MatchVenue` ,`Overs` ,`MatchResult` ,`BattingOrder` ,`BattingPosition` ,`BallsFaced` ,`RunsScored` ,`Four` ,`Six` ,`CreateTS`) VALUES (NULL , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+			if(!$this->db->query($sql,array($id,$your_team,$opp_team,$match_date,$venue,$overs,$match_result,$batting_order,$batting_position,$balls_faced,$runs_scored,$_4s,$_6s)))
+			{
+				$data['message'] = "Your Batting history no saved.";
+				$data['title'] = "Error !";
+				$this->load->view('message',$data);
+			}
+			else
+			{
+        		redirect(current_url()."?success=1");
+			}
+		}else{
+			$data['message'] = "You entered wrong profile Id";
+			$data['title'] = "Wrong profile ID";
+			echo $this->load->view('message',$data);
+		}
 	}
 	public function history(){
 		if($this->session->userdata('logged_in')!==TRUE){
@@ -162,13 +383,7 @@ class User extends CI_Controller {
 		$this->load->view('inc/footer');
 		$this->load->view('inc/extra_pop');
 	}
-	public function batting_history(){
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
-		$this->users->batting_history();
-	}
+	
 	public function bowling_history(){
 		if($this->session->userdata('logged_in')!==TRUE){
 			redirect('/');
@@ -336,5 +551,11 @@ class User extends CI_Controller {
 		}
 		//$this->email->attach($fullpath);
 	}
+
+	public function check_profile_id($id){
+		$sql = "SELECT Id FROM player_profile where UserSysID = ? and Id=?";
+		return $this->db->query($sql,array($this->session->userdata('user_id'),$id))->num_rows();
+	}
+
 }
 ?>

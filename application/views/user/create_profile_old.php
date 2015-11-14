@@ -9,7 +9,7 @@
 		<?php
 		foreach ($profile as $pro) {
 		?>
-		<form action="#" method="post" id="">
+		<form action="welcome" method="post" >
 		<div class="col-lg-12 border padding-3">
 		<div class="panel panel-info">
 		   	<div class="panel-heading">
@@ -21,14 +21,17 @@
 				<div class="form-group">
 					<label>Date Of Birth</label>
 					<input type="text" class="form-control datepicker form-control-cust" id="dob" required name="dob" value="<?=$pro['DOB']?>">
+					<?php echo form_error('dob'); ?>
 				</div>
 				<div class="form-group">
 					<label>Height(Cms)</label>
 					<input type="number" class="form-control form-control-cust" id="height" required name="height" value="<?=$pro['Height']?>">
+					<?php echo form_error('height'); ?>
 				</div>
 				<div class="form-group">
 					<label>Weight(Kgs)</label>
 					<input type="number" class="form-control form-control-cust" id="weight" required name="weight" value="<?=$pro['Weight']?>">
+					<?php echo form_error('weight'); ?>
 				</div>
 				</div>
 				<div class="col-lg-6">
@@ -46,23 +49,29 @@
                     }
                     ?>
                     </select>
+                    <?php echo form_error('country'); ?>
 				</div>
 				<div class="form-group">
 					<label>State</label>
 					<select class="form-control form-control-cust" id="state1" name="state" required>
 					<option value="<?=$pro['State']?>"><?=$pro['State1']?></option>
                     </select>
+                    <?php echo form_error('state'); ?>
 				</div>
 				<div class="form-group">
 					<label>City</label>
 					 <select class="form-control  form-control-cust" id="city1" name="city" required>
 					 <option value="<?=$pro['City']?>"><?=$pro['City1']?></option>
                     </select>
+                    <?php echo form_error('city'); ?>
+
 				</div>
 				<div class="form-group">
 					<label>Postal code</label>
 					<input type="number" class="form-control form-control-cust" id="postal" required name="postal" value="<?=$pro['PostalCode']?>">
+					<?php echo form_error('postal'); ?>
 				</div>
+
 				</div>
 			</div>
 			
@@ -83,6 +92,7 @@
 	                    }
 	                    ?>
                     </select>
+                    <?php echo form_error('batting'); ?>
 				</div>
 				<div class="form-group">
 					<label>Do you keep wicket?</label>
@@ -98,6 +108,7 @@
 					 </option>
 					 <option value="N">No</option>
                      <option value="Y">Yes</option>
+                     <?php echo form_error('wicket'); ?>
                     </select>
 				</div>				
 				</div>
@@ -115,7 +126,8 @@
 	                    <?php
 	                    }
 	                    ?>                    
-	                    </select>
+	                 </select>
+	                 <?php echo form_error('bowling'); ?>
 				</div>
 				<div class="form-group">
 					<label>Have you captained?</label>
@@ -131,6 +143,7 @@
 					 <option value="N">No</option>
                     <option value="Y">Yes</option>
                     </select>
+                    <?php echo form_error('captained'); ?>
 				</div>
 				</div>
 			</div>
@@ -149,6 +162,7 @@
 	                <option>College</option>
 	                <option>Other</option>
                 </select>
+                <?php echo form_error('iamfrom'); ?>
 				</div>
 				<div class="form-group">
 					<label>I am</label>
@@ -159,14 +173,15 @@
                     <option value="A Coach of both Batting & Bowling">A Coach of both Batting & Bowling</option>
                     <option value="In need of a Trainer">In need of a Trainer</option>
                     <option value="In need of a Sponsor">In need of a sponsor</option>
-                    </select>
-                    </select>
+                	</select>
+                	<?php echo form_error('iam'); ?>
 				</div>
 				</div>
 				<div class="col-lg-6">
 				<div class="form-group">
 					<label>Organizer Name</label>
 					 <input type="text" class="form-control form-control-cust" id="orgname" required name="orgname" value="<?=$pro['PlayerOrgName']?>">
+					 <?php echo form_error('orgname'); ?>
 				</div>
 				<div class="form-group">
 					<label>I agree 20overs.com to disclose my contact information (email) for any sponsers</label>
@@ -182,6 +197,7 @@
 					 ?>
                     <option value="Y">Yes</option>
                     <option value="N">No</option>
+                    <?php echo form_error('agree'); ?>
                     </select>
 				</div>
 				</div>

@@ -14,6 +14,7 @@
 	-->
 	<script src="<?=site_url()?>public/js/jquery.min.js"></script>
 	<link rel="stylesheet" href="<?=site_url()?>public/css/datatable.css" />
+	<link rel="stylesheet" href="<?=site_url()?>public/css/sweetalert.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/main.css" />
 	<link rel="shortcut icon" href="<?=site_url()?>public/img/favicon.ico" />
 	
@@ -53,9 +54,9 @@
 				 }
 				 ?>
 				 <li><a href="<?=site_url('user/articles')?>">Articles</a></li>
-				 <!--<li><a href="<?=site_url()?>">IPL 2015</a></li>-->
 				 <li><a href="<?=site_url('welcome/wow')?>">Wow Catches</a></li>
-				 <li><a href="<?=site_url('welcome/blind')?>">Blind Spot</a></li>
+				 <li><a href="<?=site_url('welcome/spin')?>">Spin To Win</a></li>
+				 <li><a href="<?=site_url('social')?>">Social networking</a></li>
 				 <?php
 				if($this->session->userdata('logged_in')!==TRUE){
 				?>
@@ -72,7 +73,7 @@
 			if($this->session->userdata('logged_in')===TRUE){
 			?>
 			<ul class="nav navbar-nav header-ul pull-right">
-	          <li><a href="<?=site_url('user/welcome')?>" style="text-transform: capitalize;">Welcome <?=$this->session->userdata('name')?></a></li>
+	          <li><a href="#" style="text-transform: capitalize;cursor:default;">Welcome <?=$this->session->userdata('name')?></a></li>
 	        </ul>
 	        <?php
 			}

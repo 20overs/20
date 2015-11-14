@@ -24,7 +24,7 @@ class Locations extends CI_Model{
 		}
 	}
 	public function check_player_profile(){
-		return $this->db->query('SELECT UserSysID FROM player_profile where UserSysID=?',array($this->session->userdata('user_id')))->num_rows();	
+		return $this->db->query('SELECT count(*) as nums FROM player_profile where UserSysID=?',array($this->session->userdata('user_id')))->row()->nums;
 	}
 }
 ?>

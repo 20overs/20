@@ -85,41 +85,6 @@ $("#logout").click(function(e){
     });
   });
 
-  $('#create_profile').submit(function(e){
-    $.ajax({
-      url:'create_profile',
-      data:$(this).serializeArray(),
-      method:"POST",
-      success :function(data){
-        document.getElementById("create_profile").reset();
-        data = jQuery.parseJSON(data);
-        $('#result').html("<h3 class='text-success'>Your Profile id is <b>"+data.message+"</b>.If you want to make any change in your profile this profile id is required.</h3>");
-      },
-      error: function(){
-        $('#result').html("<h3 class='text-danger'>Player profile already created.</h3>");
-      }
-    });
-    e.preventDefault();
-  });
-
-  $('#update_profile').submit(function(e){
-    $.ajax({
-      url:'update_profile',
-      data:$(this).serializeArray(),
-      method:"POST",
-      success :function(data){
-        data = jQuery.parseJSON(data);
-        $('#result').html("<h3 class='text-success'>"+data.message+"</h3>");
-      },
-      error: function(){
-        $('#result').html("<h3 class='text-danger'>Error updating player profile.</h3>");
-      }
-    });
-    e.preventDefault();
-  });
-
-  
-
   $('div[data-toggle="collapse"]').click(function(){
     if($('.collapse').hasClass('in')){
       $('.collapse').removeClass('in');
@@ -286,6 +251,7 @@ $("#logout").click(function(e){
     $.post("send_email/",$(this).serializeArray(),function(data){
       $('#recover_email_res').html("<h4>"+data+"</h4>");
       document.getElementById("recover_mail").reset();
+      $('#recover_mail_submit').removeAttr('disabled');
     });
     e.preventDefault();
   });

@@ -25,6 +25,7 @@
 
 <script type="text/javascript" src="<?=site_url()?>public/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="<?=site_url()?>public/js/additional.methods.js"></script>
+<script src="<?=site_url()?>public/js/sweetalert.min.js"></script>
 <script src="<?=site_url()?>public/js/main.js"></script>
 
 <script type="text/javascript" src="<?=site_url()?>public/js/smoothscroll.js"></script>

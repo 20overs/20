@@ -1,7 +1,7 @@
 <div class="container-fluid margin-top-5">
 	<div class="row">
 			<div class="col-lg-4 col-md-4 height-400">
-				<div class="border  padding-9 clearfix article wow fadeInLeft">
+				<div class="border  padding-9 clearfix article">
 					<h4 class="heading">
 						LATEST ARTICLES
 					</h4>
@@ -49,14 +49,13 @@
 				<img src="<?=site_url()?>public/img/front/front<?=$randval?>.jpg" width=100% class="image" />
 		</div>
 	<div class="col-lg-3 col-md-3 wow fadeInRight" data-wow-delay="0.5s" data-wow-duration="1s">
-		<div class="border padding-9 clearfix">
+		<!--<div class="border padding-9 clearfix">
 			<h4 class="heading">
 				MATCHES TODAY
 			</h4>
 			<ul class="no-style match-today-ul">
 				<li>
 					<div class="media">
-					
 					<div class="media-body">
 					<?php
 					if(count($match_today) > 0){
@@ -72,16 +71,14 @@
 					<?php
 					}
 					?>
-						<!--
-						<span class="font-source font-size-16">Pakistan vs Zimbabwe</span>
-						<small>09:00:00 | 14:00:00 (IST) | Gaddafi Stadium, Lahore</small>
-						-->
+					<span class="font-source font-size-16">Pakistan vs Zimbabwe</span>
+					<small>09:00:00 | 14:00:00 (IST) | Gaddafi Stadium, Lahore</small>
 					</div>
 					</div>
 				</li>
 			</ul>
-		</div>
-		<div class="border  padding-9 margin-top-5">
+		</div>-->
+		<div class="border padding-9 height-400" style="overflow:scroll;">
 			<h4 class="heading">
 				LIVE SCORE
 			</h4>
@@ -89,15 +86,13 @@
 				<div class="live-score-iframe">
 					<script src="//www.cricruns.com/system/application/views/widgetBase/wid_300_200_2_wo_ad.js" type="text/javascript" id="cricruns"></script>
 				</div>
+			</div>
 				<h3>OTHER MATCHES</h3>
 				<?=$rss?>
-			</div>
 		</div>
 	</div>
 </div>
-
 <!-- Row one starting -->
-
 <div class="row margin-top-5">
 			<div class="col-lg-6">
 				<div class="border padding-9 clearfix wow fadeInLeft" data-wow-delay="2s">
@@ -229,23 +224,22 @@
 
 <!-- Row 2 starts -->
 
-    
 	<div class="row margin-top-5 rows3">
 		<div class="col-lg-3 wow fadeInLeft" data-wow-delay="1s">
-			<div class="border  padding-9">
+			<div class="border padding-9">
 				<h4 class="heading">
 					TRENDING NOW
 				</h4>
 				<ul class="no-style trending-ul">
 					<?php
-						foreach ($trending as $row):
+					foreach ($trending as $row):
 					?>
 					<li>
 						<img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top"/>
 						<span class="font-source"><?=$row['news']?></span>
 					</li>
 					<?php
-						endforeach;
+					endforeach;
 					?>
 				</ul>
 			</div>
@@ -301,7 +295,7 @@
 			   <h4 class="heading">
 				EXTRAS
 			   </h4>
-			<ul class="no-style trending-ul ">
+			<ul class="no-style trending-ul">
 				<?php
 				foreach ($extras as $row):
 				?>
@@ -318,3 +312,12 @@
 	</div>
 
 </div>
+<script type="text/javascript">
+	$(function(){
+		setInterval(function(){
+			$.post('<?=site_url()?>welcome/ajax_whatis',{load:1},function(data){
+				console.log(data);
+			});
+		}, 5000);
+	});
+</script>
