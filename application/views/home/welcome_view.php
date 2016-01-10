@@ -6,19 +6,21 @@
 						LATEST ARTICLES
 					</h4>
 				<div class="height-300">
-					<?php if ($arti_count > 0): ?>
+					<?php 
+					$arti_count = count($arti[0]);
+					if ($arti_count > 0): ?>
 					<marquee direction="up" id="test" onmouseover="this.stop();" onmouseout="this.start();"  scrollamount="2" style="margin-top:0px;height:350px;">
 						<ul class="no-style arti-ul margin-top-5" style="margin-top:-20px;">
 						<?php foreach ($arti as $res): ?>
 							<li>
 								<div class="media">
 									<div class="media-body">
-										<b><img src="<?=site_url()?>public/img/icons/user.png" class="icon-top"/> <span class="arti-title blue-font bold font-open"><?=$res['user_name']?> Says:</span></b>
-										<p><img src="<?=site_url()?>public/img/icons/message.png" class="icon-top"/> <span class="arti-content font-source"> <?=$res['article']?></span></p>
+										<b><i class="fa fa-user fa-2x"></i> <span class="arti-title blue-font bold font-open"><?=$res['user_name']?> Says:</span></b>
+										<p><i class="fa fa-commenting-o"></i> <span class="arti-content font-source"> <?=$res['article']?></span></p>
 										<?php
 										if($res['external_link'] != ""){
 										?>
-										<p><a href="<?=$res['external_link']?>" class="label label-success open_new">Click here</a> to visit website</p>
+										<p><a href="<?=$res['external_link']?>" class="label label-success" target="_blank">Click here</a> to visit website</p>
 										<?php
 										}
 										?>
@@ -34,7 +36,8 @@
 					<?php endif; ?>
 				</div>
 					<span class="padding-9"></span>
-					<a class="gold-font font-source" href="<?=site_url('user/articles')?>"><img src="<?=site_url()?>public/img/icons/plus.png" class="icon-top"/> Create new</a>
+					<a class="gold-font font-source" href="<?=site_url('user/articles')?>">
+					<i class="fa fa-plus"></i> Create new</a>
 				</span>
 			</div>
 		</div>
@@ -48,7 +51,7 @@
 				?>
 				<img src="<?=site_url()?>public/img/front/front<?=$randval?>.jpg" width=100% class="image" />
 		</div>
-	<div class="col-lg-3 col-md-3 wow fadeInRight" data-wow-delay="0.5s" data-wow-duration="1s">
+	<div class="col-lg-3 col-md-3">
 		<!--<div class="border padding-9 clearfix">
 			<h4 class="heading">
 				MATCHES TODAY
@@ -129,9 +132,7 @@
 							<?php
 			                    foreach ($countries as $count) {
 			                    ?>
-			                    	<option value="<?=$count['countryid']?>">
-			                    		<?=$count['country']?>
-			                    	</option>
+			                    	<option value="<?=$count['countryid']?>"><?=$count['country']?></option>
 			                    <?php
 			                    }
 			                    ?>
@@ -147,7 +148,7 @@
 				</div>
 				<div class="col-lg-6">
 				    <div class="form-group">
-				        <label class="form-label-cust" for="inputEmail">City :</label>
+				        <label class="form-label-cust" for="city">City :</label>
 				        <select class="form-control form-control-cust" id="city" name="city">
 						<option value="">Select city</option>
 						</select>
@@ -164,36 +165,30 @@
 				</div>
 			</div>
 			<div class="col-lg-3">
-
-				<div class="border padding-9 wow fadeInRight" data-wow-delay="2s">
+				<div class="border padding-9">
 					<h4 class="heading">
 						TALENTS TODAY
 					</h4>
 					<div class="margin-left-3">
-
-						<img src="<?=site_url()?>public/img/icons/user.png" class="icon-top"/>
 						<span class="talent-today-name">
 						<?php
-							$curryear = date('Y');
-							$doby = explode("-",$talent[0]["DOB"]);
-							$age = $curryear-$doby[0];
 							foreach ($talent as $row):
 						?>
-							<a href='<?=site_url()?>user/view_profile/<?=$row['Id']+674539873?>' class="user"><?=$row['fullname']?></a>
+							<a href='<?=site_url()?>user/view_profile/<?=$row['id']?>' class="user"><i class="fa fa-user fa-lg"></i> <?=$row['fullname']?></a>
 						</span>
 					</div>
 							<ul class="no-style talent-ul">
 								<li>
-									<h5><img src="<?=site_url()?>public/img/icons/trending.png"> <?=$age?> Yrs</h5>
+									<h5><i class="fa fa-newspaper-o"></i> <?=$row['age']?> Yrs</h5>
 								</li>
 								<li>
-									<h5><img src="<?=site_url()?>public/img/icons/trending.png"> <?=$row['BattingStyle']?></h5>
+									<h5><i class="fa fa-newspaper-o"></i> <?=$row['BattingStyle']?></h5>
 								</li>
 								<li>
-									<h5><img src="<?=site_url()?>public/img/icons/trending.png"> <?=$row['BowlingStyle']?></h5>
+									<h5><i class="fa fa-newspaper-o"></i> <?=$row['BowlingStyle']?></h5>
 								</li>
 								<li>
-									<h5><img src="<?=site_url()?>public/img/icons/trending.png"> <?=$row['city_name']?> , <?=$row['Country']?></h5>
+									<h5><i class="fa fa-newspaper-o"></i> <?=$row['city_name']?> , <?=$row['Country']?></h5>
 								</li>
 							</ul>
 						<?php
@@ -202,17 +197,17 @@
 					</div>
 
 			</div>
-			<div class="col-lg-3 wow fadeInRight" data-wow-delay="2s">
+			<div class="col-lg-3">
 				<div class="border padding-9">
 			        <h4 class="heading">
 			        	RECENT USERS
 			        </h4>
 					<ul class="no-style recent-ul">
 						<?php
-						foreach ($recent as $row):
+						foreach ($recent_users as $row):
 						?>
 							<li>
-								<h5><img src="<?=site_url()?>public/img/icons/recent.png" height="25" width="25"> <?=$row['Firstname']?></h5>
+								<h5><i class="fa fa-user-plus"></i> <?=ucwords($row['name'])?></h5>
 							</li>
 						<?php
 						endforeach;
@@ -225,67 +220,41 @@
 <!-- Row 2 starts -->
 
 	<div class="row margin-top-5 rows3">
-		<div class="col-lg-3 wow fadeInLeft" data-wow-delay="1s">
+		<div class="col-lg-3">
 			<div class="border padding-9">
 				<h4 class="heading">
 					TRENDING NOW
 				</h4>
-				<ul class="no-style trending-ul">
-					<?php
-					foreach ($trending as $row):
-					?>
-					<li>
-						<img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top"/>
-						<span class="font-source"><?=$row['news']?></span>
-					</li>
-					<?php
-					endforeach;
-					?>
+				<ul class="no-style trending-ul" id="trending">
+					
 				</ul>
 			</div>
 		</div>
-		<div class="col-lg-3 wow fadeInLeft" data-wow-delay="0.5s">
+		<div class="col-lg-3">
 			<div class="border  padding-9">
 				<h4 class="heading">
 					GET TO KNOW
 				</h4>
-				<ul class="no-style trending-ul">
-				<?php
-				foreach ($whatis as $row):
-				?>
-					<li>
-						<img src="<?=site_url()?>public/img/icons/trending.png" class="icon-top"/>
-						<span class="font-source"><?=$row['news']?></span>
-					</li>
-				<?php
-				endforeach;
-				?>
+				<ul class="no-style trending-ul" id="what_is">
 				</ul>
 			</div>
 		</div>
 
-		<div class="col-lg-3 wow fadeInRight" data-wow-delay="0.5s">
+		<div class="col-lg-3">
 			<div class="border padding-12">
 				<h4 class="heading">
 					GOOGLY
 				</h4>
-				<center><img src="<?=site_url()?>public/img/icons/quest.png" height="40"/></span></center>
+				<center><i class="fa fa-question-circle fa-5x"></i></center>
 				<div class="googly">
-					<?php
-					foreach ($quiz as $row):
-					?>
-						<p>
-							<img src="<?=site_url()?>public/img/icons/crossarrow.png" height="17" class="icon-top"/>
-							<span class="font-source"><?=$row['qq']?></span>
-						</p>
-						<center>
-							<h3 class="bolder">
-								<span class="font-source"><?=$row['qa1']?></span>
-							</h3>
-						</center>
-					<?php
-					endforeach;
-					?>
+					<p>
+						<i class="fa fa-mail-forward icon-top"></i><span class="font-source" id="question"></span>
+					</p>
+					<center>
+						<h3 class="bolder">
+							<span class="font-source" id="ans"></span>
+						</h3>
+					</center>
 				</div>
 			</div>
 		</div>
@@ -295,29 +264,76 @@
 			   <h4 class="heading">
 				EXTRAS
 			   </h4>
-			<ul class="no-style trending-ul">
-				<?php
-				foreach ($extras as $row):
-				?>
-				<li>
-					<img src="<?=site_url()?>public/img/icons/trending.png">
-					<span class="font-source"><?=$row['news']?></span>
-				</li>
-				<?php
-				endforeach;
-				?>
-			</ul>
+				<ul class="no-style trending-ul" id="extras">
+				</ul>
 			</div>
 		</div>
 	</div>
 
 </div>
+
+
 <script type="text/javascript">
 	$(function(){
+		$('#what_is,#trending,#extras').html('<center><i class="fa fa-refresh fa-spin fa-2x"></i></center>');
 		setInterval(function(){
-			$.post('<?=site_url()?>welcome/ajax_whatis',{load:1},function(data){
-				console.log(data);
+		$.get("<?=site_url()?>welcome/get_trending_now",function(data){
+			var list='';
+			$.each(data,function(key,val){
+				list += '<li><i class="fa fa-mail-forward"></i> <span class="font-source">'+data[key].News+'</span></li>';
 			});
-		}, 5000);
+			$('#trending').html(list);
+		});
+		$.get("<?=site_url()?>welcome/get_extras",function(data){
+			var list='';
+			$.each(data,function(key,val){
+				list += '<li><i class="fa fa-mail-forward"></i> <span class="font-source">'+data[key].News+'</span></li>';
+			});
+			$('#extras').html(list);
+		});
+		$.get("<?=site_url()?>welcome/get_what_is",function(data){
+			var list='';
+			$.each(data,function(key,val){
+				list += '<li><i class="fa fa-mail-forward "></i> <span class="font-source">'+data[key].News+'</span></li>';
+			});
+			$('#what_is').html(list);
+		});
+	}, 3500);
+
+		$.get("<?=site_url()?>welcome/get_googly",function(data){
+			$.each(data,function(key,val){
+				$('#question').html(data[0].question);
+				$('#ans').html(data[0].ans);
+			});
+		});
+
+	$(document).on('change', "#country", function(){
+	    var country_id = $(this).val();
+	    $.post('<?=site_url()?>welcome/get_states',{country_id:country_id},function(data){
+	    	var list='<option value="">Select state</option>';
+	    	$.each(data,function(key,val){
+				list += '<option value="'+data[key].stateid+'">'+data[key].name+'</option>';
+			});
+			$('#state').html(list);
+	    });
+	    return false;
 	});
+
+	$(document).on('change', "#state", function(){
+		var country_id = $('#country').val();
+	    var state_id = $(this).val();
+	    $.post('<?=site_url()?>welcome/get_cities',{state_id:state_id,country_id:country_id},function(data){
+	    	console.log(data);
+	    	var list='<option value="">Select state</option>';
+	    	$.each(data,function(key,val){
+				list += '<option value="'+data[key].id+'">'+data[key].city_name+'</option>';
+			});
+			$('#city').html(list);
+	    });
+	    return false;
+	});
+
+	});
+
+	
 </script>

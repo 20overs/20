@@ -105,7 +105,7 @@
         </div>
     </div>
 </div>
--->
+
 <script>
 $('#login-form').submit(function(e){
   $('#login-btn').attr('disabled','true');
@@ -265,3 +265,5 @@ $('#login-form').submit(function(e){
 
   });
 </script>
+
+-->

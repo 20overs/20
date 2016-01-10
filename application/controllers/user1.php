@@ -15,10 +15,47 @@ class User extends CI_Controller {
 	}
 	public function index()
 	{
-		$data['title'] = "Player profile - ".$this->session->userdata('name');
-		$this->load->view('inc/header',$data);
-		
-		$this->load->view('inc/footer');
+		echo "A";
+	}
+	public function get_pp_id($id){
+		$rows = $this->db->query('SELECT count(*) as nums FROM player_profile where UserSysID=?',array($id))->row()->nums;
+		if($rows > 0){
+			return $this->db->select('Id')->from('player_profile')->where('UserSysID',$id)->get()->row()->Id;
+		}else{
+			return 0;
+		}
+	}
+	public function login(){
+		$res = $this->users->login($this->input->post('username',true),$this->input->post('password',true));
+		if($res !== FALSE){
+			foreach ($res as $ress) {
+				if($ress->image != false){
+					$sessdata = array(
+	                   'user_id'  => $ress->UserSysID,
+	                   'user_id_enc' => $this->get_pp_id($ress->UserSysID) + 674539873,
+	                   'name' => $ress->Firstname." ".$ress->Lastname,
+	                   'email' =>$ress->Username,
+	                   'image_url' => site_url().$ress->image_url,
+	                   'admin' => $ress->admin,
+	                   'logged_in' => TRUE
+	             	);
+				}else{
+					$sessdata = array(
+	                   'user_id'  => $ress->UserSysID,
+	                   'user_id_enc' => $this->get_pp_id($ress->UserSysID) + 674539873,
+	                   'name' => $ress->Firstname." ".$ress->Lastname,
+	                   'email' =>$ress->Username,
+	                   'image_url' => site_url()."uploads/talent.png",
+	                   'admin' => $ress->admin,
+	                   'logged_in' => TRUE
+	               );
+				}
+				$this->session->set_userdata($sessdata);
+			}
+			echo "1";
+		}else{
+			echo "0";
+		}
 	}
 
 	public function logout(){
@@ -106,10 +143,8 @@ class User extends CI_Controller {
 		}
 		$this->users->add_articles();
 	}
-	public function view_profile($getid)
-	{
-		if($getid == "")
-		{
+	public function view_profile($getid){
+		if($getid == ""){
 			redirect('/');
 		}
 		$data['title'] = "View profile";
@@ -117,7 +152,6 @@ class User extends CI_Controller {
 		$id = $getid - 674539873;
 		$data['id'] = $id;
 		$count = $this->users->profile_count($id);
-		echo $id;
 		if($count>0){
 			$profile_id = $this->users->get_profile_id($id);
 			$data['profile_pic'] = $this->users->get_profile_pic($profile_id);
@@ -170,6 +204,7 @@ class User extends CI_Controller {
 			}else{
 				$data['choice']	= 0;
 			}
+
 			$this->load->view('home/view_profile',$data);
 		}else{
 			$data['alert'] = "danger";

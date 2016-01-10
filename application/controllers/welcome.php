@@ -1,32 +1,46 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Welcome extends CI_Controller 
+{
+	private $id_enc = 674539873;
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->model('site');
+	}
 	public function index()
 	{
-		$this->load->model('home');
-		$this->load->model('locations');
-		$data['countries'] = $this->locations->get_countries();
-		$data['match_today'] = $this->home->get_matches();
-		$data['title'] = "20overs.com";
-		$data['arti'] = $this->home->get_articles();
-		$data['arti_count'] = count($data['arti']);
-		$data['talent'] = $this->home->talent();
-		$data['recent'] = $this->home->recent();
-		$data['quiz'] = $this->home->quiz();
-		$data['whatis'] = $this->home->news('What is');
-		$data['trending'] = $this->home->news('Trending Now');
-		$data['extras'] = $this->home->news('Extras');
+		$data['title'] = "20overs.com - Home";
+		$data['talent'] = $this->get_talents_today();
+		$data['recent_users'] = $this->get_recent_users();
+		$data['countries'] = $this->get_countries();
+		$data['arti'] = $this->get_articles();
 		$data['rss'] = $this->rss();
 		$this->load->view('inc/header',$data);
 		$this->load->view('home/welcome_view');
 		$this->load->view('inc/footer');
 		$this->load->view('inc/popup');
 	}
-	public function ajax_whatis(){
-		$this->load->model('home'); 
-		echo json_encode($this->home->news('What is'));
+	public function login()
+	{
+		$this->_check_login();
+		$data['title'] = "20overs.com - Login";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/login');
+		$this->load->view('inc/footer');
 	}
-	public function rss(){
+	public function register()
+	{
+		$this->_check_login();
+		$data['title'] = "20overs.com - Register";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/register');
+		$this->load->view('inc/footer');
+	}
+
+	public function rss()
+	{
 		$this->load->library('curl');
 		$ret = "<ul class='list-group'>";
 		$result = $this->curl->simple_get('http://static.cricinfo.com/rss/livescores.xml');
@@ -34,237 +48,19 @@ class Welcome extends CI_Controller {
 		foreach($res->channel->item as $live){
 			$ret .= "<li class='list-group-item'><b>".$live->title."</b></li>";
 		}
-		/*
-		try {
-		$result = $this->curl->simple_get('http://www.ecb.co.uk/live-scores.xml');
-			$res = new SimpleXMLElement($result);
-			foreach($res->channel->item as $live){
-				$ret .= "<li class='list-group-item'>".$live->title."</li>";
-			}
-			$ret .= "</ul>";
-			return $ret;
-		}catch(Exception $e) {
-		  //var_dump($e->getMessage());
-			return "Error on server";
-		}*/
 		$ret .= "</ul>";
 		return $ret;
 	}
-	public function profile(){
-		$this->output->cache(1);
-		$data['title'] = "Player Profile";
-		$this->load->view('inc/header',$data);
-		$this->load->view('home/profile');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-		$this->load->view('inc/extra_pop');
-	}
-	public function register(){
-		$email = $this->input->post('email',TRUE);
-		$first = $this->input->post('reg-first-name',TRUE);
-		$last = $this->input->post('reg-last-name',TRUE);
-		$pass = $this->input->post('reg-password',TRUE);
-		$this->load->model('home');
-		$res = $this->home->register($email,$first,$last,$pass);
-		echo $res;
-	}
-	public function recover(){
-		$email = $this->input->post('lostpassword',TRUE);
-		$passtoken =  md5(uniqid(rand(),TRUE));
-		$resetlinkpaste = site_url()."welcome/reset/".$passtoken;
-		$this->session->set_userdata('resetcode',$passtoken);
-		$this->session->set_userdata('timestamp1',time());
-		$sql = "SELECT Firstname, Lastname from 20oversusers where Username=? ";
-		$count = $this->db->query($sql,array($email))->num_rows();
-		if($count > 0){
-			$res = $this->db->query($sql,array($email))->result_array();
-			$fullname = $res[0]['Firstname']." ".$res[0]['Lastname'];
-			$to = trim($email);
-			$this->session->set_userdata('retemailid',$to);
-		$subject = "Message from 20overs.com - Password Reset Link";
-		$message =" ## This is an automated response. Please do not reply to this e-mail. ##\n\n
-			Dear ". $fullname." ,\n
-          	You are receiving this email because a request has been submitted to change your password. If you have requested additional password changes the following link will no longer be valid.\n\nPlease use the link in the most recent email to change your password. It will expire in 5 minutes.\nUse the following link to change your password. It will expire in 5 minutes.\n".$resetlinkpaste."\r\n "
-			."\n\n\n## This is an automated response. Please do not reply to this e-mail.##\n\n\nThank you for visiting 20overs.com - 20overs.com Support Team";
-		$from = "support@20overs.com";
-		$headers = "From:" . $from;
-			if(mail($to,$subject,$message,$headers))
-			{
-				echo "<font color='green'>The password reset link is sent to email address.</font>";
-			}
-			else
-			{
-				echo "Error sending email";
-			}
-		}else{
-				echo"<font color='red'>You have entered an incorrect email!!</font>";
-		}
-	}
-	public function reset($id){
-		if($id == ""){
-			redirect('/');
-		}
-		$this->output->cache(1);
-		$this->load->model('home');
-		$data['title'] = "Reset password";
-		$this->session->set_userdata('token',$id);
-		$this->load->view('inc/header',$data);
-		$this->load->view('reset');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-	}
-	public function doreset(){
-		$data['title'] = "Reset password";
-		$this->load->view('inc/header',$data);
-		$token = $this->session->userdata('token');
-		$resetcode = $this->session->userdata('resetcode');
-		$timestamp = $this->session->userdata('timestamp1');
-		$username = $this->session->userdata('retemailid');
-		$pass1 =  $this->input->post('pass');
-		$pass2 =  $this->input->post('repass');
-		if((time() - $timestamp) <= 300)
-			{
-				if(isset($token))
-					{
-						if($pass1==$pass2)
-						{
-						$datas=$pass1;
-						if($token==$resetcode)
-						{
-							$sql = "SELECT AES_DECRYPT(IDNbr,'test') as IdNbr from 20oversusers where Username=?";
-							$res = $this->db->query($sql,array($username))->result_array();
-							$oldpass = $res[0]['IdNbr'];
-							if($datas==$oldpass)
-							{
-								$data['alert'] = "danger";
-								$data['message'] = "<font color='red'>Old password and new password are same.</font>";
-							}
-							else 
-							{
-								$sql="UPDATE 20oversusers set IDNbr=AES_ENCRYPT(?,'test') where Username=?";
-								$this->db->query($sql,array($datas,$username));
-								$data['alert'] = "success";
-								$data['message'] = "<font color='green'>Your password changed successfully.</font>";
-							}
-						}
-						else
-						{
-							$data['alert'] = "danger";
-							$data['message'] = "<font color='red'>The link has been expired. Please try again.</font>";
-						}
-						}
-						else
-						{
-							$data['alert'] = "danger";
-							$data['message'] = "<font color='red'>Passwords do not match.</font>";
-							
-						}
-			}
-		}		
-		else 
+
+	public function _check_login()
+	{
+		if($this->session->userdata('logged_in') == TRUE)
 		{
-			$data['alert'] = "danger";
-			$data['message'] = "<font color='red'>The link has been expired. Please try again.</font>";
-		}
-		$this->load->view('inc/message',$data);
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-	}
-	public function wow(){
-		$this->output->cache(1);
-		$data['title'] = "WOW catch";
-		$this->load->view('inc/header',$data);
-		$this->load->view('home/wow');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-	}
-	public function spin(){
-		$this->output->cache(1);
-		$data['title'] = "Spin to win";
-		$this->load->view('inc/header',$data);
-		$this->load->view('home/spin');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-	}
-	public function contactform(){
-		$this->output->cache(1);
-		$data['title'] = "Contact form";
-		$this->load->view('inc/header',$data);
-		$this->load->view('footer/contactform');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-	}
-	public function postcontactform(){
-		$this->output->cache(1);
-		$name = $this->input->post('name');
-		$email = $this->input->post('email');
-		$ihavea = $this->input->post('ihavea');
-		$comments = $this->input->post('comments');
-		$sql = "INSERT INTO suggestions(Name,Email,SuggestionCode,Comments,SuggestionDate) VALUES(?,?,?,?,NOW())";
-		$this->db->query($sql,array($name,$email,$ihavea,$comments));
-		$id = $this->db->insert_id();
-		if($id != 0){
-			$data['title'] = "Thanks for contact us";
-			$data['message'] = "Your feedback is submitted";
-			$this->load->view('inc/header',$data);
-			$this->load->view('message');
-			$this->load->view('inc/footer');
-			$this->load->view('inc/popup');
-			header("refresh:2;url=".site_url('welcome/contactform'));
+			redirect('user/welcome');
 		}
 	}
-	public function aboutus(){
-		$this->output->cache(1);
-		$data['title'] = "About us";
-		$this->load->view('inc/header',$data);
-		$this->load->view('footer/aboutus');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');
-	}
-	public function privacypolicy(){
-		$this->output->cache(1);
-		$data['title'] = "Privacty policy";
-		$this->load->view('inc/header',$data);
-		$this->load->view('footer/terms');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');	
-	}
-	public function ourteam(){
-		$this->output->cache(1);
-		$data['title'] = "Our team";
-		$this->load->view('inc/header',$data);
-		$this->load->view('footer/ourteam');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');	
-	}
-	public function faq(){
-		$this->output->cache(1);
-		$data['title'] = "FAQ";
-		$this->load->view('inc/header',$data);
-		$this->load->view('footer/faq');
-		$this->load->view('inc/footer');
-		$this->load->view('inc/popup');	
-	}
-
-	public function sendmail(){
-
-		
-		$this->load->library('email');
-
-		$this->email->from("cvvkshcv@gmail.com","Vikash");
-		$this->email->to('cvvkshcv@gmail.com');
-
-		$this->email->subject('Message from: www.20overs.com');
-		$this->email->message("Dear ,\n\nHere is your profile id:\n\nIf you need further assistance please go to 20overs.com and use our contact us section to raise any concerns or to give feedback.\n\nThank you for visiting 20overs.com.");
-		$this->email->attach('uploads/talent.jpg');
-		if($this->email->send()){
-			echo "A";
-		}else{
-			echo "B";
-		}
-	}
-	public function active($token){
-		
+	public function activate($token)
+	{
 		if($this->db->query('SELECT * from user_activate_account where AuthToken=?',array($token))->num_rows() > 0){
 			$x = $this->db->query('SELECT UserSysID,Lastname,Firstname,Username,IDNbr,CreatedOn from user_activate_account where AuthToken=?',array($token))->row();
 			if($x->UserSysID != null){
@@ -284,5 +80,165 @@ class Welcome extends CI_Controller {
 		}else{
 			redirect('/');
 		}
+	}
+	
+	/* Database call functions */
+	public function get_login()
+	{
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('username', 'Username','trim|required|valid_email');
+		$this->form_validation->set_rules('password','Password','trim|required');
+		if ($this->form_validation->run() == FALSE)
+		{
+			$errors = validation_errors();
+        	echo $this->to_json($errors);
+		}
+		else
+		{
+			$this->site->get_login();
+		}
+	}
+
+	public function do_register()
+	{
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+		$this->form_validation->set_rules('username', 'Username','trim|required|valid_email|is_unique[20oversusers.Username]');
+		$this->form_validation->set_rules('password','Password','trim|required|matches[re_password]|min_length[5]');
+		$this->form_validation->set_rules('re_password','Re-enter password','trim|required');
+		$this->form_validation->set_rules('first_name','First name','trim|required');
+		$this->form_validation->set_rules('last_name','Last name','trim|required');
+
+		$this->form_validation->set_message('is_unique', '%s is already exist. Please try another.');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$errors = validation_errors();
+        	echo $this->to_json($errors);
+		}
+		else
+		{
+			$this->site->do_register();
+		}
+	}
+
+	public function get_talents_today()
+	{
+		return ($this->site->get_talents_today());
+	}
+	public function get_recent_users()
+	{
+		return ($this->site->get_recent_users());
+	}
+	public function get_trending_now()
+	{
+		return ($this->site->get_trending_now());
+	}
+	public function get_what_is()
+	{
+		return ($this->site->get_what_is());
+	}
+	public function get_extras()
+	{
+		return ($this->site->get_extras());
+	}
+	public function get_googly()
+	{
+		return ($this->site->get_googly());
+	}
+	public function get_countries()
+	{
+		return ($this->site->get_countries());	
+	}
+	public function get_states()
+	{
+		$param = $this->input->post('country_id');
+		return ($this->site->get_states($param));
+	}
+	public function get_cities()
+	{
+		$param1 = $this->input->post('country_id');
+		$param2 = $this->input->post('state_id');
+		return ($this->site->get_cities($param1,$param2));	
+	}
+	public function get_articles($param = null)
+	{
+		return ($this->site->get_articles($param));
+	}
+	public function to_json($data)
+	{
+		header('Content-Type: application/json');
+		return json_encode($data);
+	}
+	public function view_profile($getid){
+		if($getid == ""){
+			redirect('/');
+		}
+		$data['title'] = "View profile";
+		$this->load->view('inc/header',$data);
+		$id = $getid - 674539873;
+		$data['id'] = $id;
+		$count = $this->site->profile_count($id);
+		if($count>0){
+			//$profile_id = $this->users->get_profile_id($id);
+			//$data['profile_pic'] = $this->users->get_profile_pic($profile_id);
+			$data['profile'] = $this->site->get_profile($id);
+			// $data['name'] = $this->users->get_name($id);
+			$data['batting_history'] = $this->site->get_batting_history($id);
+			$data['bowling_history'] = $this->site->get_bowling_history($id);
+			$data['six_four'] = $this->site->get_six_four($id);
+			$data['wicket'] = $this->site->get_wicket($id);
+			// $data['location'] = $this->users->pro_get_location($id);
+			// $data['runs'] = $this->users->pro_get_runs($id);
+			// $data['wickets'] = $this->users->pro_get_wicket($id);
+
+			$data['user_id'] = $this->site->get_user_id($id);
+			$data['profile_id'] = $getid;
+			$logged_id = $this->session->userdata('pp_id');
+
+			if($this->session->userdata('logged_in') !== FALSE && $this->session->userdata('user_id') !== $data['profile'][0]['UserSysID']){
+
+				$counts = $this->db->query('SELECT count(*) as nums FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?)',array($logged_id,$logged_id,$id,$id))->row()->nums;
+				if($counts == 0)
+				{
+					$data['choice']	= 1;
+				}else{
+					$result = $this->db->query('SELECT * FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and request_type="friend"',array($logged_id,$logged_id,$id,$id))->row();
+					if($result->sender_id == $logged_id && $result->status == "pending"){
+						$data['choice']	= 2;
+					}
+					if($result->receiver_id == $logged_id && $result->status == "pending"){
+						$data['choice']	= 3;
+					}
+					else if($result->status == "rejected")
+					{
+						$data['choice']	= 4;
+					}
+					else if($result->status == "accepted")
+					{
+						$data['choice']	= 5;
+					}
+					else if($result->status == "blocked")
+					{
+						$data['choice']	= 6;
+						$data['alert'] = "danger";
+						$data['message'] = "No profile found";
+						$this->load->view('inc/message',$data);
+						die();
+					}
+
+				}
+			}else{
+				$data['choice']	= 0;
+			}
+
+			$this->load->view('home/view_profile',$data);
+		}else{
+			$data['alert'] = "danger";
+			$data['message'] = "No profile found";
+			$this->load->view('inc/message',$data);
+		}
+		$this->load->view('inc/footer');
 	}
 }

@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="<?=site_url()?>public/css/sweetalert.css" />
 	<link rel="stylesheet" href="<?=site_url()?>public/css/main.css" />
 	<link rel="shortcut icon" href="<?=site_url()?>public/img/favicon.ico" />
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	
 </head>
 <body>
@@ -32,8 +33,8 @@
 <div class="col-lg-2 col-md-2 col-sm-3">
 	<div class="social-follow">
 		<span>FOLLOW US:</span>
-		<a href="http://www.facebook.com/20overs"><img src="<?=site_url()?>public/img/fb.png" /></a>
-		<a href="http://www.twitter.com/20overs"><img src="<?=site_url()?>public/img/tweet.png" /></a>
+		<a href="http://www.facebook.com/20overs" class="btn btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></a>
+		<a href="http://www.twitter.com/20overs" class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></a>
 	</div>
 </div>
 </div>
@@ -60,7 +61,8 @@
 				 <?php
 				if($this->session->userdata('logged_in')!==TRUE){
 				?>
-				 <li><a href="#" data-toggle="modal" data-target="#login-modal">Register / Login</a></li>
+				 <li><a href="<?=site_url('login')?>">Login</a></li>
+				 <li><a href="<?=site_url('register')?>">Register</a></li>
 				<?php
 				}else{
 				?>

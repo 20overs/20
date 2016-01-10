@@ -82,7 +82,8 @@ class Social extends CI_Controller{
 	public function _pro_id($id){
 		return $id > 674539873 ? ($id - 674539873) : ($id + 674539873);
 	}
-	public function request(){
+	public function request()
+	{
 		$from = $this->users->get_user_id($this->session->userdata('user_id'));
 		$to = $this->_pro_id($this->input->post("to"));
 		$status = $this->_request_status($this->input->post("status"));
@@ -92,7 +93,8 @@ class Social extends CI_Controller{
 		{
 			switch ($type) {
 				case 'friend':
-					if($status == 'pending'){
+					if($status == 'pending')
+					{
 						$counts = $this->db->query('SELECT count(*) as nums FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and (status="pending" or status="accepted")',array($from,$from,$to,$to))->row()->nums;
 						$usercount = $this->user_exist($from);
 						$this->db->query('DELETE FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and status="rejected"',array($from,$from,$to,$to));
@@ -104,6 +106,7 @@ class Social extends CI_Controller{
 							if($this->db->query("insert into 20overs_requests(sender_id,receiver_id,status,request_type) values(?,?,?,?)",array($from,$to,$status,$type)))
 							{
 								echo $this->_json("1","Friend request sent !",$this->_pro_id($to));
+								$this->notification($type,$to,$from);
 							}
 							else
 							{
@@ -143,6 +146,7 @@ class Social extends CI_Controller{
 							{
 								//$this->db->query('DELETE FROM 20overs_requests where sender_id=? and receiver_id=?',array($to,$from));
 								echo $this->_json("1","Request accepted.",$this->_pro_id($to));
+								$this->notification($type,$to,$from);
 							}
 							else
 							{
@@ -192,8 +196,14 @@ class Social extends CI_Controller{
 				break;
 			}
 			
-		}else{
+		}
+		else
+		{
 			echo $this->_json("0","Something went wrong");
 		}
+	}
+	public function notification($type,$to_id,$from_id)
+	{
+		$this->db->query("insert into 20overs_notification(type,to_id,from_id) values(?,?,?)",array($type,$to_id,$from_id));
 	}
 }

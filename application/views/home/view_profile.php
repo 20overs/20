@@ -1,11 +1,12 @@
 <div class="container-fluid margin-top-5">
 	<div class="col-lg-3">
-	<b><center><?=$name[0]['fullname']?></center></b>
-	<b><center><?=$location[0]['state']?> , <?=$location[0]['city']?></center></b>
-	<img src="<?=site_url()?><?=$profile_pic?>" class="img-thumbnail img-circle" height=500 width=500 />
+	<b><center><?=$profile[0]['name']?></center></b>
+	<b><center><?=$profile[0]['city']?> , <?=$profile[0]['state']?> , <?=$profile[0]['country']?></center></b>
+	<img src="<?=site_url()?>uploads/<?=$profile[0]['image']?>" class="img-thumbnail img-circle" height=500 width=500 />
 	<div id="request_btn_area">
 	<?php
-	if($choice == 1 || $choice == 4){
+	if($choice == 1 || $choice == 4)
+	{
 	?>
 	<div class="dropdown">
 	  <button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Add Friend 
@@ -31,7 +32,6 @@
 	else if($choice == 3)
 	{
 	?>
-
 	<button class="btn btn-info dropdown-toggle" data-pp-id="<?=$profile_id?>" data-user-id="<?=$user_id?>" type="button" data-toggle="dropdown" id="accept_request"> Conform Request </button>
 	<button class="btn btn-danger dropdown-toggle" data-pp-id="<?=$profile_id?>" data-user-id="<?=$user_id?>" type="button" data-toggle="dropdown" id="cancel_request"> Cancel Request </button>
 	<?php
@@ -55,6 +55,7 @@
 	<div class="col-lg-9">
 		<h3 class="tableHeading">Player Profile</h3>
 		<table class="table table-bordered  table-striped" >
+
 		<thead class="success">
 		<tr>
 		<th>Batting Style</th>
@@ -63,22 +64,20 @@
 		<th>Number of Fours</th>
 		<th>Number of Sixers</th>
 		<th>Total Wickets</th>
-
 		</tr>
 		</thead>
 		<tr>
-		<td><?=$style[0]['bat']?></td>
-		<td><?=$style[0]['bow']?></td>
-		<td><?=$runs[0]['runs']?></td>
-		<td><?=$four[0]['fours']?></td>
-		<td><?=$six[0]['sixes']?></td>		
-		<td><?=$wickets[0]['wikets']?></td>
+		<td><?=$profile[0]['BattingStyle']?></td>
+		<td><?=$profile[0]['BowlingStyle']?></td>
+		<td><?=$six_four[0]['runs']?></td>
+		<td><?=$six_four[0]['fours']?></td>
+		<td><?=$six_four[0]['sixes']?></td>		
+		<td><?=$wicket[0]['wickets']?></td>
 		</tr>
 
 		</table>
 
 		<h3 class="tableHeading">Batting History</h3>
-
 		<table class="table table-bordered table-striped" >
 		<thead class="success">
 		<tr>
