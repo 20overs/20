@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"fu",
+				"function"
+			],
+			[
+				"bowli",
+				"bowling_style"
+			],
+			[
+				"bowling",
+				"bowling_type"
+			],
+			[
+				"bow",
+				"bowling_style"
+			],
+			[
+				"is",
+				"isConfirm"
+			],
+			[
 				"th",
 				"this"
 			],
@@ -86,10 +106,6 @@
 			[
 				"for",
 				"foreach	foreach …"
-			],
-			[
-				"bowling",
-				"bowling_style"
 			],
 			[
 				"suc",
@@ -396,10 +412,6 @@
 				"print_r"
 			],
 			[
-				"bow",
-				"bowling_type"
-			],
-			[
 				"ove",
 				"overs_bowled"
 			],
@@ -502,18 +514,6 @@
 			[
 				"opt",
 				"option	Tag"
-			],
-			[
-				"sub",
-				"sub_cat_id"
-			],
-			[
-				"func",
-				"function"
-			],
-			[
-				"bo",
-				"boxes"
 			]
 		]
 	},
@@ -523,15 +523,7 @@
 			"file": "/C/xampp/htdocs/20/application/models/Site.php",
 			"settings":
 			{
-				"buffer_size": 12330,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/20/application/controllers/user1.php",
-			"settings":
-			{
-				"buffer_size": 23120,
+				"buffer_size": 15953,
 				"line_ending": "Windows"
 			}
 		},
@@ -539,23 +531,31 @@
 			"file": "/C/xampp/htdocs/20/application/controllers/welcome.php",
 			"settings":
 			{
-				"buffer_size": 8146,
+				"buffer_size": 8148,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/C/xampp/htdocs/20/application/views/home/view_profile.php",
+			"file": "/C/xampp/htdocs/20/application/controllers/user.php",
 			"settings":
 			{
-				"buffer_size": 7584,
+				"buffer_size": 23684,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/xampp/htdocs/20/application/controllers/social.php",
+			"file": "forgot_profile_id.php",
 			"settings":
 			{
-				"buffer_size": 7058,
+				"buffer_size": 1374,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "upload_photo.php",
+			"settings":
+			{
+				"buffer_size": 1224,
 				"line_ending": "Windows"
 			}
 		}
@@ -601,21 +601,32 @@
 		"/C/xampp/htdocs/20/application/controllers",
 		"/C/xampp/htdocs/20/application/models",
 		"/C/xampp/htdocs/20/application/views",
-		"/C/xampp/htdocs/20/application/views/social/inc",
-		"/C/xampp/htdocs/20/public"
+		"/C/xampp/htdocs/20/application/views/inc",
+		"/C/xampp/htdocs/20/application/views/user",
+		"/C/xampp/htdocs/20/public",
+		"/C/xampp/htdocs/20/public/js"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/20/application/controllers/user1.php",
+		"/C/xampp/htdocs/20/application/models/users.php",
+		"/C/xampp/htdocs/20/application/views/inc/extra_pop.php",
+		"/C/xampp/htdocs/20/application/views/user/articles.php",
+		"/C/xampp/htdocs/20/public/js/main.js",
+		"/C/xampp/htdocs/20/application/views/user/history.php",
+		"/C/xampp/htdocs/20/application/views/user/bowling_history.php",
+		"/C/xampp/htdocs/20/application/views/user/batting_history.php",
+		"/C/xampp/htdocs/20/application/views/inc/footer.php",
+		"/C/xampp/htdocs/20/application/views/home/view_profile.php",
+		"/C/xampp/htdocs/20/application/controllers/social.php",
+		"/C/xampp/htdocs/20/application/views/inc/sidebar.php",
 		"/C/xampp/htdocs/20/application/views/mat/view_profile.php",
 		"/C/xampp/htdocs/20/application/views/mat/header.php",
 		"/C/xampp/htdocs/20/application/views/mat/footer.php",
-		"/C/xampp/htdocs/20/application/models/users.php",
 		"/C/xampp/htdocs/20/application/controllers/user.php",
 		"/C/xampp/htdocs/20/application/controllers/welcome.php",
 		"/C/xampp/htdocs/20/application/views/user/user_home_page.php",
 		"/C/xampp/htdocs/20/application/views/inc/header.php",
-		"/C/xampp/htdocs/20/application/views/home/view_profile.php",
-		"/C/xampp/htdocs/20/application/controllers/user1.php",
 		"/C/xampp/htdocs/20/application/models/home.php",
 		"/C/xampp/htdocs/20/application/controllers/welcome1.php",
 		"/C/xampp/htdocs/20/application/views/user/header.php",
@@ -624,17 +635,9 @@
 		"/C/xampp/htdocs/20/public/css/main.css",
 		"/C/xampp/htdocs/20/application/views/home/welcome_view.php",
 		"/C/xampp/htdocs/20/application/config/routes.php",
-		"/C/xampp/htdocs/20/application/views/inc/footer.php",
 		"/C/xampp/htdocs/20/application/models/locations.php",
-		"/C/xampp/htdocs/20/public/js/main.js",
 		"/C/xampp/htdocs/20/application/views/inc/popup.php",
-		"/C/xampp/htdocs/20/application/views/inc/extra_pop.php",
-		"/C/xampp/htdocs/20/application/views/user/batting_history.php",
-		"/C/xampp/htdocs/20/application/views/inc/sidebar.php",
-		"/C/xampp/htdocs/20/application/controllers/social.php",
-		"/C/xampp/htdocs/20/application/views/user/bowling_history.php",
 		"/C/xampp/htdocs/20/application/views/user/welcome_user.php",
-		"/C/xampp/htdocs/20/application/views/user/history.php",
 		"/C/xampp/htdocs/20/application/views/message.php",
 		"/C/xampp/htdocs/20/application/views/user/create_profile.php",
 		"/C/xampp/htdocs/20/application/views/user/create_profile_old.php",
@@ -677,7 +680,6 @@
 		"/C/xampp/htdocs/orange/application/views/footer.php",
 		"/C/xampp/htdocs/orange/application/views/header.php",
 		"/C/xampp/htdocs/20/application/views/footer/faq.php",
-		"/C/xampp/htdocs/20/application/views/user/articles.php",
 		"/C/xampp/htdocs/20/api/login.php",
 		"/C/xampp/htdocs/20/api/insert.php",
 		"/C/xampp/htdocs/20/api/test.php",
@@ -751,6 +753,37 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"do_upload",
+			"do",
+			"extra_",
+			"check_email",
+			"users",
+			"orgot-popup').click(function(e",
+			"bowling_history(",
+			"number",
+			"save_batting_history",
+			"save_bowling_history",
+			"errors",
+			"save_bowling_history",
+			"save_bowling_history\n",
+			"save_bowling_history",
+			"create_bowling_history",
+			"}\n",
+			"panel-",
+			"get_batting_history",
+			"users->",
+			"history()",
+			"history(",
+			"styl",
+			"overs",
+			"bowling_history(",
+			"bowling_history",
+			"required",
+			"\" ",
+			"save_batting_history",
+			"bowling_history(",
+			"batting_history(",
+			"batting_history()",
 			"request",
 			"request(",
 			" request(",
@@ -847,38 +880,7 @@
 			"save",
 			"flas",
 			"set_fl",
-			"flashdata('save",
-			"save",
-			"check_profile_id",
-			"save",
-			"batting",
-			"save",
-			"check_profile_id",
-			"check",
-			"create_profile",
-			"for",
-			"=\"\"",
-			"required",
-			"CREATE",
-			"create_pr",
-			"count(",
-			"try",
-			"create_profile",
-			"batting",
-			"required",
-			"create",
-			"count(*)",
-			"count(*(",
-			"from player",
-			"create",
-			"check_player_profile",
-			"recover_mail_submit",
-			"cit",
-			"#country",
-			"country",
-			"get_ci",
-			"get_",
-			"get"
+			"flashdata('save"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -905,15 +907,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12330,
+						"buffer_size": 15953,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5513,
-								5521
+								15949,
+								15949
 							]
 						],
 						"settings":
@@ -921,8 +923,8 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 117.0,
-						"translation.y": 3000.0,
+						"translation.x": 0.0,
+						"translation.y": 8545.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -930,19 +932,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/C/xampp/htdocs/20/application/controllers/user1.php",
+					"file": "/C/xampp/htdocs/20/application/controllers/welcome.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23120,
+						"buffer_size": 8148,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7329,
-								7329
+								487,
+								487
 							]
 						],
 						"settings":
@@ -951,7 +953,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3146.0,
+						"translation.y": 102.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -959,19 +961,19 @@
 				},
 				{
 					"buffer": 2,
-					"file": "/C/xampp/htdocs/20/application/controllers/welcome.php",
+					"file": "/C/xampp/htdocs/20/application/controllers/user.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8146,
+						"buffer_size": 23684,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7062,
-								7062
+								19782,
+								19789
 							]
 						],
 						"settings":
@@ -980,7 +982,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3441.0,
+						"translation.y": 10141.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -988,19 +990,19 @@
 				},
 				{
 					"buffer": 3,
-					"file": "/C/xampp/htdocs/20/application/views/home/view_profile.php",
+					"file": "forgot_profile_id.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7584,
+						"buffer_size": 1374,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6994,
-								6994
+								0,
+								1374
 							]
 						],
 						"settings":
@@ -1009,27 +1011,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 103.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "/C/xampp/htdocs/20/application/controllers/social.php",
+					"file": "upload_photo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7058,
+						"buffer_size": 1224,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5254,
-								5254
+								769,
+								1114
 							]
 						],
 						"settings":
@@ -1037,11 +1039,11 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 54.0,
-						"translation.y": 2999.0,
+						"translation.x": 0.0,
+						"translation.y": 253.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

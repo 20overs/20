@@ -3,7 +3,12 @@
 class User extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		$this->load->model('users');
+		if($this->session->userdata('logged_in')!==TRUE){
+			redirect('/');
+			die();
+		}
+		//$this->load->model('users');
+		$this->load->model('site');
 		$this->load->model('locations');
 		$this->load->library('form_validation');
 		$this->load->library('MY_Form_validation');
@@ -13,14 +18,6 @@ class User extends CI_Controller {
 		$this->output->set_header("Cache-Control: post-check=0, pre-check=0");
 		$this->output->set_header("Pragma: no-cache");
 	}
-	public function index()
-	{
-		$data['title'] = "Player profile - ".$this->session->userdata('name');
-		$this->load->view('inc/header',$data);
-		
-		$this->load->view('inc/footer');
-	}
-
 	public function logout(){
 		$this->session->sess_destroy();
 		redirect('/');
@@ -65,13 +62,12 @@ class User extends CI_Controller {
 			echo $this->create_profile();
 		}
 		if($check_player_profile > 0){
-			$data['profile'] = $this->users->get_profile();
+			$data['profile'] = $this->site->get_profile_logged_in();
 			$this->load->view('user/create_profile_old',$data);
 		}else{
 			$this->load->view('user/create_profile');
 		}
 		$this->load->view('inc/footer');
-		$this->load->view('inc/extra_pop');
 	}
 
 	function checkDateFormat($date)
@@ -91,20 +87,15 @@ class User extends CI_Controller {
 
 	public function articles(){
 		$data['title'] = "Create articles";
-		$data['articles'] = $this->users->articles();
-		$data['countries'] = $this->locations->get_countries();
+		$data['articles'] = $this->site->articles_logged_in();
+		$data['countries'] = $this->site->get_countries();
 		$this->load->view('inc/header',$data);		
 		$this->load->view('user/articles');
 		$this->load->view('inc/footer');
-		$this->load->view('inc/extra_pop');
 		$this->load->view('inc/popup');
 	}
 	public function add_articles(){
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
-		$this->users->add_articles();
+		$this->site->add_articles();
 	}
 	public function view_profile($getid)
 	{
@@ -263,10 +254,6 @@ class User extends CI_Controller {
 
 	public function create_batting_history()
 	{
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
 		$data['title'] = "Create Batting history";
 		$this->load->view('inc/header',$data);
 
@@ -301,11 +288,7 @@ class User extends CI_Controller {
 
 	public function create_bowling_history()
 	{
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
-		$data['title'] = "Create Batting history";
+		$data['title'] = "Create Bowling history";
 		$this->load->view('inc/header',$data);
 
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
@@ -318,7 +301,7 @@ class User extends CI_Controller {
 		$this->form_validation->set_rules('overs','overs','required|numeric|less_than[51]');
 
 		$this->form_validation->set_rules('bowling_type','Bowling type','required');
-		$this->form_validation->set_rules('overs bowled','Overs bowled','required');
+		$this->form_validation->set_rules('overs_bowled','Overs bowled','required');
 		$this->form_validation->set_rules('bowling_style','Bowling style','required');
 		$this->form_validation->set_rules('runs_given','Runs given','required|numeric');
 		$this->form_validation->set_rules('total_wickets','Total wickets','required|numeric');
@@ -335,13 +318,7 @@ class User extends CI_Controller {
 		$this->load->view('user/bowling_history');
 		$this->load->view('inc/footer');
 	}
-
-
 	public function save_batting_history(){
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
 		$id = $this->input->post('pro_id',TRUE);
 		$count = $this->check_profile_id($this->input->post('pro_id'));
 		if($count == 1){
@@ -378,27 +355,57 @@ class User extends CI_Controller {
 			echo $this->load->view('message',$data);
 		}
 	}
+	public function save_bowling_history(){
+
+		$id = $this->input->post('pro_id',TRUE);
+		$count = $this->check_profile_id($this->input->post('pro_id'));
+		if($count == 1){
+			$match_date = preg_replace('/[a-zA-Z]/','',$this->input->post('match_date',TRUE));
+			$match_result = $this->input->post('match_result',TRUE);
+			$your_team = $this->input->post('your_team',TRUE);
+			$venue = $this->input->post('venue',TRUE);
+			$opp_team = $this->input->post('opp_team',TRUE);
+			$overs = $this->input->post('overs',TRUE);
+
+			$bowling_type = $this->input->post('bowling_type',TRUE);
+			$overs_bowled = $this->input->post('overs_bowled',TRUE);
+			$bowling_style = $this->input->post('bowling_style',TRUE);
+			$runs_given = $this->input->post('runs_given',TRUE);
+			$total_wickets = $this->input->post('total_wickets',TRUE);
+
+			$sql = "INSERT INTO  `bowling_history` (`Id` ,`PlayerId` ,`MyTeamName` ,`OpponentTeam` ,`MatchDate` ,`MatchVenue` ,`Overs` ,`MatchResult` ,`BowlingType` ,`BowlingStyle` ,`OversBowled` ,`Wickets` ,`RunsGiven`,`CreateTS`) VALUES (NULL , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+			if(!$this->db->query($sql,array($id,$your_team,$opp_team,$match_date,$venue,$overs,$match_result,$bowling_type,$bowling_style,$overs_bowled,$total_wickets,$runs_given)))
+			{
+				$data['message'] = "Your Batting history no saved.";
+				$data['title'] = "Error !";
+				$this->load->view('message',$data);
+			}
+			else
+			{
+        		redirect(current_url()."?success=1");
+			}
+		}else{
+			$data['message'] = "You entered wrong profile Id";
+			$data['title'] = "Wrong profile ID";
+			echo $this->load->view('message',$data);
+		}
+	}
 	public function history(){
 		if($this->session->userdata('logged_in')!==TRUE){
 			redirect('/');
 			die();
 		}
 		$data['title'] = "Create/Manage history";
-		$data['batting_history'] = $this->users->get_batting_history();
-		$data['bowling_history'] = $this->users->get_bowling_history();
+		$data['batting_history'] = $this->site->get_batting_history_logged_in();
+		$data['bowling_history'] = $this->site->get_bowling_history_logged_in();
 		$this->load->view('inc/header',$data);
 		$this->load->view('user/history');
 		$this->load->view('inc/footer');
-		$this->load->view('inc/extra_pop');
 	}
 	
-	public function bowling_history(){
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
-		$this->users->bowling_history();
-	}
+	// public function bowling_history(){
+	// 	$this->users->bowling_history();
+	// }
 	public function bowling_style(){
 		$id = $this->input->post('id');
 		$data = $this->locations->get_bowling_style($id);
@@ -409,20 +416,16 @@ class User extends CI_Controller {
 		echo json_encode($res);
 	}
 	function del_batting(){
-		$this->users->del_batting();
+		$this->site->del_batting();
 	}
 	function del_bowling(){
-		$this->users->del_bowling();
+		$this->site->del_bowling();
 	}
 	
 	function send_email()
 	{
-		if($this->session->userdata('logged_in')!==TRUE){
-			redirect('/');
-			die();
-		}
 		$email = $this->input->post('recover_mail',TRUE);
-		$result = $this->users->check_email($email);
+		$result = $this->site->check_email($email);
 		$id = $result[0]['Id'];
 		if($id != 0)
 		{
@@ -459,10 +462,6 @@ class User extends CI_Controller {
 		$config['overwrite']  = TRUE;
 		$config['file_name'] = md5($this->session->userdata('email'));
 
-		//$path = $_FILES['userfile']['name'];
-		//$ext = pathinfo($path, PATHINFO_EXTENSION);
-		//$config['file_name'] = $this->session->userdata('email').".".$ext;
-
 		$this->load->library('upload', $config);
 
 		if ( ! $this->upload->do_upload('userfile'))
@@ -472,62 +471,31 @@ class User extends CI_Controller {
 		}
 		else
 		{
-			//$oldname = $this->db->select('image_name')->from('player_image')->where('user_id',$this->session->userdata('user_id'))->get()->row()->image_name;
-			//$folder = "uploads/".$oldname;
-			//unlink($folder);
 			$data = array('upload_data' => $this->upload->data());
 			$data['title'] = "Profile picture uploaded";
-			$inserts =$this->upload->data();
+			$inserts = $this->upload->data();
 			$this->load->view('inc/header',$data);
-			if($this->users->do_upload($data['upload_data']['file_name'])=== TRUE){
-				//$this->session->set_userdata(array('image_url'=>site_url()."uploads/".$data['upload_data']['file_name']));
+			$data['alert'] = "success";
+			$data['message'] = "Image uploaded successfully. Waiting for security check<br>Image will updated after security check ";
+			$filename = $inserts['file_name'];
+
+			$this->db->where('UserSysID',$this->session->userdata('user_id'));
+			if($this->db->update('20oversusers',array('image'=>$filename)))
+			{
 				$data['alert'] = "success";
-				$data['message'] = "Image uploaded successfully. Waiting for security check<br>Image will updated after security check ";
-				$filename = $inserts['file_name'];
-				$fileext = $inserts['file_ext'];
-				$fullpath = "uploads/".$filename;
-
-			//echo $this->db->query("select * from player_image wincache_rplist_meminfo(oid) user_id=1")->row()->num_row();
-			$count = $this->db->select()->from('player_image')->where('user_id',$this->session->userdata('user_id'))->get()->num_rows();
-			if($count > 0){
-				//echo $this->db->select('image_url')->from('player_image')->where('user_id',$this->session->userdata('user_id'))->get()->row()->image_url;
-				$this->load->helper('date');
-				$this->db->where('user_id',$this->session->userdata('user_id'));
-				$updatedata = array('image_name'=>$filename,'image_url'=>$fullpath,'image_ext'=>$fileext,'createTS'=>now());
-				$this->db->update('player_image',$updatedata);
-				$this->db->where('UserSysID',$this->session->userdata('user_id'));
-				$this->db->update('20oversusers',array('image'=>'0'));
-			}else{
-				$insertdata = array('user_id'=>$this->session->userdata('user_id'),'image_name'=>$filename,'image_url'=>$fullpath,'image_ext'=>$fileext,'createTS'=>date('Y-m-d'));
-				$this->db->insert('player_image',$insertdata);
+				$data['message'] = "Profile picture uploaded successfully";
+				$this->session->set_userdata('image_url',site_url()."uploads/".$filename);
 			}
-
-		$this->load->library('email');
-		$list = array('surya@20overs.com', 'sthaniga@20overs.com', 'cvvkshcv@20overs.com','kriskumaresh@20overs.com','jayban@20overs.com');
-		$this->email->from("support@20overs.com","20overs");
-		$this->email->to($list);
-		$user_id = $this->session->userdata('user_id');
-		$user_id = $user_id + 3456;
-		$message = "<h3>Image verification :</h3> \n\n <a href='http://20overs.com/test/activate_image/".$user_id."/'>Click Link</a> to activate";
-		$this->email->subject('Message from: www.20overs.com');
-		$this->email->message($message);
-		$this->email->attach($fullpath);
-		$this->email->set_mailtype('html');
-
-		if(! $this->email->send()){
-			$extra = "<br>message not sent";
-		}else{
-			$extra = "<br>message sent";
-		}
-
-			$this->load->view('inc/message.php',$data);
-			}else{
+			else
+			{
 				$data['alert'] = "danger";
 				$data['message'] = "Profile picture upload failed";
-				$this->load->view('inc/message.php',$data);
 			}
+			$this->load->view('inc/message.php',$data);
 			$this->load->view('inc/footer');
 			//header("Refresh:2;url=".site_url()."user/welcome");
+			//$folder = "uploads/".$oldname;
+			//unlink($folder);
 		}
 	}
 
@@ -564,6 +532,19 @@ class User extends CI_Controller {
 		$sql = "SELECT Id FROM player_profile where UserSysID = ? and Id=?";
 		return $this->db->query($sql,array($this->session->userdata('user_id'),$id))->num_rows();
 	}
-
+	public function forgot_profile_id()
+	{
+		$data['title'] = "20overs.com - Forgot profile id";
+		$this->load->view('inc/header',$data);
+		$this->load->view('user/forgot_profile_id');
+		$this->load->view('inc/footer');
+	}
+	public function upload_photo()
+	{
+		$data['title'] = "20overs.com - Upload photo";
+		$this->load->view('inc/header',$data);
+		$this->load->view('user/upload_photo');
+		$this->load->view('inc/footer');
+	}
 }
 ?>

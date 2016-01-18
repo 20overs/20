@@ -41,6 +41,7 @@ class Site extends CI_Model
 					$sessdata = array(
 	                   'user_id'  => $ress->UserSysID,
 	                   'pp_id' => $ress->pp_id,
+	                   'pp_id_enc' => $ress->pp_id+$this->id_enc,
 	                   'name' => $ress->Fullname,
 	                   'email' =>$ress->Username,
 	                   'image_url' => site_url().'uploads/'.$ress->image,
@@ -330,4 +331,108 @@ class Site extends CI_Model
 	public function pro_get_wicket($id){
 		return $this->db->query("Select Sum(BLH.Wickets) as wikets From bowling_history BLH Where BLH.PlayerId =?",array($id))->result_array();
 	}
+
+	/*Batting bowling history after login*/
+
+	function get_batting_history_logged_in(){
+		$sql = "SELECT a.* FROM batting_history a,player_profile b WHERE a.PlayerId=b.Id AND b.UserSysID=?";
+		return $this->db->query($sql,array($this->session->userdata('user_id')))->result_array();
+	}
+	function get_bowling_history_logged_in(){
+		$sql = "SELECT a.* FROM bowling_history a,player_profile b WHERE a.PlayerId=b.Id AND b.UserSysID=?";
+		return $this->db->query($sql,array($this->session->userdata('user_id')))->result_array();
+	}
+
+	function del_batting(){
+		$sql = "DELETE FROM batting_history WHERE Id=?";
+		$data = array();
+		if($this->db->query($sql,array($this->input->post('id')))){
+			$data = array('message'=>'Batting history deleted','errors'=>0);
+			echo $this->to_json($data);
+		}else{
+			$data = array('message'=>'Batting history is not deleted.','errors'=>1);
+			echo $this->to_json($data);
+		}
+	}
+	function del_bowling(){
+		$sql = "DELETE FROM bowling_history WHERE Id=?";
+		$data = array();
+		if($this->db->query($sql,array($this->input->post('id')))){
+			$data = array('message'=>'Bowling history deleted','errors'=>0);
+			echo $this->to_json($data);
+		}else{
+			$data = array('message'=>'Bowling history is not deleted.','errors'=>1);
+			echo $this->to_json($data);
+		}
+	}
+	function get_profile_logged_in(){
+		$sql = "SELECT a.*,b.city_name as City1,d.country as Country1,c.name as State1 FROM player_profile a,cities b,states c,countries d where UserSysID = ? and a.Country = d.countryid and (a.State = c.stateid and a.country= c.countryid) and b.id = a.City";
+		return $this->db->query($sql,array($this->session->userdata('user_id')))->result_array();
+	}
+	function articles_logged_in(){
+		$day = date("d");
+		$day +=1;
+		$ym = date("Y-m");
+		$full = $ym."-".$day;
+
+		$day = date("d");
+		$day -=1;
+		$full1 = $ym."-".$day;
+
+		$day = date("d");
+		$day +=2;
+		$full2 = $ym."-".$day;
+
+		$day = date("d");
+		$full3 = $ym."-".$day;		
+		$sql = "SELECT * FROM international_match_schedule where EventName = ? AND MatchType=? AND MatchStartDate IN (?,?,?,?)";
+		return $this->db->query($sql,array("World Cup 2015","ODI",$full,$full1,$full2,$full3))->result_array();
+	}
+	function add_articles(){
+		$match = $this->input->post('id',TRUE);
+		$name = $this->input->post('name',TRUE);
+		$arti = $this->input->post('arti',TRUE);
+		$link = trim($this->input->post('link',TRUE));
+
+		$day = date("d");
+		$day +=1;
+		$ym = date("Y-m");
+		$full = $ym."-".$day;
+
+		$day = date("d");
+		$day -=1;
+		$full1 = $ym."-".$day;
+
+		$day = date("d");
+		$day +=2;
+		$full2 = $ym."-".$day;
+		if($link != ""){
+			$sql = "INSERT INTO 20overs_articles(user_name,match_id,article,external_link,added) VALUES(?,?,?,?,now())";
+			if($this->db->query($sql,array($name,$match,$arti,$link))){
+			echo "Article posted Succesfully";
+			}else{
+				echo "Failed to post Article";
+			}
+		}else{
+			$sql = "INSERT INTO 20overs_articles(user_name,match_id,article,added) VALUES(?,?,?,now())";	
+			if($this->db->query($sql,array($name,$match,$arti))){
+			echo "Article posted Succesfully";
+			}else{
+				echo "Failed to post Article";
+			}
+		}
+	}
+	public function check_email($email){
+		$sess_email = $this->session->userdata('email');
+		if($email == $sess_email){
+			$sql = "SELECT PP.Id From player_profile PP,20oversusers 20U  WHERE 20U.Username=? AND PP.UserSysID=20U.UserSysID";
+			$count = $this->db->query($sql,array($sess_email))->num_rows();
+			if($count > 0){
+				return $this->db->query($sql,array($sess_email))->result_array();
+			}else{
+				return array(array('Id'=>0));
+			}
+		}
+	}
+	
 }

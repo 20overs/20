@@ -18,9 +18,9 @@ class Social extends CI_Controller{
 	public function index(){
 		$from = $this->users->get_user_id($this->session->userdata('user_id'));
 		$this->data['friend_request_count'] = $this->db->query('SELECT count(*) as nums FROM 20overs_requests where (receiver_id=?) and (status="pending")',array($from,$from))->row()->nums;
-		$this->load->view('social/inc/header',$this->data);
-		$this->load->view('social/social');
-		$this->load->view('social/inc/footer');
+		$this->load->view('inc/header',$this->data);
+		$this->load->view('user/view_social_request');
+		$this->load->view('inc/footer');
 	}
 	
 	private function _json($success,$message,$opt=""){

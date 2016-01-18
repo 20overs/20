@@ -16,7 +16,7 @@ class Welcome extends CI_Controller
 		$data['recent_users'] = $this->get_recent_users();
 		$data['countries'] = $this->get_countries();
 		$data['arti'] = $this->get_articles();
-		$data['rss'] = $this->rss();
+		//$data['rss'] = $this->rss();
 		$this->load->view('inc/header',$data);
 		$this->load->view('home/welcome_view');
 		$this->load->view('inc/footer');

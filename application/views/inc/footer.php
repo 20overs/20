@@ -20,6 +20,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script>
 -->
 <script src="<?=site_url()?>public/js/sweetalert.min.js"></script>
-<!--<script src="<?=site_url()?>public/js/main.js"></script>-->
+<script src="<?=site_url()?>public/js/main.js"></script>
 
 <script type="text/javascript" src="<?=site_url()?>public/js/smoothscroll.js"></script>

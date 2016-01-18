@@ -127,22 +127,6 @@ class Users extends CI_Model{
 		$sql = "SELECT a.* FROM bowling_history a,player_profile b WHERE a.PlayerId=b.Id AND b.UserSysID=?";
 		return $this->db->query($sql,array($this->session->userdata('user_id')))->result_array();
 	}
-	function del_batting(){
-		$sql = "DELETE FROM batting_history WHERE Id=?";
-		if($this->db->query($sql,array($this->input->post('id')))){
-			echo json_encode(array('message'=>'Batting history deleted','errors'=>0));
-		}else{
-			echo json_encode(array('message'=>'Batting history not deleted.','errors'=>1));
-		}
-	}
-	function del_bowling(){
-		$sql = "DELETE FROM bowling_history WHERE Id=?";
-		if($this->db->query($sql,array($this->input->post('id')))){
-			echo json_encode(array('message'=>'Batting history deleted','errors'=>0));
-		}else{
-			echo json_encode(array('message'=>'Batting history not deleted.','errors'=>1));
-		}
-	}
 	function articles(){
 		$day = date("d");
 		$day +=1;

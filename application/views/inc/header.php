@@ -57,7 +57,6 @@
 				 <li><a href="<?=site_url('user/articles')?>">Articles</a></li>
 				 <li><a href="<?=site_url('welcome/wow')?>">Wow Catches</a></li>
 				 <li><a href="<?=site_url('welcome/spin')?>">Spin To Win</a></li>
-				 <li><a href="<?=site_url('social')?>">Social networking</a></li>
 				 <?php
 				if($this->session->userdata('logged_in')!==TRUE){
 				?>
@@ -66,6 +65,7 @@
 				<?php
 				}else{
 				?>
+				 	<li><a href="<?=site_url('social')?>">Social networking</a></li>
 					<li><a href="<?=site_url()?>user/logout">LOGOUT</a></li>
 				<?php
 				}

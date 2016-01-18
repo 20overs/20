@@ -6,23 +6,25 @@
       ?>
     </div>
     <div class="col-lg-8 col-md-8">
+      <div class="panel-group">
+        <div class="panel panel-info">
         <div class="panel-heading" href="#collapseTwo" data-toggle="collapse" data-parent="#accordion">
             <center><span class="h4 handover">CREATE BOWLING HISTORY</span></center>
         </div>
         <div>
           <div class="panel-body">
             <div class="col-lg-12">
-            <form action="#" method="post" id="bowling_history">
+            <form action="<?=site_url()?>user/create_bowling_history" method="post" id="bowling_history">
               <h3>Match details</h3>
                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                     <div class="form-group">
                       <label for="pro_id">Player ID</label>
-                      <input type="number" class="form-control form-control-cust" id="pro_id" placeholder="Player ID"  name="pro_id" value="<?php echo set_value('pro_id'); ?>">
+                      <input type="number" min="0" class="form-control form-control-cust" id="pro_id" placeholder="Player ID"  name="pro_id" value="<?php echo set_value('pro_id'); ?>">
                       <?php echo form_error('pro_id'); ?>
                     </div>
                     <div class="form-group">
                       <label for="match_date">Match Date</label>
-                      <input type="text" class="form-control datepicker form-control-cust" id="match_date" placeholder="Match date"  name="match_date" value="<?php echo set_value('match_date'); ?>">
+                      <input type="text" class="form-control datepicker form-control-cust" id="match_date" placeholder="Match date [YYYY-MM-DD]"  name="match_date" value="<?php echo set_value('match_date'); ?>">
                       <?php echo form_error('match_date'); ?>
                     </div>
                     <div class="form-group">
@@ -51,7 +53,7 @@
                     </div>
                     <div class="form-group">
                       <label for="overs">Overs</label>
-                      <input type="number" class="form-control form-control-cust" id="overs" placeholder="Overs" name="overs" value="<?php echo set_value('overs'); ?>">
+                      <input type="number" min="0" class="form-control form-control-cust" id="overs" placeholder="Overs" name="overs" value="<?php echo set_value('overs'); ?>">
                       <?php echo form_error('overs'); ?>
                     </div>
                   </div>
@@ -62,8 +64,8 @@
                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                     <div class="form-group">
                         <label for="bowling_type">Bowling Type</label>
-                        <select class="form-control form-control-cust" id="bowling_type" name="bowling_type" value="<?php echo set_value('bowling_type'); ?>" required>
-                            <option>Select a bowling style</option>
+                        <select class="form-control form-control-cust" id="bowling_type" name="bowling_type" value="<?php echo set_value('bowling_type'); ?>">
+                            <option value="">Select a bowling style</option>
                             <option value="0">Not a bowler</option>
                             <option value="1">Pace Bowling</option>
                             <option value="2">Spin Bowling</option>
@@ -72,28 +74,28 @@
                     </div>
                     <div class="form-group">
                         <label for="overs_bowled">Overs Bowled</label>
-                        <input type="number" class="form-control form-control-cust" id="overs_bowled" placeholder="Overs Bowled" required name="overs_bowled" value="<?php echo set_value('overs_bowled'); ?>">
+                        <input type="number" min="0" class="form-control form-control-cust" id="overs_bowled" placeholder="Overs Bowled" name="overs_bowled" value="<?php echo set_value('overs_bowled'); ?>">
                     </div>
                     <?php echo form_error('overs_bowled'); ?>
                   </div>
                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                     <div class="form-group">
                         <label for="bowling_style">Bowling Style</label>
-                        <select class="form-control form-control-cust" id="bowling_style" name="bowling_style" required>
+                        <select class="form-control form-control-cust" id="bowling_style" name="bowling_style">
                             <option value="">Select Batting Style</option>
                         </select>
                         <?php echo form_error('bowling_style'); ?>
                     </div>
                     <div class="form-group">
                         <label for="runs_given">Runs Given</label>
-                        <input type="number" class="form-control form-control-cust" id="runs_given" placeholder="Runs Given" required name="runs_given">
+                        <input type="number" min="0" class="form-control form-control-cust" id="runs_given" placeholder="Runs Given" name="runs_given" value="<?php echo set_value('runs_given'); ?>">
                         <?php echo form_error('runs_given'); ?>
                     </div>
                   </div>
                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                     <div class="form-group">
                         <label for="total_wickets">Total Wickets</label>
-                        <input type="number" class="form-control form-control-cust" id="total_wickets" placeholder="Total Wickets" required name="total_wickets">
+                        <input type="number" min="0" class="form-control form-control-cust" id="total_wickets" placeholder="Total Wickets" name="total_wickets" value="<?php echo set_value('total_wickets'); ?>">
                         <?php echo form_error('total_wickets'); ?>
                     </div>
                     <button type="submit" class="btn search-btn">SAVE BOWLING HISTORY</button>
@@ -103,5 +105,7 @@
             </form>
           </div>
         </div>
+        </div>
+      </div>
   </div>
 </div>

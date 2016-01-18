@@ -14,17 +14,17 @@
 					    <div class="panel-collapse">
 					      <div class="panel-body">
 						      <div class="col-lg-12">
-                              <form action="batting_history" method="post">
+                              <form action="<?=site_url()?>user/create_batting_history" method="post" id="batting_history_form">
 						      <h3>Match details</h3>
 							      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 							     	<div class="form-group">
 										<label for="pro_id">Player ID</label>
-										<input type="number" class="form-control form-control-cust" id="pro_id" placeholder="Player ID"  name="pro_id" value="<?php echo set_value('pro_id'); ?>">
+										<input type="number" min="0" class="form-control form-control-cust" id="pro_id" placeholder="Player ID"  name="pro_id" value="<?php echo set_value('pro_id'); ?>">
                                         <?php echo form_error('pro_id'); ?>
 									</div>
 									<div class="form-group">
 										<label for="match_date">Match Date</label>
-										<input type="text" class="form-control datepicker form-control-cust" id="match_date" placeholder="Match date"  name="match_date" value="<?php echo set_value('match_date'); ?>">
+										<input type="text" class="form-control datepicker form-control-cust" id="match_date" placeholder="Match date [YYYY-MM-DD]"  name="match_date" value="<?php echo set_value('match_date'); ?>">
                                         <?php echo form_error('match_date'); ?>
 									</div>
 									<div class="form-group">
@@ -53,7 +53,7 @@
 									</div>
 									<div class="form-group">
 										<label for="overs">Overs</label>
-										<input type="number" class="form-control form-control-cust" id="overs" placeholder="Overs" name="overs" value="<?php echo set_value('overs'); ?>">
+										<input type="number" min="0" class="form-control form-control-cust" id="overs" placeholder="Overs" name="overs" value="<?php echo set_value('overs'); ?>">
                                         <?php echo form_error('overs'); ?>
 									</div>
 							      </div>
@@ -75,7 +75,7 @@
 									</div>
                                     <div class="form-group">
                                         <label for="balls_faced">Balls Faced</label>
-                                        <input type="number" class="form-control form-control-cust" id="balls_faced" placeholder="Balls Faced"  name="balls_faced" value="<?php echo set_value('balls_faced'); ?>">
+                                        <input type="number" min="0" class="form-control form-control-cust" id="balls_faced" placeholder="Balls Faced"  name="balls_faced" value="<?php echo set_value('balls_faced'); ?>">
                                         <?php echo form_error('balls_faced'); ?>
                                     </div>
                                     <br><span id="bat_result"></span>
@@ -100,19 +100,19 @@
 									</div>
                                     <div class="form-group">
                                         <label for="runs_scored">Runs Scored</label>
-                                        <input type="number" class="form-control form-control-cust" id="runs_scored" placeholder="Runs Scored"  name="runs_scored" value="<?php echo set_value('runs_scored'); ?>">
+                                        <input type="number" min="0" class="form-control form-control-cust" id="runs_scored" placeholder="Runs Scored"  name="runs_scored" value="<?php echo set_value('runs_scored'); ?>">
                                         <?php echo form_error('runs_scored'); ?>
                                     </div>
 							      </div>
 							      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
                                     <div class="form-group">
                                         <label for="_4s">Number Of 4(s)</label>
-                                        <input type="number" class="form-control form-control-cust" id="_4s" placeholder="Number Of 4(s)"  name="_4s" value="<?php echo set_value('_4s'); ?>">
+                                        <input type="number" min="0" class="form-control form-control-cust" id="_4s" placeholder="Number Of 4(s)"  name="_4s" value="<?php echo set_value('_4s'); ?>">
                                         <?php echo form_error('_4s'); ?>
                                     </div>
                                     <div class="form-group">
                                         <label for="_6s">Number Of 6(s)</label>
-                                        <input type="number" class="form-control form-control-cust" id="_6s" placeholder="Number Of 6(s)"  name="_6s" value="<?php echo set_value('_6s'); ?>">
+                                        <input type="number" min="0" class="form-control form-control-cust" id="_6s" placeholder="Number Of 6(s)"  name="_6s" value="<?php echo set_value('_6s'); ?>">
                                         <?php echo form_error('_6s'); ?>
                                     </div>
                                     <button type="submit" class="btn search-btn">SAVE</button> &nbsp; &nbsp; &nbsp;

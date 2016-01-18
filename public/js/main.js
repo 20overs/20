@@ -12,21 +12,6 @@ $('html,body').scroll(function(){
     scrollTop: $("#cont").offset().top
   });
 });
-/*
-$("#go").click(function() {
-    $('html, body').animate({
-        scrollTop: $("#cont").offset().top
-    }, 1000);
-});
-
-
-$("#logout").click(function(e){
-    $.post("user/logout",{logout:1},function(){
-      window.open("/",'_self');
-    });
-    e.preventDefault();
-  });
-*/
 
  $('#flipper').click(function(){
  if($(this).text().trim() == "New User Please Register"){
@@ -147,46 +132,6 @@ $("#logout").click(function(e){
    e.preventDefault();
   });
 
-  $('.delete_batting').click(function(){
-    var r = confirm("Sure want to delete?");
-    if (r == true) {
-    $(this).parent().fadeOut(800);
-    $.ajax({
-      url:'del_batting',
-      data:{id:$(this).attr('data-id')},
-      method:"POST",
-      success :function(data){
-        data = jQuery.parseJSON(data);
-          alert(data.message);
-      },
-      error: function(){
-        alert("Server error try again later");
-        $(this).parent().fadeIn(500);
-      }
-    });
-  }
-  });
-
-  $('.delete_bowling').click(function(){
-    var r = confirm("Sure want to delete?");
-    if (r == true) {
-    $(this).parent().fadeOut(800);
-    $.ajax({
-      url:'del_bowling',
-      data:{id:$(this).attr('data-id')},
-      method:"POST",
-      success :function(data){
-        data = jQuery.parseJSON(data);
-          alert(data.message);
-      },
-      error: function(){
-        alert("Server error try again later");
-        $(this).parent().fadeIn(500);
-      }
-    });
-  }
-  });
-
   $('#matchid').change(function(){
   if($(this).val() != 0 ){
     $('#arti,#countdown,#link').slideDown(300);
@@ -197,54 +142,7 @@ $("#logout").click(function(e){
     }
   });
   
-  $('#arti').keyup(function(e){
-  if($(this).val().length!=0){
-  $('#arti_submit').slideDown(300);
-  var output = $(this).val();
-  $('#op').text(output);
-  var arti = $('#op').text();
-  var remaining = 250 - arti.length;
-  $('#countdown').text(remaining+' characters remaining.');
-  arti = arti.replace(/(\r\n|\n|\r)/gm," ");
-  arti = arti.replace(/\s+/g," ");
-    badwords = /\b(fuck|suck|dick|fucks|piss|pussy|sunni|punda|otha|ootha|fucker|Fuck|Suck|Pussy|Sunni|Punda|Ootha|Fuckoff|fuckoff)\b/g;
-    output = output.replace(badwords, function (fullmatch, badword) {
-        return new Array(badword.length + 1).join('*');
-    });
-    if($(this).val().length >= 250){
-      $(this).addClass('has-err');
-    }else{
-      $(this).removeClass('has-err');
-    }
-    $('#op').text(output);
-    }else{
-      $('#arti_submit').slideUp(300);
-    }
-  });
   
-  $('#arti_form').submit(function(e){
-  //$('#ajax').html("<img src='http://20overs.com/_img/fb_load.gif' />");
-  $('#arti_submit').attr('disabled','true');
-  var arti = $('#op').text();
-  arti = arti.replace(/(\r\n|\n|\r)/gm," ");
-    arti = arti.replace(/\s+/g," ");
-  if(arti.length ==0){
-    $('#ajax').html("<div class='badge badge-error'>Enter Some Data To Post Article</div>");
-    $('#arti_submit').removeAttr('disabled');
-  }else{
-    $.post('add_articles',{id:$('#matchid').val(),name:$('#name').val(),link:$('#link').val(),arti:arti},function(data){
-    $('#arti').val();
-      $('#ajax').html("<div class='badge badge-success'>"+data+"</div>");
-      $('#arti,#link').val('');$('#matchid').val('0');$('#op').text('');
-      $('#arti_submit').css('display','none');
-      $('#arti,#link').css('display','none');
-      $('#countdown').text('250 characters remaining.');
-      $('#countdown').css('display','none');
-      $('#arti_submit').removeAttr('disabled');
-    });
-    }
-    e.preventDefault(); 
-  });
 
   $('#recover_mail').submit(function(e){
     $('#recover_mail_submit').attr('disabled','true');
@@ -254,30 +152,6 @@ $("#logout").click(function(e){
       $('#recover_mail_submit').removeAttr('disabled');
     });
     e.preventDefault();
-  });
-
-  $('#update_profile,#create_profile').validate({
-    rules:{
-      "dob":{
-        required:true,
-        date:true
-      },
-      "height":{
-        required:true,
-        number:true,
-        max:220
-      },
-      "weight":{
-        required:true,
-        number:true,
-        max:130
-      },
-      "postal":{
-        required:true,
-        number:true,
-        minlength:4
-      }
-    }
   });
 
 });

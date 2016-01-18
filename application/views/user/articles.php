@@ -87,3 +87,53 @@
 		?>
 	</div>
 </div>
+<script type="text/javascript">
+	$('#arti').keyup(function(e){
+  if($(this).val().length!=0){
+  $('#arti_submit').slideDown(300);
+  var output = $(this).val();
+  $('#op').text(output);
+  var arti = $('#op').text();
+  var remaining = 250 - arti.length;
+  $('#countdown').text(remaining+' characters remaining.');
+  arti = arti.replace(/(\r\n|\n|\r)/gm," ");
+  arti = arti.replace(/\s+/g," ");
+    badwords = /\b(fuck|suck|dick|fucks|piss|pussy|sunni|punda|otha|ootha|fucker|Fuck|Suck|Pussy|Sunni|Punda|Ootha|Fuckoff|fuckoff)\b/g;
+    output = output.replace(badwords, function (fullmatch, badword) {
+        return new Array(badword.length + 1).join('*');
+    });
+    if($(this).val().length >= 250){
+      $(this).addClass('has-err');
+    }else{
+      $(this).removeClass('has-err');
+    }
+    $('#op').text(output);
+    }else{
+      $('#arti_submit').slideUp(300);
+    }
+  });
+  
+  $('#arti_form').submit(function(e){
+  //$('#ajax').html("<img src='http://20overs.com/_img/fb_load.gif' />");
+  $('#arti_submit').attr('disabled','true');
+  var arti = $('#op').text();
+  arti = arti.replace(/(\r\n|\n|\r)/gm," ");
+    arti = arti.replace(/\s+/g," ");
+  if(arti.length ==0){
+    $('#ajax').html("<div class='badge badge-error'>Enter Some Data To Post Article</div>");
+    $('#arti_submit').removeAttr('disabled');
+  }else{
+    $.post('add_articles',{id:$('#matchid').val(),name:$('#name').val(),link:$('#link').val(),arti:arti},function(data){
+    $('#arti').val();
+      $('#ajax').html("<div class='badge badge-success'>"+data+"</div>");
+      $('#arti,#link').val('');$('#matchid').val('0');$('#op').text('');
+      $('#arti_submit').css('display','none');
+      $('#arti,#link').css('display','none');
+      $('#countdown').text('250 characters remaining.');
+      $('#countdown').css('display','none');
+      $('#arti_submit').removeAttr('disabled');
+    });
+    }
+    e.preventDefault(); 
+  });
+</script>
