@@ -174,7 +174,7 @@
 						<?php
 							foreach ($talent as $row):
 						?>
-							<a href='<?=site_url()?>user/view_profile/<?=$row['id']?>' class="user"><i class="fa fa-user fa-lg"></i> <?=$row['fullname']?></a>
+							<a href='<?=site_url()?>welcome/view_profile/<?=$row['id']?>' class="user"><i class="fa fa-user fa-lg"></i> <?=$row['fullname']?></a>
 						</span>
 					</div>
 							<ul class="no-style talent-ul">

@@ -7,7 +7,6 @@ class User extends CI_Controller {
 			redirect('/');
 			die();
 		}
-		//$this->load->model('users');
 		$this->load->model('site');
 		$this->load->model('locations');
 		$this->load->library('form_validation');

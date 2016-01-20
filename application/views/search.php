@@ -18,7 +18,7 @@ echo $this->load->view('inc/header');
 </thead>
 <?php
 foreach ($data as $val) {
-	echo "<tr><td>".$val['fullname']."</td><td>".$val['age']."</td><td>".$val['battingstyle']."</td><td>".$val['bowlingstyle']."</td><td>".$val['country']."</td><td>".$val['state']."</td><td>".$val['city']."</td><td>".$val['postal']."</td></tr>";
+	echo "<tr><td><a href='".base_url()."welcome/view_profile/".$val['id']."'>".$val['fullname']."</a></td><td>".$val['age']."</td><td>".$val['battingstyle']."</td><td>".$val['bowlingstyle']."</td><td>".$val['country']."</td><td>".$val['state']."</td><td>".$val['city']."</td><td>".$val['postal']."</td></tr>";
 }
 ?>
 </table>

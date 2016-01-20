@@ -435,4 +435,76 @@ class Site extends CI_Model
 		}
 	}
 	
+	/*Social network*/
+	public function friend_list()
+	{
+		$user_id = $this->session->userdata('pp_id');
+		$sql = "SELECT F.status, CONCAT( UCASE( U.Firstname ) ,  \" \", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+		FROM player_profile P, 20overs_requests F, 20oversusers U
+		WHERE 
+		CASE 
+		WHEN F.sender_id =?
+		THEN F.receiver_id = P.Id
+		WHEN F.receiver_id =?
+		THEN F.sender_id = P.Id
+		END 
+		AND F.status =  \"accepted\"
+		AND P.UserSysID = U.UserSysID";
+		$query = $this->db->query($sql,array($user_id,$user_id));
+		$count = $query->num_rows();
+		if($count > 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	public function friend_req()
+	{
+		$user_id = $this->session->userdata('pp_id');
+		$sql = 'SELECT F.status, CONCAT( UCASE( U.Firstname ) ,  " ", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+		FROM player_profile P, 20overs_requests F, 20oversusers U
+		WHERE 
+		CASE 
+		WHEN F.receiver_id =?
+		THEN F.sender_id = P.Id
+		END 
+		AND F.status =  "pending"
+		AND P.UserSysID = U.UserSysID';
+		$query = $this->db->query($sql,array($user_id));
+		$count = $query->num_rows();
+		if($count > 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	public function friend_req_sent()
+	{
+		$user_id = $this->session->userdata('pp_id');
+		$sql = 'SELECT F.status, CONCAT( UCASE( U.Firstname ) ,  " ", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+		FROM player_profile P, 20overs_requests F, 20oversusers U
+		WHERE 
+		CASE 
+		WHEN F.receiver_id = P.Id
+		THEN F.sender_id = ?
+		END 
+		AND F.status =  "pending"
+		AND P.UserSysID = U.UserSysID';
+		$query = $this->db->query($sql,array($user_id));
+		$count = $query->num_rows();
+		if($count > 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
