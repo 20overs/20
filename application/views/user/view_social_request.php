@@ -13,7 +13,7 @@
 				    </div>
 				    <div class="panel-body">
 				    	<ul class="list-group">
-				    		<li class="list-group-item"><b>FRIENDS REQUESTS</b><span class="badge"><?=count($friend_req)?></li>
+				    		<li class="list-group-item"><b>FRIENDS REQUESTS</b></li>
 				    		<?php
 				    		if($friend_req != FALSE)
 				    		{
@@ -47,11 +47,11 @@
 			<div class="panel-group">
 				<div class="panel panel-info">
 				    <div class="panel-heading">
-				    	<center><span class="h4 handover">FRIENDS LIST</span></span></center>
+				    	<center><span class="h4 handover">FRIENDS LIST</span></center>
 				    </div>
 				    <div class="panel-body">
 				    	<ul class="list-group">
-				    		<li class="list-group-item"><b class="h4">TOTAL FRIENDS</b><span class="badge"><?=count($friend_list)?></li>
+				    		<li class="list-group-item"><b>TOTAL FRIENDS</b></li>
 				    		<?php
 				    		if($friend_list != FALSE)
 				    		{

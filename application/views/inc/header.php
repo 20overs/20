@@ -65,7 +65,6 @@
 				<?php
 				}else{
 				?>
-				 	<li><a href="<?=site_url('social')?>">Social networking</a></li>
 					<li><a href="<?=site_url()?>user/logout">LOGOUT</a></li>
 				<?php
 				}

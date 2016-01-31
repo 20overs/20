@@ -17,6 +17,7 @@ class Social extends CI_Controller{
 
 	public function index(){
 		$from = $this->session->userdata('pp_id');
+		$this->data['title'] = "20overs.com - Friend Request list";
 		$this->data['friend_list'] = $this->site->friend_list();
 		$this->data['friend_req'] = $this->site->friend_req();
 		$this->load->view('inc/header',$this->data);
@@ -113,7 +114,7 @@ class Social extends CI_Controller{
 								if($this->db->query("insert into 20overs_requests(sender_id,receiver_id,status,request_type) values(?,?,?,?)",array($from,$to,$status,$type)))
 								{
 									echo $this->_json("1","Friend request sent !",$this->_pro_id($to));
-									$this->notification($type,$to,$from);
+									$this->notification($type,$to,$from,'pending');
 								}
 								else
 								{
@@ -153,7 +154,7 @@ class Social extends CI_Controller{
 								{
 									//$this->db->query('DELETE FROM 20overs_requests where sender_id=? and receiver_id=?',array($to,$from));
 									echo $this->_json("1","Request accepted.",$this->_pro_id($to));
-									$this->notification($type,$to,$from);
+									$this->notification($type,$to,$from,'accepted');
 								}
 								else
 								{
@@ -166,6 +167,7 @@ class Social extends CI_Controller{
 							if($this->db->query('DELETE FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and status="pending"',array($from,$from,$to,$to)))
 							{
 								echo $this->_json("1","Friend request cancelled.");
+								$this->notification($type,$to,$from,'',1);
 							}
 							else
 							{
@@ -210,8 +212,25 @@ class Social extends CI_Controller{
 			}
 		}
 	}
-	public function notification($type,$to_id,$from_id)
+	public function notification($type,$to_id,$from_id,$status,$delete=FALSE)
 	{
-		$this->db->query("insert into 20overs_notification(type,to_id,from_id) values(?,?,?)",array($type,$to_id,$from_id));
+		if($delete == FALSE)
+		{
+			$this->db->query("insert into 20overs_notification(type,status,to_id,from_id) values(?,?,?,?)",array($type,$status,$to_id,$from_id));
+		}
+		else
+		{
+			$this->db->query("delete from 20overs_notification where type=? AND to_id=? AND from_id=?",array($type,$to_id,$from_id));
+		}
+		
+	}
+	public function notification_list()
+	{
+		$from = $this->session->userdata('pp_id');
+		$this->data['title'] = "20overs.com - Notifications";
+		$this->data['notification_list'] = $this->site->notification_list();
+		$this->load->view('inc/header',$this->data);
+		$this->load->view('user/view_social_notifications');
+		$this->load->view('inc/footer');
 	}
 }
