@@ -1,7 +1,21 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <?php
+            $class = "";
+            if($this->input->get('i') == 1)
+            {  
+            ?>
+            <div class="alert alert-danger text-center h4">Please Signin to continue.</div>
+            <?php
+            }
+            else
+            {
+            ?>
             <h1 class="text-center login-title">Sign in to continue</h1>
+            <?php
+            }
+            ?>
             <div class="account-wall">
                 <center><i class="fa fa-user fa-5x login-icon"></i></center>
                 <form class="form-signin" id="login-form">
@@ -17,7 +31,7 @@
     </div>
 </div>
 <style type="text/css">
-    .form-signin
+.form-signin
 {
     max-width: 330px;
     padding: 15px;

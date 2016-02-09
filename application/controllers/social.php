@@ -4,10 +4,22 @@ class Social extends CI_Controller{
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('site');
-		if(!$this->session->userdata('logged_in')){
-			redirect('/');
+		if(!$this->session->userdata('logged_in'))
+		{
+			if($this->input->is_ajax_request())
+			{
+				echo $this->_json("0","Please Login");
+				die();
+			}
+			else
+			{
+				redirect('/');
+			}
 		}
 		$this->data['title'] = "20overs.com - Social";
+		$this->data['notification_count'] = $this->site->notification_count();
+		$this->data['friend_request_count'] = $this->site->friend_request_count();
+
 		$this->output->set_header("HTTP/1.0 200 OK");
 		$this->output->set_header("HTTP/1.1 200 OK");
 		$this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -20,6 +32,7 @@ class Social extends CI_Controller{
 		$this->data['title'] = "20overs.com - Friend Request list";
 		$this->data['friend_list'] = $this->site->friend_list();
 		$this->data['friend_req'] = $this->site->friend_req();
+
 		$this->load->view('inc/header',$this->data);
 		$this->load->view('user/view_social_request');
 		$this->load->view('inc/footer');
@@ -58,7 +71,7 @@ class Social extends CI_Controller{
 				return 'pending';
 			break;
 			case 1:
-				return  'accepted';
+				return 'accepted';
 			break;
 			case 2:
 				return 'rejected';
@@ -107,11 +120,11 @@ class Social extends CI_Controller{
 							$usercount = $this->user_exist($from);
 							$this->db->query('DELETE FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and status="rejected"',array($from,$from,$to,$to));
 							if($counts > 0 || $usercount < 1){
-								echo $this->_json("0","Error sending request !");
+								echo $this->_json("0","You already have a friend request from this user. Please refresh page.");
 							}
 							else
 							{
-								if($this->db->query("insert into 20overs_requests(sender_id,receiver_id,status,request_type) values(?,?,?,?)",array($from,$to,$status,$type)))
+								if($this->db->query("INSERT into 20overs_requests(sender_id,receiver_id,status,request_type) values(?,?,?,?)",array($from,$to,$status,$type)))
 								{
 									echo $this->_json("1","Friend request sent !",$this->_pro_id($to));
 									$this->notification($type,$to,$from,'pending');
@@ -164,14 +177,23 @@ class Social extends CI_Controller{
 						}
 						else if($status == 'cancelled')
 						{
-							if($this->db->query('DELETE FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and status="pending"',array($from,$from,$to,$to)))
+							$counts = $this->db->query('SELECT count(*) as nums FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and (status="pending")',array($from,$from,$to,$to))->row()->nums;
+							$usercount = $this->user_exist($from);
+							if($counts == 0 || $usercount < 1)
 							{
-								echo $this->_json("1","Friend request cancelled.");
-								$this->notification($type,$to,$from,'',1);
+								echo $this->_json("0","Error while cancelling your friend request. Please refresh the page.");
 							}
 							else
 							{
-								echo $this->_json("0","Friend request cancel failed.");
+								if($this->db->query('DELETE FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and status="pending"',array($from,$from,$to,$to)))
+								{
+									echo $this->_json("1","Friend request cancelled.");
+									$this->notification($type,$to,$from,'',1);
+								}
+								else
+								{
+									echo $this->_json("0","Friend request cancel failed.");
+								}
 							}
 						}
 						else if($status == 'unfriend')
@@ -179,7 +201,7 @@ class Social extends CI_Controller{
 							$counts = $this->db->query('SELECT count(*) as nums FROM 20overs_requests where (sender_id=? or receiver_id=?) and (sender_id=? or receiver_id=?) and (status="accepted")',array($from,$from,$to,$to))->row()->nums;
 							$usercount = $this->user_exist($from);
 							if($counts < 1 || $usercount < 1){
-								echo $this->_json("0","Error while trying to unfriend.");
+								echo $this->_json("0","Error while trying to unfriend. Please refresh the page.");
 							}
 							else
 							{
@@ -204,11 +226,10 @@ class Social extends CI_Controller{
 
 					break;
 				}
-				
 			}
 			else
 			{
-				echo $this->_json("0","Something went wrong");
+				echo $this->_json("0","Something went wrong. Try again later.");
 			}
 		}
 	}
@@ -220,17 +241,33 @@ class Social extends CI_Controller{
 		}
 		else
 		{
-			$this->db->query("delete from 20overs_notification where type=? AND to_id=? AND from_id=?",array($type,$to_id,$from_id));
+			$this->db->query("delete from 20overs_notification where type=? AND to_id=? AND from_id=? and status='pending'",array($type,$to_id,$from_id));
 		}
-		
 	}
 	public function notification_list()
 	{
 		$from = $this->session->userdata('pp_id');
 		$this->data['title'] = "20overs.com - Notifications";
-		$this->data['notification_list'] = $this->site->notification_list();
+		$this->data['notification_list'] = $this->get_notification();
+		$this->data['old_notification_list'] = $this->get_old_notification();
 		$this->load->view('inc/header',$this->data);
 		$this->load->view('user/view_social_notifications');
 		$this->load->view('inc/footer');
+	}
+	public function get_notification($last_id = FALSE)
+	{
+		if($last_id == FALSE)
+		{
+			return $this->site->notification_list();
+		}
+		else
+		{
+			$this->output->set_header("Content-Type: application/json");
+			echo json_encode($this->site->notification_list($last_id));
+		}
+	}
+	public function get_old_notification()
+	{
+		return $this->site->old_notification_list();
 	}
 }

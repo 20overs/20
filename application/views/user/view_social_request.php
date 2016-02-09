@@ -9,11 +9,10 @@
 			<div class="panel-group">
 				<div class="panel panel-info">
 				    <div class="panel-heading">
-				    	<center><span class="h4 handover">FRIENDS REQUESTS</span></center>
+				    	<center><span class="h4 handover">FRIENDS REQUESTS</span> <span class="badge pull-right"><?=$friend_request_count?></span></center>
 				    </div>
 				    <div class="panel-body">
 				    	<ul class="list-group">
-				    		<li class="list-group-item"><b>FRIENDS REQUESTS</b></li>
 				    		<?php
 				    		if($friend_req != FALSE)
 				    		{
@@ -22,8 +21,8 @@
 				    		?>
 				    		<li class="list-group-item">
 				    			<a href="<?=site_url()?>welcome/view_profile/<?=$row['Id']+674539873?>"><?=$row['Name']?></a>
-				    			<button class="btn btn-danger btn-xs pull-right reject" data-pp-id="<?=$row['Id']+674539873?>"><i class="fa fa-times" style="color:#fff;"></i></button> 
-				    			<button class="btn btn-success btn-xs pull-right accept" data-pp-id="<?=$row['Id']+674539873?>"><i class="fa fa-check" style="color:#fff;"></i></button>
+				    			<button class="btn btn-danger btn-xs pull-right reject" data-pp-id="<?=$row['Id']+674539873?>">Reject</button> 
+				    			<button class="btn btn-success btn-xs pull-right accept" data-pp-id="<?=$row['Id']+674539873?>">Accept</button>
 				    		</li>
 				    		<?php
 				    		}

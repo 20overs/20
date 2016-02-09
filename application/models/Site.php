@@ -55,7 +55,7 @@ class Site extends CI_Model
 			{
 				$data = array('error'=> 1,'message'=> 'Login failed');
 			}
-		if ($this->input->is_ajax_request()) 
+		if ($this->input->is_ajax_request())
 		{
  			echo $this->to_json($data);
 		}
@@ -507,13 +507,75 @@ class Site extends CI_Model
 			return FALSE;
 		}
 	}
-
-	function notification_list()
+	public function notification_count()
 	{
 		$user_id = $this->session->userdata('pp_id');
-		$sql = 'SELECT N.status,N.type,N.from_id,N.to_id,N.date, CONCAT( UCASE( U.Firstname ) ,  " ", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+		$sql = $this->db->get_where('20overs_notification',array('to_id' => $user_id,'seen' => '0'));
+		return $sql->num_rows();
+	}
+	public function friend_request_count()
+	{
+		$user_id = $this->session->userdata('pp_id');
+		$sql = 'SELECT F.status, CONCAT( UCASE( U.Firstname ) ,  " ", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+		FROM player_profile P, 20overs_requests F, 20oversusers U
+		WHERE 
+		CASE 
+		WHEN F.receiver_id = ?
+		THEN F.sender_id = P.Id
+		END 
+		AND F.status =  "pending"
+		AND P.UserSysID = U.UserSysID';
+		$query = $this->db->query($sql,array($user_id));
+		return $query->num_rows();
+	}
+	public function friend_list_count()
+	{
+		$user_id = $this->session->userdata('pp_id');
+		$sql = "SELECT F.status, CONCAT( UCASE( U.Firstname ) ,  \" \", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+		FROM player_profile P, 20overs_requests F, 20oversusers U
+		WHERE 
+		CASE 
+		WHEN F.sender_id =?
+		THEN F.receiver_id = P.Id
+		WHEN F.receiver_id =?
+		THEN F.sender_id = P.Id
+		END 
+		AND F.status =  \"accepted\"
+		AND P.UserSysID = U.UserSysID";
+		$query = $this->db->query($sql,array($user_id,$user_id));
+		return $query->num_rows();
+	}
+	function notification_list($last_id = FALSE)
+	{
+		$user_id = $this->session->userdata('pp_id');
+		if($last_id == FALSE)
+		{
+			$sql = 'SELECT N.noti_id,N.status,N.type,N.from_id,N.to_id,N.date, CONCAT( UCASE( U.Firstname ) ,  " ", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
+			FROM player_profile P, 20oversusers U,20overs_notification N
+			WHERE N.from_id = P.Id AND P.UserSysID = U.UserSysID AND N.to_id = ? AND N.seen="0" ORDER BY N.date DESC LIMIT 100';
+			$query = $this->db->query($sql,array($user_id));
+		}
+		else
+		{
+			$sql = 'UPDATE 20overs_notification set seen="1" where to_id=? AND noti_id <= ? LIMIT 100';
+			$query = $this->db->query($sql,array($user_id,$last_id));
+		}
+		$count = $query->num_rows();
+		if($count > 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	public function old_notification_list()
+	{
+		$user_id = $this->session->userdata('pp_id');
+		$sql = 'SELECT N.noti_id,N.status,N.type,N.from_id,N.to_id,N.date, CONCAT( UCASE( U.Firstname ) ,  " ", UCASE( U.Lastname ) ) AS Name, P.Id, P.UserSysID
 		FROM player_profile P, 20oversusers U,20overs_notification N
-		WHERE N.from_id = P.Id AND P.UserSysID = U.UserSysID AND N.to_id = ? AND N.seen="0"';
+		WHERE N.from_id = P.Id AND P.UserSysID = U.UserSysID AND N.to_id = ? AND N.seen="1" ORDER BY N.date DESC LIMIT 100';
 		$query = $this->db->query($sql,array($user_id));
 		$count = $query->num_rows();
 		if($count > 0)

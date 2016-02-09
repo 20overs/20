@@ -11,7 +11,7 @@ class Welcome extends CI_Controller
 	}
 	public function index()
 	{
-		$data['title'] = "20overs.com - Home";
+		$data['title'] = "Home - 20overs.com";
 		$data['talent'] = $this->get_talents_today();
 		$data['recent_users'] = $this->get_recent_users();
 		$data['countries'] = $this->get_countries();
@@ -25,7 +25,7 @@ class Welcome extends CI_Controller
 	public function login()
 	{
 		$this->_check_login();
-		$data['title'] = "20overs.com - Login";
+		$data['title'] = "Login - 20overs.com";
 		$this->load->view('inc/header',$data);
 		$this->load->view('home/login');
 		$this->load->view('inc/footer');
@@ -33,7 +33,7 @@ class Welcome extends CI_Controller
 	public function register()
 	{
 		$this->_check_login();
-		$data['title'] = "20overs.com - Register";
+		$data['title'] = "Register - 20overs.com";
 		$this->load->view('inc/header',$data);
 		$this->load->view('home/register');
 		$this->load->view('inc/footer');
@@ -81,7 +81,27 @@ class Welcome extends CI_Controller
 			redirect('/');
 		}
 	}
-	
+	public function profile()
+	{
+		$data['title'] = "Player Profile - 20overs.com";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/profile');
+		$this->load->view('inc/footer');	
+	}
+	public function wow()
+	{
+		$data['title'] = "Wow Catches - 20overs.com";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/wow');
+		$this->load->view('inc/footer');	
+	}
+	public function spin()
+	{
+		$data['title'] = "Spin to win - 20overs.com";
+		$this->load->view('inc/header',$data);
+		$this->load->view('home/spin');
+		$this->load->view('inc/footer');	
+	}
 	/* Database call functions */
 	public function get_login()
 	{

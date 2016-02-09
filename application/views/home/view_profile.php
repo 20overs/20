@@ -1,7 +1,7 @@
 <div class="container-fluid margin-top-5">
 	<div class="col-lg-3">
-	<b><center><?=$profile[0]['name']?></center></b>
-	<b><center><?=$profile[0]['city']?> , <?=$profile[0]['state']?> , <?=$profile[0]['country']?></center></b>
+	<h3><center><b><?=$profile[0]['name']?></b></center></h3>
+	<b><center><h4><?=$profile[0]['city']?> , <?=$profile[0]['state']?> , <?=$profile[0]['country']?></h4></center></b>
 	<img src="<?=site_url()?>uploads/<?=$profile[0]['image']?>" class="img-thumbnail img-circle" height=500 width=500 />
 	<div id="request_btn_area">
 	<?php
@@ -12,7 +12,7 @@
 	  <button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Add Friend 
 	  <span class="caret"></span></button>
 	  <ul class="dropdown-menu">
-	    <li><a href="#" data-pp-id="<?=$profile_id?>" id="add_friend">Send request</a></li>
+	    <li><a href="#" data-pp-id="<?=$profile_id?>" id="add_friend">Send request to <?=$profile[0]['name']?></a></li>
 	  </ul>
 	</div>
 	<?php
@@ -24,7 +24,7 @@
 	  <button class="btn btn-info btn-block dropdown-toggle" data-pp-id="<?=$profile_id?>" data-user-id="<?=$user_id?>" type="button" data-toggle="dropdown"> Request Sent
 	  <span class="caret"></span></button>
 	  <ul class="dropdown-menu">
-	    <li><a href="#" id="cancel_request" data-pp-id="<?=$profile_id?>">Cancel request</a></li>
+	    <li><a href="#" id="cancel_request" data-pp-id="<?=$profile_id?>">Cancel friend request</a></li>
 	  </ul>
 	</div>
 	<?php
@@ -42,7 +42,7 @@
 	  <button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Friends 
 	  <span class="caret"></span></button>
 	  <ul class="dropdown-menu">
-	    <li><a href="#" data-pp-id="<?=$profile_id?>" id="un_friend">Unfriend</a></li>
+	    <li><a href="#" data-pp-id="<?=$profile_id?>" id="un_friend">Unfriend <?=$profile[0]['name']?></a></li>
 	  </ul>
 	</div>
 	<?php
@@ -209,7 +209,7 @@ if($choice !== 0){
 			$.post("<?=site_url()?>social/request",{"to":$(this).data('pp-id'),"type":0,"status":1},
 				function(data){
 					if(data.success == 1){
-						$('#request_btn_area').html('<div class="dropdown"><button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Friends <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-pp-id="<?=$profile_id?>" id="add_friend">Unfriend</a></li></ul></div>');
+						$('#request_btn_area').html('<div class="dropdown"><button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Friends <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-pp-id="<?=$profile_id?>" id="un_friend">Unfriend</a></li></ul></div>');
 						sweetAlert("",data.message, "success");
 					}else{
 						sweetAlert("Oops...!",data.message, "error");
@@ -225,7 +225,7 @@ if($choice !== 0){
 				function(data){
 					if(data.success == 1){
 						$('#request_btn_area').html('<div class="dropdown"><button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown"> Add Friend <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" data-pp-id="<?=$profile_id?>" id="add_friend">Send request</a></li></ul></div>');
-						sweetAlert(data.message);
+						sweetAlert("",data.message, "success");
 					}else{
 						sweetAlert("Oops...!",data.message, "error");
 						$(this).removeAttr('disabled');
