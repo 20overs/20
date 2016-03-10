@@ -1,17 +1,19 @@
 $(document).ready(function(){
-$('.open_new').click(function(e){
-  window.open($(this).attr('href'), '_blank');
-  e.preventDefault();
-});
-$('.banner').hover(function(){
-	$('.image').toggleClass('anim');
-});
 
-$('html,body').scroll(function(){
-  $(this).animate({
-    scrollTop: $("#cont").offset().top
+  $('[data-toggle="tooltip"]').tooltip();
+  $('.open_new').click(function(e){
+    window.open($(this).attr('href'), '_blank');
+    e.preventDefault();
   });
-});
+  $('.banner').hover(function(){
+  	$('.image').toggleClass('anim');
+  });
+
+  $('html,body').scroll(function(){
+    $(this).animate({
+      scrollTop: $("#cont").offset().top
+    });
+  });
 
  $('#flipper').click(function(){
  if($(this).text().trim() == "New User Please Register"){
